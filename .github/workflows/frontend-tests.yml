@@ -3,12 +3,12 @@ name: Frontend Tests - matcha-frontend
 on:
   push:
     branches:
-      - main
+      - "*"
     paths:
       - "matcha-frontend/**"
   pull_request:
     branches:
-      - main
+      - "*"
     paths:
       - "matcha-frontend/**"
 
