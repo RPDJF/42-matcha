@@ -1,3 +1,11 @@
 {
-  "Adopte ton Dev": "Adopte ton Dev"
+  "Adopte ton Dev": "Adopte ton Dev",
+  "Trouve ton dev parfait": "Trouve ton dev parfait",
+  "Email": "Email",
+  "ton@email.com": "ton@email.com",
+  "Mot de passe": "Mot de passe",
+  "Se connecter": "Se connecter",
+  "Ou continuer avec": "Ou continuer avec",
+  "Continuer avec Github": "Continuer avec Github",
+  "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}"
 }
