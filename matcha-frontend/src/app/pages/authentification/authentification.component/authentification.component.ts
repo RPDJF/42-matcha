@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { ButtonPrimaryDirective } from '../../../core/directives/buttons/button-primary.directive';
@@ -29,9 +29,11 @@ import { AuthLogin } from '../../../core/stores/auth/auth.actions';
 export class AuthentificationComponent {
   readonly #store = inject(Store);
 
+  readonly isLoading = signal(false);
+
   readonly authForm = new FormGroup({
-    email: new FormControl(''),
-    password: new FormControl(''),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required]),
   });
 
   get credentials() {
@@ -40,7 +42,13 @@ export class AuthentificationComponent {
 
   onSubmit(event: Event) {
     event.preventDefault();
-    if (this.credentials.email && this.credentials.password)
-      this.#store.dispatch(new AuthLogin(this.credentials as AuthServiceLoginProp));
+    // TODO: implement notification for bad entries
+    if (this.authForm.valid) {
+      this.isLoading.set(true);
+      this.#store.dispatch(new AuthLogin(this.credentials as AuthServiceLoginProp)).subscribe({
+        complete: () => this.isLoading.set(false),
+        error: () => this.isLoading.set(false), // TODO: error message handling
+      });
+    }
   }
 }

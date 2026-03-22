@@ -36,7 +36,7 @@
             required
           />
         </div>
-        <button appButtonPrimary class="w-full">
+        <button appButtonPrimary class="w-full" [loading]="isLoading()">
           {{ ('Se connecter' | i18n)() }}
         </button>
       </form>
