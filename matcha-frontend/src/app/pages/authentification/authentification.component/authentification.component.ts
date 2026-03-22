@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { ButtonPrimaryDirective } from '../../../core/directives/buttons/button-primary.directive';
 import { ButtonSecondaryDirective } from '../../../core/directives/buttons/button-secondary.directive';
+import { appFormBase } from '../../../core/directives/forms/form-base.directive';
 import { InputPrimaryDirective } from '../../../core/directives/inputs/input-primary.directive';
 import { MarkupReplacerDirective } from '../../../core/directives/markupReplacer/markupReplacer.directive';
 import { MarkupReplacerTemplate } from '../../../core/directives/markupReplacer/markupReplacerTemplate.directive';
@@ -22,6 +23,7 @@ import { AuthLogin } from '../../../core/stores/auth/auth.actions';
     MarkupReplacerTemplate,
     RouterLink,
     ReactiveFormsModule,
+    appFormBase,
   ],
   templateUrl: './authentification.component.html',
   standalone: true,
