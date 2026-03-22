@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideStore, Store } from '@ngxs/store';
@@ -9,7 +9,7 @@ describe('Authentification store', () => {
   let state: Signal<AuthStateModel>;
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideStore([AuthState]), provideHttpClient()],
+      providers: [provideStore([AuthState]), provideHttpClientTesting()],
     });
 
     store = TestBed.inject(Store);
