@@ -1,0 +1,56 @@
+<div class="flex w-full justify-center text-gray-100">
+  <div class="flex w-96 flex-col items-center gap-8">
+    <div class="bg-latte-pink aspect-square size-20 rounded-full p-4">
+      <img src="assets/images/icons/icon-heart.svg" class="invert" />
+    </div>
+    <div class="text-center">
+      <h1 class="text-3xl text-white">{{ ('Adopte ton Dev' | i18n)() }}</h1>
+      <p>{{ ('Trouve ton dev parfait' | i18n)() }}</p>
+    </div>
+    <div class="flex w-full flex-col items-center gap-4">
+      <form class="w-full" appFormBase (submit)="onSubmit($event)" [disabled]="isLoading()">
+        <div class="flex flex-col gap-2">
+          <label class="text-sm text-gray-600">{{ ('Email' | i18n)() }}</label>
+          <input
+            class="w-full"
+            appInputPrimary
+            [placeholder]="('ton@email.com' | i18n)()"
+            [formControl]="authForm.controls.email"
+            inputIcon="icon-email"
+            type="email"
+            required
+          />
+        </div>
+        <div class="flex flex-col gap-2">
+          <label class="text-sm text-gray-600">{{ ('Mot de passe' | i18n)() }}</label>
+          <input
+            class="w-full"
+            appInputPrimary
+            placeholder="••••••••"
+            [formControl]="authForm.controls.password"
+            inputIcon="icon-locker-locked"
+            type="password"
+            required
+          />
+        </div>
+        <button appButtonPrimary class="w-full" [loading]="isLoading()">
+          {{ ('Se connecter' | i18n)() }}
+        </button>
+      </form>
+
+      <p>{{ ('Ou continuer avec' | i18n)() }}</p>
+      <button appButtonSecondary class="w-full">
+        {{ ('Continuer avec Github' | i18n)() }}
+      </button>
+      <p
+        [appMarkupReplacer]="
+          ('Vous n\'avez pas de compte ? {#linkref}S\'enregistrer{/linkref}' | i18n)()
+        "
+      >
+        <ng-template appMarkupReplacerTemplate="linkref" let-content>
+          <a class="underline" routerLink="register">{{ content }}</a>
+        </ng-template>
+      </p>
+    </div>
+  </div>
+</div>

@@ -2,28 +2,40 @@ import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, isDevMode } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { I18nUpdateLang } from '../../state/i18n/i18n.actions';
-import { I18nState } from '../../state/i18n/i18n.state';
-import { I18nCollection, LangCode, TranslationKey } from '../../state/i18n/i18n.state.types';
+import { I18nUpdateLang } from '../../stores/i18n/i18n.actions';
+import { I18nState } from '../../stores/i18n/i18n.state';
+import { I18nCollection, LangCode, TranslationKey } from '../../stores/i18n/i18n.state.types';
 import { HydratableService } from '../hydratableService/hydratableService';
 
 @Injectable({
   providedIn: 'root',
 })
 export class I18nService extends HydratableService {
-  #httpClient = inject(HttpClient);
+  readonly #httpClient = inject(HttpClient);
 
   readonly #store = inject(Store);
 
+  #getBrowserLanguage(): LangCode {
+    const langCode = globalThis.navigator.language?.split('-')?.at(0) ?? 'en';
+
+    switch (langCode) {
+      case 'en':
+        return 'english';
+      case 'fr':
+        return 'french';
+      default:
+        return 'english';
+    }
+  }
+
   hydrateService(): Observable<void> {
-    const LangCode =
-      typeof window !== 'undefined'
-        ? ((localStorage.getItem('lang') as LangCode) ?? 'french')
-        : 'french';
+    const langCode =
+      (typeof window !== 'undefined' ? (localStorage.getItem('lang') as LangCode) : undefined) ||
+      this.#getBrowserLanguage();
 
     return this.#store.dispatch(
       new I18nUpdateLang({
-        LangCode,
+        langCode: langCode,
         skipStorage: true,
       }),
     );
