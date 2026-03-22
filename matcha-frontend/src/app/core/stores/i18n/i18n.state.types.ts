@@ -5,6 +5,6 @@ export type TranslationKey = keyof typeof french;
 export type I18nCollection = Record<TranslationKey, string>;
 
 export interface I18nUpdateLangPayload {
-  LangCode: LangCode;
+  langCode: LangCode;
   skipStorage?: boolean;
 }

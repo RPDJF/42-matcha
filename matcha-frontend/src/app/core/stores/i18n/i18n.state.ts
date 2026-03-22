@@ -44,13 +44,13 @@ export class I18nState {
 
   @Action(I18nUpdateLang)
   updateLang(ctx: StateContext<I18nStateModel>, { payload }: I18nUpdateLang) {
-    return this.#i18nService.loadTranslate(payload.LangCode).pipe(
+    return this.#i18nService.loadTranslate(payload.langCode).pipe(
       tap((language) => {
-        ctx.setState({ lang: payload.LangCode, i18n: language });
-        if (!payload.skipStorage) localStorage.setItem('lang', payload.LangCode);
+        ctx.setState({ lang: payload.langCode, i18n: language });
+        if (!payload.skipStorage) localStorage.setItem('lang', payload.langCode);
       }),
       catchError((err) => {
-        console.error(`Failed to load ${payload.LangCode} translations`, err);
+        console.error(`Failed to load ${payload.langCode} translations`, err);
         return of({});
       }),
     );

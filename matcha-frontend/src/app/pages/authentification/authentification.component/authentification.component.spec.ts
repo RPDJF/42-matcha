@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { provideRouter } from '@angular/router';
 import { provideStore } from '@ngxs/store';
-import { I18nState } from '../../../core/state/i18n/i18n.state';
+import { I18nState } from '../../../core/stores/i18n/i18n.state';
 import { AuthentificationComponent } from './authentification.component';
 
 describe('AuthentificationComponent', () => {
