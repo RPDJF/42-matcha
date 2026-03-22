@@ -43,23 +43,17 @@ export class InputPrimaryDirective implements OnInit {
 
   ngOnInit(): void {
     const el = this.#elementRef.nativeElement;
-
-    // Add base classes to the input
     this.#classes.forEach((cls) => this.#renderer2.addClass(el, cls));
 
     if (this.inputIcon()) {
       this.#iconClasses.forEach((cls) => this.#renderer2.addClass(el, cls));
     }
 
-    // Wrap input inside override container if it exists
     const overrideEl = this.#inputOverrideElement();
     if (overrideEl) {
       const parent = el.parentElement;
       if (parent) {
-        // Insert the override element before the input
         parent.insertBefore(overrideEl, el);
-
-        // Move the input inside the override element
         overrideEl.appendChild(el);
       }
     }
