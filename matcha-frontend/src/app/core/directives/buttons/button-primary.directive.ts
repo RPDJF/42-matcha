@@ -6,6 +6,7 @@ import { AbstractButtonPrimaryDirective as AbstractButtonDirective } from './Abs
 })
 export class ButtonPrimaryDirective extends AbstractButtonDirective {
   override readonly classes: string[] = [
+    'block',
     'to-latte-pink',
     'from-latte-maroon',
     'hover:shadow-latte-pink',
@@ -19,6 +20,7 @@ export class ButtonPrimaryDirective extends AbstractButtonDirective {
   ];
 
   override readonly disabledClasses: string[] = [
+    'block',
     'to-latte-pink',
     'from-latte-maroon',
     'cursor-not-allowed',
@@ -32,6 +34,7 @@ export class ButtonPrimaryDirective extends AbstractButtonDirective {
   ];
 
   override readonly loadingClasses: string[] = [
+    'block',
     'to-latte-pink',
     'from-latte-maroon',
     'cursor-not-allowed',

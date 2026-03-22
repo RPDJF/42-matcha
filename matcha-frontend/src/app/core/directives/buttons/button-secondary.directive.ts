@@ -6,6 +6,7 @@ import { AbstractButtonPrimaryDirective } from './AbstractButtonDirective';
 })
 export class ButtonSecondaryDirective extends AbstractButtonPrimaryDirective {
   override readonly classes: string[] = [
+    'block',
     'cursor-pointer',
     'rounded-2xl',
     'bg-rose-pink-purple',
@@ -15,6 +16,7 @@ export class ButtonSecondaryDirective extends AbstractButtonPrimaryDirective {
   ];
 
   override readonly disabledClasses: string[] = [
+    'block',
     'cursor-not-allowed',
     'rounded-2xl',
     'bg-rose-pink-purple',
@@ -25,6 +27,7 @@ export class ButtonSecondaryDirective extends AbstractButtonPrimaryDirective {
   ];
 
   override readonly loadingClasses: string[] = [
+    'block',
     'cursor-not-allowed',
     'rounded-2xl',
     'bg-rose-pink-purple',

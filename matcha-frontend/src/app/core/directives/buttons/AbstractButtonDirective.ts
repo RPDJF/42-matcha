@@ -12,7 +12,7 @@ import {
   Renderer2,
   signal,
 } from '@angular/core';
-import { SpinnerComponent } from '../../../components/spinner/spinner.component/spinner.component';
+import { SpinnerComponent } from '../../../components/spinner/spinner.component';
 
 @Directive()
 export abstract class AbstractButtonPrimaryDirective implements AfterViewInit {
@@ -62,9 +62,17 @@ export abstract class AbstractButtonPrimaryDirective implements AfterViewInit {
 
   #applyClasses(classes: string[]) {
     this.nativeElement.className = this.#baseClassName!;
-    classes.forEach((cls) => {
+    for (const cls of classes) {
+      const clsParts = cls.split('-');
+
+      if (
+        this.#baseClassName
+          ?.split(' ')
+          .find((baseClass) => baseClass.startsWith(`${clsParts?.at(0)}-`))
+      )
+        continue;
       this.#renderer2.addClass(this.nativeElement, cls);
-    });
+    }
   }
 
   effectDisabledHandler(disabled: boolean) {
