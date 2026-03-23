@@ -12,6 +12,7 @@ describe('LayoutHeaderComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(LayoutHeaderComponent);
+    fixture.componentRef.setInput('title', 'title');
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
