@@ -17,6 +17,7 @@ export class ButtonPrimaryDirective extends AbstractButtonDirective {
     'shadow-lg',
     'transition-all',
     'duration-150',
+    'text-white',
   ];
 
   override readonly disabledClasses: string[] = [
@@ -31,6 +32,7 @@ export class ButtonPrimaryDirective extends AbstractButtonDirective {
     'transition-all',
     'duration-150',
     'opacity-70',
+    'text-white',
   ];
 
   override readonly loadingClasses: string[] = [
@@ -49,6 +51,7 @@ export class ButtonPrimaryDirective extends AbstractButtonDirective {
     'justify-center',
     'items-center',
     'gap-4',
+    'text-white',
   ];
 
   protected override readonly loadingIconClasses: string[] = ['min-w-6', 'invert'];

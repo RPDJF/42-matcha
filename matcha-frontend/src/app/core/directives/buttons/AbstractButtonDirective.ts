@@ -60,7 +60,7 @@ export abstract class AbstractButtonPrimaryDirective implements AfterViewInit {
     return this.#elementRef.nativeElement;
   }
 
-  #applyClasses(classes: string[]) {
+  protected applyClasses(classes: string[]) {
     this.nativeElement.className = this.#baseClassName!;
     for (const cls of classes) {
       const clsParts = cls.split('-');
@@ -76,11 +76,11 @@ export abstract class AbstractButtonPrimaryDirective implements AfterViewInit {
   }
 
   effectDisabledHandler(disabled: boolean) {
-    this.#applyClasses(disabled ? this.disabledClasses : this.classes);
+    this.applyClasses(disabled ? this.disabledClasses : this.classes);
   }
 
   effectLoadingHandler(loading: boolean) {
-    this.#applyClasses(loading ? this.loadingClasses : this.classes);
+    this.applyClasses(loading ? this.loadingClasses : this.classes);
 
     if (loading) {
       this.#addSpinnerComponentIntoHost();

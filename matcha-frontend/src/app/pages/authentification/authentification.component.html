@@ -11,7 +11,7 @@
       <p>{{ ('Trouve ton dev parfait' | i18n)() }}</p>
     </div>
     <div class="flex w-full flex-col items-center gap-4">
-      <form class="w-full" appFormBase (submit)="onSubmit($event)" [disabled]="isLoading()">
+      <form class="w-full" appFormPrimary (submit)="onSubmit($event)" [disabled]="isLoading()">
         <div class="flex flex-col gap-2">
           <label class="text-sm text-gray-600">{{ ('Email' | i18n)() }}</label>
           <input

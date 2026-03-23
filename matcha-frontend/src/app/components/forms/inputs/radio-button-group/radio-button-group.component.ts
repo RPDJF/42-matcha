@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, contentChildren, input, model } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { RadioButtonComponent } from './radio-button/radio-button.component';
 
 @Component({
@@ -9,6 +10,7 @@ import { RadioButtonComponent } from './radio-button/radio-button.component';
 export class RadioButtonGroupComponent implements AfterViewInit {
   readonly radioButtonRefs = contentChildren(RadioButtonComponent);
 
+  readonly formControl = input<FormControl<string | string[] | null>>();
   readonly required = input<boolean>(true);
   readonly mode = input<'single' | 'multi'>('single');
   readonly selected = model<string[]>([]);
@@ -28,6 +30,7 @@ export class RadioButtonGroupComponent implements AfterViewInit {
           } else if (!this.required()) {
             this.selected.set([]);
           }
+          this.formControl()?.setValue(this.selected()?.at(0) ?? null);
         } else {
           if (selected) {
             this.selected.update((selecteds) => [...selecteds, radioButtonRef.value()]);
@@ -36,6 +39,7 @@ export class RadioButtonGroupComponent implements AfterViewInit {
               selecteds.filter((selected) => selected !== radioButtonRef.value()),
             );
           }
+          this.formControl()?.setValue(this.selected());
         }
         radioButtonRefs.forEach((otherRadioButtonRef) =>
           otherRadioButtonRef.selected.set(this.selected().includes(otherRadioButtonRef.value())),

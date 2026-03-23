@@ -9,5 +9,15 @@
   "Continuer avec Github": "Continue with GitHub",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "Don't have an account? {#linkref}Sign up{/linkref}",
   "Explorer": "Discover",
-  "Trouvez votre développeur idéal": "Find Your Ideal Developer"
+  "Trouvez votre développeur idéal": "Find Your Ideal Developer",
+  "Filtres": "Filters",
+  "Range d'âge": "Age range",
+  "{#minAgeFilter}{/minAgeFilter} - {#maxAgeFilter}{/maxAgeFilter} ans": "{#minAgeFilter}{/minAgeFilter} - {#maxAgeFilter}{/maxAgeFilter} years",
+  "Âge minimum: {#minAgeFilter}{/minAgeFilter}": "Minimum age: {#minAgeFilter}{/minAgeFilter}",
+  "Âge maximum: {#maxAgeFilter}{/maxAgeFilter}": "Maximum age: {#maxAgeFilter}{/maxAgeFilter}",
+  "Distance: {#distanceFilter}{/distanceFilter}": "Distance: {#distanceFilter}{/distanceFilter}",
+  "{#distanceFilter}{/distanceFilter} km": "{#distanceFilter}{/distanceFilter} km",
+  "Tout": "All",
+  "En Ligne": "Online Now",
+  "Nouveaux Utilisateurs": "New Users"
 }

@@ -1,5 +1,43 @@
 <app-layout-header
   [title]="('Explorer' | i18n)()"
   [subtitle]="('Trouvez votre développeur idéal' | i18n)()"
-/>
+>
+  <button
+    appButtonPrimary
+    ngProjectAs="aside"
+    class="flex items-center gap-2"
+    (click)="showFilters.set(!showFilters())"
+  >
+    <img class="size-5 invert" src="assets/images/icons/icon-filters.svg" />
+    {{ ('Filtres' | i18n)() }}
+  </button>
+</app-layout-header>
+
+<div
+  [class.max-h-full]="this.showFilters()"
+  [class.max-h-0]="!this.showFilters()"
+  class="h-fit w-full overflow-hidden bg-gray-100 transition-all duration-200"
+>
+  <form appFormBase class="w-full">
+    <div class="flex w-full justify-between">
+      <p>{{ ("Range d'âge" | i18n)() }}</p>
+      <p>{{ ('{#minAgeFilter}{/minAgeFilter} - {#maxAgeFilter}{/maxAgeFilter} ans' | i18n)() }}</p>
+    </div>
+    <label>{{ ('Âge minimum: {#minAgeFilter}{/minAgeFilter}' | i18n)() }}</label>
+    <!--SELECTOR-->
+    <label>{{ ('Âge maximum: {#maxAgeFilter}{/maxAgeFilter}' | i18n)() }}</label>
+    <!--SELECTOR-->
+    <div class="flex w-full justify-between">
+      <label>{{ ('Distance: {#distanceFilter}{/distanceFilter}' | i18n)() }}</label>
+      <p>{{ ('{#distanceFilter}{/distanceFilter} km' | i18n)() }}</p>
+    </div>
+    <!--SELECTOR-->
+    <app-radio-button-group [formControl]="filtersFormGroup.controls.userStatus">
+      <app-radio-button value="all">{{ ('Tout' | i18n)() }}</app-radio-button>
+      <app-radio-button value="online">{{ ('En Ligne' | i18n)() }}</app-radio-button>
+      <app-radio-button value="new">{{ ('Nouveaux Utilisateurs' | i18n)() }}</app-radio-button>
+    </app-radio-button-group>
+  </form>
+</div>
+
 <p>discover.component works!</p>

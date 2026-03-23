@@ -1,6 +1,12 @@
-<header class="w-full bg-gray-100">
-  <h1>{{ title() }}</h1>
-  @if (subtitle(); as subtitle) {
-    <p>{{ subtitle }}</p>
-  }
+<header class="flex w-full flex-col gap-2 border-b border-b-gray-200 bg-gray-100/80 p-8">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-3xl text-black">{{ title() }}</h1>
+      @if (subtitle(); as subtitle) {
+        <p>{{ subtitle }}</p>
+      }
+    </div>
+    <ng-content select="aside" />
+  </div>
+  <ng-content select="body" />
 </header>
