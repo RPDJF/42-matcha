@@ -1,19 +1,20 @@
 import {
-  AfterContentInit,
   ContentChildren,
   Directive,
+  effect,
   ElementRef,
   inject,
   input,
   QueryList,
   Renderer2,
+  signal,
 } from '@angular/core';
 import { MarkupReplacerTemplate } from './markupReplacerTemplate.directive';
 
 @Directive({
   selector: '[appMarkupReplacer]',
 })
-export class MarkupReplacerDirective implements AfterContentInit {
+export class MarkupReplacerDirective {
   readonly #el = inject(ElementRef<HTMLElement>);
   readonly #renderer = inject(Renderer2);
 
@@ -22,10 +23,26 @@ export class MarkupReplacerDirective implements AfterContentInit {
   @ContentChildren(MarkupReplacerTemplate)
   templates!: QueryList<MarkupReplacerTemplate>;
 
-  ngAfterContentInit(): void {
-    const text = this.appMarkupReplacer();
-    if (!text) return;
+  readonly #templatesReady = signal(false);
 
+  constructor() {
+    effect(() => {
+      if (!this.#templatesReady()) return;
+
+      const text = this.appMarkupReplacer();
+
+      if (!text) return;
+
+      this.#render(text);
+    });
+  }
+
+  ngAfterContentInit(): void {
+    this.#templatesReady.set(this.templates.length > 0);
+    this.templates.changes.subscribe(() => this.#templatesReady.set(true));
+  }
+
+  #render(text: string) {
     this.#el.nativeElement.innerHTML = '';
 
     const regex = /\{#(\w+)\}([\s\S]*?)\{\/\1\}/g;

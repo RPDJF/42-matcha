@@ -12,7 +12,7 @@ import {
   Renderer2,
   signal,
 } from '@angular/core';
-import { SpinnerComponent } from '../../../components/spinner/spinner.component';
+import { SpinnerComponent } from '../../components/spinner/spinner.component';
 
 @Directive()
 export abstract class AbstractButtonPrimaryDirective implements AfterViewInit {

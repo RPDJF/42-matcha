@@ -21,17 +21,53 @@
   <form appFormBase class="w-full">
     <div class="flex w-full justify-between">
       <p>{{ ("Range d'âge" | i18n)() }}</p>
-      <p>{{ ('{#minAgeFilter}{/minAgeFilter} - {#maxAgeFilter}{/maxAgeFilter} ans' | i18n)() }}</p>
+      <p>
+        {{
+          (
+            '{minAgeFilter} - {maxAgeFilter} ans'
+            | i18n
+              : {
+                  minAgeFilter: researchFiltersLimits.MIN_AGE,
+                  maxAgeFilter: researchFiltersLimits.MAX_AGE,
+                }
+          )()
+        }}
+      </p>
     </div>
-    <label>{{ ('Âge minimum: {#minAgeFilter}{/minAgeFilter}' | i18n)() }}</label>
-    <!--SELECTOR-->
-    <label>{{ ('Âge maximum: {#maxAgeFilter}{/maxAgeFilter}' | i18n)() }}</label>
-    <!--SELECTOR-->
+    <label>{{
+      ('Âge minimum: {minAgeFilter}' | i18n: { minAgeFilter: formMinAge() ?? '' })()
+    }}</label>
+    <input
+      type="range"
+      [min]="researchFiltersLimits.MIN_AGE"
+      [max]="researchFiltersLimits.MAX_AGE"
+      [formControl]="filtersFormGroup.controls.minAge"
+    />
+    <label>{{
+      ('Âge maximum: {maxAgeFilter}' | i18n: { maxAgeFilter: formMaxAge() ?? '' })()
+    }}</label>
+    <input
+      type="range"
+      [min]="researchFiltersLimits.MIN_AGE"
+      [max]="researchFiltersLimits.MAX_AGE"
+      [formControl]="filtersFormGroup.controls.maxAge"
+    />
     <div class="flex w-full justify-between">
-      <label>{{ ('Distance: {#distanceFilter}{/distanceFilter}' | i18n)() }}</label>
-      <p>{{ ('{#distanceFilter}{/distanceFilter} km' | i18n)() }}</p>
+      <label>{{
+        ('Distance: {distanceFilter} km' | i18n: { distanceFilter: formDistance() ?? '' })()
+      }}</label>
+      <p>
+        {{
+          ('{distanceFilter} km' | i18n: { distanceFilter: researchFiltersLimits.MAX_DISTANCE })()
+        }}
+      </p>
     </div>
-    <!--SELECTOR-->
+    <input
+      type="range"
+      [min]="researchFiltersLimits.MIN_DISTANCE"
+      [max]="researchFiltersLimits.MAX_DISTANCE"
+      [formControl]="filtersFormGroup.controls.distance"
+    />
     <app-radio-button-group [formControl]="filtersFormGroup.controls.userStatus">
       <app-radio-button value="all">{{ ('Tout' | i18n)() }}</app-radio-button>
       <app-radio-button value="online">{{ ('En Ligne' | i18n)() }}</app-radio-button>
