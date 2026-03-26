@@ -15,24 +15,29 @@ export class RadioButtonGroupComponent implements AfterViewInit {
   readonly mode = input<'single' | 'multi'>('single');
   readonly selected = model<string[]>([]);
 
+  get selectedRef() {
+    const valueRef = this.formControl()?.value || this.selected();
+    return Array.isArray(valueRef) ? valueRef : [valueRef];
+  }
+
   ngAfterViewInit(): void {
     const radioButtonRefs = this.radioButtonRefs();
 
     for (const radioButtonRef of radioButtonRefs) {
-      radioButtonRef.selected.set(this.selected().includes(radioButtonRef.value()));
+      radioButtonRef.selected.set(this.selectedRef.includes(radioButtonRef.value()));
     }
 
     for (const radioButtonRef of radioButtonRefs) {
-      radioButtonRef.selectedChange.subscribe((selected) => {
+      radioButtonRef.selectedChange.subscribe((isSelected) => {
         if (this.mode() === 'single') {
-          if (selected) {
+          if (isSelected) {
             this.selected.set([radioButtonRef.value()]);
           } else if (!this.required()) {
             this.selected.set([]);
           }
           this.formControl()?.setValue(this.selected()?.at(0) ?? null);
         } else {
-          if (selected) {
+          if (isSelected) {
             this.selected.update((selecteds) => [...selecteds, radioButtonRef.value()]);
           } else if (!this.required() || this.selected().length > 1) {
             this.selected.update((selecteds) =>
