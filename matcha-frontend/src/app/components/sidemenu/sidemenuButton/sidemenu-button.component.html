@@ -1,0 +1,20 @@
+<a
+  class="flex w-20 cursor-pointer flex-col items-center justify-center gap-1 md:w-auto"
+  [routerLink]="routerLink()"
+>
+  <button
+    class="aspect-square size-10 cursor-pointer rounded-2xl p-2 transition-all duration-150 md:size-12 md:rounded-xl md:p-3"
+    [class]="this.currentClasses()"
+  >
+    <img
+      [src]="`assets/images/icons/${icon()}.svg`"
+      class="aspect-square size-full invert"
+      [class.invert]="selected()"
+    />
+  </button>
+  @if (name(); as name) {
+    <label class="block w-full max-w-full truncate text-center text-xs md:hidden">
+      {{ name }}
+    </label>
+  }
+</a>

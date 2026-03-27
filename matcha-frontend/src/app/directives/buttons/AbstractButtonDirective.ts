@@ -12,10 +12,10 @@ import {
   Renderer2,
   signal,
 } from '@angular/core';
-import { SpinnerComponent } from '../../../components/spinner/spinner.component/spinner.component';
+import { SpinnerComponent } from '../../components/spinner/spinner.component';
 
 @Directive()
-export abstract class AbstractButtonPrimaryDirective implements AfterViewInit {
+export abstract class AbstractButtonDirective implements AfterViewInit {
   readonly #elementRef = inject(ElementRef);
   readonly #renderer2 = inject(Renderer2);
   readonly #environmentInjector = inject(EnvironmentInjector);
@@ -60,25 +60,41 @@ export abstract class AbstractButtonPrimaryDirective implements AfterViewInit {
     return this.#elementRef.nativeElement;
   }
 
-  #applyClasses(classes: string[]) {
+  protected applyClasses(classes: string[]) {
     this.nativeElement.className = this.#baseClassName!;
-    classes.forEach((cls) => {
+    for (const cls of classes) {
+      const clsParts = cls.split('-');
+
+      if (
+        this.#baseClassName
+          ?.split(' ')
+          .find((baseClass) => baseClass.startsWith(`${clsParts?.at(0)}-`))
+      )
+        continue;
       this.#renderer2.addClass(this.nativeElement, cls);
-    });
+    }
   }
 
   effectDisabledHandler(disabled: boolean) {
-    this.#applyClasses(disabled ? this.disabledClasses : this.classes);
+    this.applyClasses(disabled ? this.disabledClasses : this.classes);
   }
 
   effectLoadingHandler(loading: boolean) {
-    this.#applyClasses(loading ? this.loadingClasses : this.classes);
+    this.applyClasses(loading ? this.loadingClasses : this.classes);
 
     if (loading) {
       this.#addSpinnerComponentIntoHost();
     } else {
       this.#removeSpinnerComponentFromHost();
     }
+  }
+
+  protected addNativeElement(element: HTMLElement) {
+    this.#renderer2.appendChild(this.nativeElement, element);
+  }
+
+  protected addComponent(component: ComponentRef<any>) {
+    this.#renderer2.appendChild(this.nativeElement, component.location.nativeElement);
   }
 
   #addSpinnerComponentIntoHost() {
@@ -92,10 +108,7 @@ export abstract class AbstractButtonPrimaryDirective implements AfterViewInit {
       this.#renderer2.addClass(this.#spinnerComponentRef?.location.nativeElement, cls);
     });
 
-    this.#renderer2.appendChild(
-      this.nativeElement,
-      this.#spinnerComponentRef.location.nativeElement,
-    );
+    this.addComponent(this.#spinnerComponentRef);
   }
 
   #removeSpinnerComponentFromHost() {

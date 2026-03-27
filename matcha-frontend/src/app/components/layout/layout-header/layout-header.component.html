@@ -1,0 +1,26 @@
+<header class="relative z-10 w-full">
+  <div
+    class="flex w-full flex-col gap-2 border-b border-b-gray-200 bg-gray-100/80 px-6 py-4 md:p-8"
+  >
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl text-black md:text-3xl">{{ title() }}</h1>
+        @if (subtitle(); as subtitle) {
+          <p class="hidden md:inline">{{ subtitle }}</p>
+        }
+      </div>
+      <ng-content select="aside" />
+    </div>
+    <ng-content select="body" />
+  </div>
+
+  <div
+    class="absolute w-full origin-top overflow-hidden rounded-b-2xl bg-white/95 transition-all duration-200 ease-out"
+    [class.max-h-0]="!showSubmenu()"
+    [class.max-h-[100dvh]]="showSubmenu()"
+    [class.opacity-50]="!showSubmenu()"
+    [class.opacity-100]="showSubmenu()"
+  >
+    <ng-content select="submenu" />
+  </div>
+</header>

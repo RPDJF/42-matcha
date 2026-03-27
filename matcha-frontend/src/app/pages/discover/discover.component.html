@@ -1,0 +1,99 @@
+<div class="flex h-full flex-col">
+  <app-layout-header
+    class="w-full shrink-0"
+    [title]="('Explorer' | i18n)()"
+    [subtitle]="('Trouvez votre développeur idéal' | i18n)()"
+    [showSubmenu]="showFilters()"
+  >
+    <div class="flex items-center gap-3" ngProjectAs="aside">
+      <button
+        appButtonPrimary
+        class="hidden items-center gap-2 md:flex"
+        (click)="showFilters.set(!showFilters())"
+      >
+        <img class="size-5 invert" src="assets/images/icons/icon-filters.svg" />
+        {{ ('Filtres' | i18n)() }}
+      </button>
+      <button
+        (click)="showFilters.set(!showFilters())"
+        class="block md:hidden"
+        appButtonIcon
+        icon="filters"
+      ></button>
+    </div>
+    <form ngProjectAs="submenu" appFormBase class="container mx-auto">
+      <div class="w-full">
+        <div class="flex w-full justify-between">
+          <label>{{
+            (
+              'Âge: {minAgeFilter} - {maxAgeFilter}'
+              | i18n: { minAgeFilter: formMinAge() ?? '', maxAgeFilter: formMaxAge() ?? '' }
+            )()
+          }}</label>
+          <p>
+            {{
+              (
+                '{minAgeFilter} - {maxAgeFilter} ans'
+                | i18n
+                  : {
+                      minAgeFilter: researchFiltersLimits.MIN_AGE,
+                      maxAgeFilter: researchFiltersLimits.MAX_AGE,
+                    }
+              )()
+            }}
+          </p>
+        </div>
+        <app-range-selector
+          [minRangeLimit]="researchFiltersLimits.MIN_AGE"
+          [maxRangeLimit]="researchFiltersLimits.MAX_AGE"
+          [minFormControl]="filtersFormGroup.controls.minAge"
+          [maxFormControl]="filtersFormGroup.controls.maxAge"
+        />
+      </div>
+
+      <div class="w-full">
+        <div class="flex w-full justify-between">
+          <label>{{
+            ('Distance: {distanceFilter} km' | i18n: { distanceFilter: formDistance() ?? '' })()
+          }}</label>
+          <p>
+            {{
+              (
+                '{distanceFilter} km' | i18n: { distanceFilter: researchFiltersLimits.MAX_DISTANCE }
+              )()
+            }}
+          </p>
+        </div>
+        <input
+          class="w-full"
+          type="range"
+          [min]="researchFiltersLimits.MIN_DISTANCE"
+          [max]="researchFiltersLimits.MAX_DISTANCE"
+          [formControl]="filtersFormGroup.controls.distance"
+        />
+      </div>
+      <app-radio-button-group [formControl]="filtersFormGroup.controls.userStatus">
+        <app-radio-button value="all">{{ ('Tout' | i18n)() }}</app-radio-button>
+        <app-radio-button value="online">{{ ('En Ligne' | i18n)() }}</app-radio-button>
+        <app-radio-button value="new">{{ ('Nouveaux Utilisateurs' | i18n)() }}</app-radio-button>
+      </app-radio-button-group>
+      <div class="mt-4 ml-auto flex w-full flex-col gap-2 md:w-fit md:flex-row md:gap-8">
+        <button class="w-full" (click)="onApplyFiltersClick($event)" appButtonPrimary>
+          {{ ('Appliquer' | i18n)() }}
+        </button>
+        <button class="w-full" (click)="onResetFiltersClick($event)" appButtonSecondary>
+          {{ ('Réinitialiser' | i18n)() }}
+        </button>
+      </div>
+    </form>
+  </app-layout-header>
+
+  <div class="flex h-full flex-col items-center justify-center gap-8 p-8 md:p-12">
+    <app-user-card [user]="mockUser" class="h-fit" (clickDetails)="onDetailsClick($event)" />
+    <div class="flex w-fit items-center gap-8">
+      <button appButtonIconSecondary icon="close" (click)="onPassClick($event)"></button>
+      <button appButtonIconPrimary icon="heart" (click)="onSmashClick($event)"></button>
+      <button appButtonIconSecondary icon="info" (click)="onDetailsClick($event)"></button>
+    </div>
+  </div>
+</div>

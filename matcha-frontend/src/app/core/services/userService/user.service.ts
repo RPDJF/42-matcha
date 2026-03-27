@@ -4,7 +4,7 @@ import { Store } from '@ngxs/store';
 import { catchError, Observable, of } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import { UserFetchMe } from '../../stores/user/user.actions';
-import { User } from '../../stores/user/user.state.types';
+import { FullUser } from '../../stores/user/user.state.types';
 import { HydratableService } from '../hydratableService/hydratableService';
 import { UpdateUserProfileProp } from './user.service.types';
 
@@ -33,11 +33,13 @@ export class UserService extends HydratableService {
   }
 
   fetchMe() {
-    return this.#httpClient.get<User>(`${environment.CORE_ENDPOINT}/users/me`);
+    return this.#httpClient.get<FullUser>(`${environment.CORE_ENDPOINT}/users/me`);
   }
 
-  fetchUser(userUuid: User['UserUUID']) {
-    return this.#httpClient.get<User>(`${environment.CORE_ENDPOINT}/users/${userUuid.toString()}`);
+  fetchUser(userUuid: FullUser['userUUID']) {
+    return this.#httpClient.get<FullUser>(
+      `${environment.CORE_ENDPOINT}/users/${userUuid.toString()}`,
+    );
   }
 
   logout() {
@@ -53,7 +55,7 @@ export class UserService extends HydratableService {
     if (displayname) formData.set('DisplayName', displayname);
     if (password) formData.set('Password', password);
 
-    return this.#httpClient.put<User>(`${environment.CORE_ENDPOINT}/users/update`, formData, {
+    return this.#httpClient.put<FullUser>(`${environment.CORE_ENDPOINT}/users/update`, formData, {
       headers: new HttpHeaders({
         enctype: 'multipart/form-data',
       }),

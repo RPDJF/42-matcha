@@ -4,10 +4,10 @@ import { catchError, tap, throwError } from 'rxjs';
 import { ServiceApiStatus } from '../../interfaces/http.interfaces';
 import { UserService } from '../../services/userService/user.service';
 import { UserFetchMe, UserLogout, UserUpdateProfile } from './user.actions';
-import { User } from './user.state.types';
+import { FullUser } from './user.state.types';
 
 export interface UserStateModel {
-  me: User | undefined;
+  me: FullUser | undefined;
   loginApiStatus: ServiceApiStatus;
   registerApiStatus: ServiceApiStatus;
   enforce2faApiStatus: ServiceApiStatus;
@@ -48,7 +48,7 @@ export class UserState {
 
   @Action(UserFetchMe)
   userFetchMe(ctx: StateContext<UserStateModel>, {}: UserFetchMe) {
-    return this.#userService.fetchMe().pipe<User>(
+    return this.#userService.fetchMe().pipe<FullUser>(
       tap({
         next: (user) => {
           ctx.patchState({ me: user });

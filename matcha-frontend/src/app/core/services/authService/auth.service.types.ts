@@ -1,4 +1,4 @@
-import { User } from '../../stores/user/user.state.types';
+import { FullUser } from '../../stores/user/user.state.types';
 
 export interface AuthServiceLoginApiPayload {
   ClientId: string;
@@ -41,7 +41,7 @@ export interface AuthServiceOauth2LoginUrlResponse {
 export interface AuthServiceJwtToken {
   token: string;
   sub: string;
-  data: Partial<User>;
+  data: Partial<FullUser>;
   iss: string;
   iat: number;
   exp: number;

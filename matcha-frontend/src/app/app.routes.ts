@@ -1,11 +1,12 @@
 import { Routes } from '@angular/router';
-import { AuthentificationComponent } from './pages/authentification/authentification.component/authentification.component';
+import { AuthentificationComponent } from './pages/authentification/authentification.component';
+import { DiscoverComponent } from './pages/discover/discover.component';
 
 export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'login',
+    redirectTo: 'discover',
   },
   {
     path: 'register',
@@ -15,5 +16,9 @@ export const routes: Routes = [
   {
     path: 'login',
     component: AuthentificationComponent,
+  },
+  {
+    path: 'discover',
+    component: DiscoverComponent,
   },
 ];

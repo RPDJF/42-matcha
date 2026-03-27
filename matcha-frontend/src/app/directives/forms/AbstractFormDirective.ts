@@ -3,23 +3,14 @@ import { Directive, effect, ElementRef, inject, input, OnInit } from '@angular/c
 @Directive({
   selector: '[appFormBase]',
 })
-export class appFormBase implements OnInit {
+export abstract class AbstractFormDirective implements OnInit {
   readonly #elementRef = inject(ElementRef);
 
   #inputsElementRef: NodeListOf<HTMLInputElement> | undefined;
 
   readonly disabled = input<boolean>(false);
 
-  readonly #classes = [
-    'bg-rose-pink-purple',
-    'flex',
-    'flex-col',
-    'gap-4',
-    'rounded-3xl',
-    'bg-linear-to-br',
-    'p-6',
-    'shadow-lg',
-  ];
+  protected abstract readonly classes: string[];
 
   constructor() {
     effect(() => {
@@ -33,7 +24,7 @@ export class appFormBase implements OnInit {
 
   ngOnInit(): void {
     this.#inputsElementRef = this.nativeElement.querySelectorAll('input');
-    this.#classes.forEach((cls) => {
+    this.classes.forEach((cls) => {
       this.nativeElement.classList.add(cls);
     });
   }

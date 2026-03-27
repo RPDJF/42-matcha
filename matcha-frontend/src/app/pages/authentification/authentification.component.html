@@ -1,4 +1,7 @@
-<div class="flex w-full justify-center text-gray-100">
+<div
+  class="to-latte-mauve via-latte-pink from-latte-maroon fixed top-0 right-0 bottom-0 left-0 -z-1 min-h-screen bg-linear-to-br"
+></div>
+<div class="mt-16 flex w-full justify-center text-gray-100">
   <div class="flex w-96 flex-col items-center gap-8">
     <div class="bg-latte-pink aspect-square size-20 rounded-full p-4">
       <img src="assets/images/icons/icon-heart.svg" class="invert" />
@@ -8,7 +11,7 @@
       <p>{{ ('Trouve ton dev parfait' | i18n)() }}</p>
     </div>
     <div class="flex w-full flex-col items-center gap-4">
-      <form class="w-full" appFormBase (submit)="onSubmit($event)" [disabled]="isLoading()">
+      <form class="w-full" appFormPrimary (submit)="onSubmit($event)" [disabled]="isLoading()">
         <div class="flex flex-col gap-2">
           <label class="text-sm text-gray-600">{{ ('Email' | i18n)() }}</label>
           <input

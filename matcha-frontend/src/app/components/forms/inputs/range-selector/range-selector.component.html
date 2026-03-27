@@ -1,0 +1,45 @@
+<div class="relative h-6 w-full">
+  <div class="absolute inset-0 flex items-center">
+    <div class="relative h-1.5 w-full overflow-hidden rounded-full bg-gray-200">
+      <div
+        class="to-latte-pink from-latte-maroon absolute h-full bg-linear-to-r"
+        [style.left.%]="minPercent()"
+        [style.right.%]="100 - maxPercent()"
+      ></div>
+    </div>
+  </div>
+
+  <div class="absolute inset-0 flex items-center">
+    @if (hasFormControl) {
+      <input
+        type="range"
+        class="pointer-events-none absolute inset-0 w-full"
+        [min]="minRangeLimit()"
+        [max]="maxRangeLimit() + 1"
+        [formControl]="minFormControl()!"
+      />
+
+      <input
+        type="range"
+        class="pointer-events-none absolute inset-0 w-full"
+        [min]="minRangeLimit() - 1"
+        [max]="maxRangeLimit()"
+        [formControl]="maxFormControl()!"
+      />
+    } @else {
+      <input
+        type="range"
+        class="pointer-events-none absolute inset-0 w-full"
+        [min]="minRangeLimit()"
+        [max]="maxRangeLimit()"
+      />
+
+      <input
+        type="range"
+        class="pointer-events-none absolute inset-0 w-full"
+        [min]="minRangeLimit()"
+        [max]="maxRangeLimit()"
+      />
+    }
+  </div>
+</div>
