@@ -11,13 +11,13 @@
   "Explorer": "Explorer",
   "Trouvez votre développeur idéal": "Trouvez votre développeur idéal",
   "Filtres": "Filtres",
-  "Range d'âge": "Range d'âge",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} - {maxAgeFilter} ans",
-  "Âge minimum: {minAgeFilter}": "Âge minimum: {minAgeFilter}",
-  "Âge maximum: {maxAgeFilter}": "Âge maximum: {maxAgeFilter}",
+  "Âge: {minAgeFilter} - {maxAgeFilter}": "Âge: {minAgeFilter} - {maxAgeFilter}",
   "Distance: {distanceFilter} km": "Distance: {distanceFilter} km",
   "{distanceFilter} km": "{distanceFilter} km",
   "Tout": "Tout",
   "En Ligne": "En ligne",
-  "Nouveaux Utilisateurs": "Nouveaux Utilisateurs"
+  "Nouveaux Utilisateurs": "Nouveaux Utilisateurs",
+  "Appliquer": "Appliquer",
+  "Réinitialiser": "Réinitialiser"
 }

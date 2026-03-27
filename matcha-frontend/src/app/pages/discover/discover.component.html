@@ -16,63 +16,70 @@
 <div
   [class.max-h-full]="this.showFilters()"
   [class.max-h-0]="!this.showFilters()"
-  class="h-fit w-full overflow-hidden bg-gray-100 transition-all duration-200"
+  class="h-fit w-full overflow-hidden bg-white/50 transition-all duration-200"
 >
-  <form appFormBase class="w-full">
-    <div class="flex w-full justify-between">
-      <p>{{ ("Range d'âge" | i18n)() }}</p>
-      <p>
-        {{
+  <form appFormBase class="container mx-auto">
+    <div class="w-full">
+      <div class="flex w-full justify-between">
+        <label>{{
           (
-            '{minAgeFilter} - {maxAgeFilter} ans'
-            | i18n
-              : {
-                  minAgeFilter: researchFiltersLimits.MIN_AGE,
-                  maxAgeFilter: researchFiltersLimits.MAX_AGE,
-                }
+            'Âge: {minAgeFilter} - {maxAgeFilter}'
+            | i18n: { minAgeFilter: formMinAge() ?? '', maxAgeFilter: formMaxAge() ?? '' }
           )()
-        }}
-      </p>
+        }}</label>
+        <p>
+          {{
+            (
+              '{minAgeFilter} - {maxAgeFilter} ans'
+              | i18n
+                : {
+                    minAgeFilter: researchFiltersLimits.MIN_AGE,
+                    maxAgeFilter: researchFiltersLimits.MAX_AGE,
+                  }
+            )()
+          }}
+        </p>
+      </div>
+      <app-range-selector
+        [minRangeLimit]="researchFiltersLimits.MIN_AGE"
+        [maxRangeLimit]="researchFiltersLimits.MAX_AGE"
+        [minFormControl]="filtersFormGroup.controls.minAge"
+        [maxFormControl]="filtersFormGroup.controls.maxAge"
+      />
     </div>
-    <label>{{
-      ('Âge minimum: {minAgeFilter}' | i18n: { minAgeFilter: formMinAge() ?? '' })()
-    }}</label>
-    <input
-      type="range"
-      [min]="researchFiltersLimits.MIN_AGE"
-      [max]="researchFiltersLimits.MAX_AGE"
-      [formControl]="filtersFormGroup.controls.minAge"
-    />
-    <label>{{
-      ('Âge maximum: {maxAgeFilter}' | i18n: { maxAgeFilter: formMaxAge() ?? '' })()
-    }}</label>
-    <input
-      type="range"
-      [min]="researchFiltersLimits.MIN_AGE"
-      [max]="researchFiltersLimits.MAX_AGE"
-      [formControl]="filtersFormGroup.controls.maxAge"
-    />
-    <div class="flex w-full justify-between">
-      <label>{{
-        ('Distance: {distanceFilter} km' | i18n: { distanceFilter: formDistance() ?? '' })()
-      }}</label>
-      <p>
-        {{
-          ('{distanceFilter} km' | i18n: { distanceFilter: researchFiltersLimits.MAX_DISTANCE })()
-        }}
-      </p>
+
+    <div class="w-full">
+      <div class="flex w-full justify-between">
+        <label>{{
+          ('Distance: {distanceFilter} km' | i18n: { distanceFilter: formDistance() ?? '' })()
+        }}</label>
+        <p>
+          {{
+            ('{distanceFilter} km' | i18n: { distanceFilter: researchFiltersLimits.MAX_DISTANCE })()
+          }}
+        </p>
+      </div>
+      <input
+        class="w-full"
+        type="range"
+        [min]="researchFiltersLimits.MIN_DISTANCE"
+        [max]="researchFiltersLimits.MAX_DISTANCE"
+        [formControl]="filtersFormGroup.controls.distance"
+      />
     </div>
-    <input
-      type="range"
-      [min]="researchFiltersLimits.MIN_DISTANCE"
-      [max]="researchFiltersLimits.MAX_DISTANCE"
-      [formControl]="filtersFormGroup.controls.distance"
-    />
     <app-radio-button-group [formControl]="filtersFormGroup.controls.userStatus">
       <app-radio-button value="all">{{ ('Tout' | i18n)() }}</app-radio-button>
       <app-radio-button value="online">{{ ('En Ligne' | i18n)() }}</app-radio-button>
       <app-radio-button value="new">{{ ('Nouveaux Utilisateurs' | i18n)() }}</app-radio-button>
     </app-radio-button-group>
+    <div class="mt-4 ml-auto flex w-full flex-col gap-2 lg:w-fit lg:flex-row lg:gap-8">
+      <button class="w-full" (click)="onApplyFiltersClick($event)" appButtonPrimary>
+        {{ ('Appliquer' | i18n)() }}
+      </button>
+      <button class="w-full" (click)="onResetFiltersClick($event)" appButtonSecondary>
+        {{ ('Réinitialiser' | i18n)() }}
+      </button>
+    </div>
   </form>
 </div>
 

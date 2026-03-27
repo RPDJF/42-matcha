@@ -1,0 +1,27 @@
+:host {
+  input[type='range']::-webkit-slider-thumb {
+    pointer-events: auto;
+    height: 16px;
+    width: 16px;
+    border-radius: 9999px;
+    background: white;
+    // bg-latte-pink
+    border: 2px solid #ea76cb;
+    cursor: pointer;
+    box-shadow: 0 2px 5px #ea76cb;
+    overflow: visible;
+  }
+
+  input[type='range']::-moz-range-thumb {
+    pointer-events: auto;
+    height: 16px;
+    width: 16px;
+    border-radius: 9999px;
+    background: white;
+    // bg-latte-pink
+    border: 2px solid #ea76cb;
+    cursor: pointer;
+    box-shadow: 0 2px 5px #ea76cb;
+    overflow: visible;
+  }
+}
