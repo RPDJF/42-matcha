@@ -19,5 +19,6 @@
   "En Ligne": "Online Now",
   "Nouveaux Utilisateurs": "New Users",
   "Appliquer": "Apply",
-  "Réinitialiser": "Reset"
+  "Réinitialiser": "Reset",
+  "à {userDistance} km": "{userDistance} km away"
 }

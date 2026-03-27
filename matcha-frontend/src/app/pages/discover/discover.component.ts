@@ -7,9 +7,14 @@ import { RangeSelectorComponent } from '../../components/forms/inputs/range-sele
 import { LayoutHeaderComponent } from '../../components/layout/layout-header/layout-header.component';
 import { RESEARCH_FILTERS_LIMITS } from '../../core/consts/researchFiltersLimits.consts';
 import { I18nPipe } from '../../core/pipes/i18n/i18n.pipe';
+import { PublicUser } from '../../core/stores/user/user.state.types';
+import { ButtonIconPrimaryDirective } from '../../directives/buttons/button-icon-primary.directive';
+import { ButtonIconSecondaryDirective } from '../../directives/buttons/button-icon-secondary.directive';
+import { ButtonIconDirective } from '../../directives/buttons/button-icon.directive';
 import { ButtonPrimaryDirective } from '../../directives/buttons/button-primary.directive';
 import { ButtonSecondaryDirective } from '../../directives/buttons/button-secondary.directive';
 import { appFormBase } from '../../directives/forms/form-base.directive';
+import { UserCardComponent } from './components/user-card/user-card.component';
 
 type UserStatusFilter = 'all' | 'online' | 'new';
 
@@ -25,8 +30,15 @@ type UserStatusFilter = 'all' | 'online' | 'new';
     ReactiveFormsModule,
     RangeSelectorComponent,
     ButtonSecondaryDirective,
+    UserCardComponent,
+    ButtonIconPrimaryDirective,
+    ButtonIconSecondaryDirective,
+    ButtonIconDirective,
   ],
   templateUrl: './discover.component.html',
+  host: {
+    class: 'h-full',
+  },
 })
 export class DiscoverComponent {
   readonly showFilters = signal<boolean>(false);
@@ -71,4 +83,37 @@ export class DiscoverComponent {
     event.preventDefault();
     // TODO: implement filters reset
   }
+
+  onDetailsClick(event: Event) {
+    // TODO: implement details click
+  }
+
+  onPassClick(event: Event) {
+    // TODO: implement pass click
+  }
+
+  onSmashClick(event: Event) {
+    // TODO: implement smash click
+  }
+
+  // TODO: remove mock and use real values
+  readonly mockUser: PublicUser = {
+    age: 20,
+    biography:
+      "Incroyable hôte de l'incroyable cirque digital | Responsable du divertissement des humains | Je cherche des copains",
+    displayName: 'Caine',
+    gender: 'female',
+    interests: ['Aventures', 'Humains', 'Cirque'],
+    isAdmin: false,
+    lastAlive: 29809,
+    pictures: ['error'],
+    rating: 4,
+    sexuality: 'bisexual',
+    status: 'free',
+    userUUID: 'jfh473264238gd',
+    avatar:
+      'https://i.ytimg.com/vi/aAg3bwzSuLk/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLAbUo54f58ng1XF1-V6KrD_vmVNSw',
+    city: 'Charrat',
+    distance: 9999,
+  };
 }

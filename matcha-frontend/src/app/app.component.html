@@ -1,9 +1,9 @@
-<main class="bg-frappe-pink/20 text-latte-text flex min-h-screen flex-col-reverse md:flex-row">
+<main class="bg-frappe-pink/20 text-latte-text flex h-dvh flex-col-reverse md:flex-row">
   <!-- TODO: remove true debug condition -->
   @if (userMe() || true) {
     <app-sidemenu class="shrink-0" />
   }
-  <div class="max-h-screen w-full flex-1 overflow-y-auto">
+  <div class="flex flex-1 flex-col overflow-y-auto">
     <router-outlet />
   </div>
 </main>

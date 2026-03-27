@@ -1,5 +1,5 @@
 import { Directive } from '@angular/core';
-import { AbstractButtonPrimaryDirective as AbstractButtonDirective } from './AbstractButtonDirective';
+import { AbstractButtonDirective } from './AbstractButtonDirective';
 
 @Directive({
   selector: '[appButtonPrimary]',
@@ -13,7 +13,8 @@ export class ButtonPrimaryDirective extends AbstractButtonDirective {
     'cursor-pointer',
     'rounded-2xl',
     'bg-linear-to-br',
-    'p-3',
+    'py-3',
+    'px-5',
     'shadow-lg',
     'transition-all',
     'duration-150',
@@ -27,7 +28,8 @@ export class ButtonPrimaryDirective extends AbstractButtonDirective {
     'cursor-not-allowed',
     'rounded-2xl',
     'bg-linear-to-br',
-    'p-3',
+    'py-3',
+    'px-5',
     'shadow-lg',
     'transition-all',
     'duration-150',
@@ -42,7 +44,8 @@ export class ButtonPrimaryDirective extends AbstractButtonDirective {
     'cursor-not-allowed',
     'rounded-2xl',
     'bg-linear-to-br',
-    'p-3',
+    'py-3',
+    'px-5',
     'shadow-lg',
     'transition-all',
     'duration-150',

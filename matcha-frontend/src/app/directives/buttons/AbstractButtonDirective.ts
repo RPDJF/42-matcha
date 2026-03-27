@@ -15,7 +15,7 @@ import {
 import { SpinnerComponent } from '../../components/spinner/spinner.component';
 
 @Directive()
-export abstract class AbstractButtonPrimaryDirective implements AfterViewInit {
+export abstract class AbstractButtonDirective implements AfterViewInit {
   readonly #elementRef = inject(ElementRef);
   readonly #renderer2 = inject(Renderer2);
   readonly #environmentInjector = inject(EnvironmentInjector);
@@ -89,6 +89,14 @@ export abstract class AbstractButtonPrimaryDirective implements AfterViewInit {
     }
   }
 
+  protected addNativeElement(element: HTMLElement) {
+    this.#renderer2.appendChild(this.nativeElement, element);
+  }
+
+  protected addComponent(component: ComponentRef<any>) {
+    this.#renderer2.appendChild(this.nativeElement, component.location.nativeElement);
+  }
+
   #addSpinnerComponentIntoHost() {
     if (this.#spinnerComponentRef) return;
 
@@ -100,10 +108,7 @@ export abstract class AbstractButtonPrimaryDirective implements AfterViewInit {
       this.#renderer2.addClass(this.#spinnerComponentRef?.location.nativeElement, cls);
     });
 
-    this.#renderer2.appendChild(
-      this.nativeElement,
-      this.#spinnerComponentRef.location.nativeElement,
-    );
+    this.addComponent(this.#spinnerComponentRef);
   }
 
   #removeSpinnerComponentFromHost() {
