@@ -56,13 +56,31 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 
 ## Auto translations
 
-WIP - Work In Progress
+This project includes an automated translation pipeline that uses **LibreTranslate** to generate missing i18n keys. It automatically scans your HTML templates (i18n pipes) and TypeScript files (`translate()` calls) to identify keys that are missing from your language files.
 
-You can find missing keys by running
+### Prerequisites
+
+- **Docker**: The script automatically manages a LibreTranslate container.
+- **Source Language**: The script is configured to use **French** as the source language for all translations.
+
+### How to use
+
+To scan the project for new strings and translate them into all supported languages, run:
 
 ```bash
-node ./scripts/translate.ts
+npm run build:translations
 ```
+
+### Features
+
+- **Tag Protection**: Handles complex markups like `{#link}text{/link}` and curly brace variables `{variable}` by masking them as HTML spans during translation. This prevents the engine from breaking the code structure.
+- **Incremental Updates**: Only missing keys are sent to the API. Existing translations in your `src/assets/i18n/*.json` files are preserved.
+- **Automatic Sorting**: Newly generated JSON files are automatically sorted alphabetically by key to maintain a clean git history.
+- **Docker Integration**: Automatically detects if `sudo` is required and handles the lifecycle (start/stop) of the `libretranslate` container.
+
+### Supported Languages
+
+The tool currently supports over 40 languages, including English, Spanish, German, Japanese, Chinese, and more. To add a new language, simply add it to the `supportedLanguages` map in the translation script.
 
 ## Additional Resources
 

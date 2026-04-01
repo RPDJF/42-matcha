@@ -1,18 +1,213 @@
+import { exec } from 'child_process';
 import { readdir, readFile } from 'fs/promises';
 import { join } from 'path';
 
-const supportedLanguages = ['french', 'english'];
+const supportedLanguages = new Map(
+  Object.entries({
+    french: 'fr',
+    english: 'en',
+    albanian: 'sq',
+    arabic: 'ar',
+    azerbaijani: 'az',
+    basque: 'eu',
+    bengali: 'bn',
+    bulgarian: 'bg',
+    catalan: 'ca',
+    chinese: 'zh',
+    czech: 'cs',
+    danish: 'da',
+    dutch: 'nl',
+    esperanto: 'eo',
+    estonian: 'et',
+    finnish: 'fi',
+    galician: 'gl',
+    german: 'de',
+    greek: 'el',
+    hebrew: 'he',
+    hindi: 'hi',
+    hungarian: 'hu',
+    indonesian: 'id',
+    irish: 'ga',
+    italian: 'it',
+    japanese: 'ja',
+    korean: 'ko',
+    kyrgyz: 'ky',
+    latvian: 'lv',
+    lithuanian: 'lt',
+    malay: 'ms',
+    norwegian: 'nb',
+    persian: 'fa',
+    polish: 'pl',
+    portuguese: 'pt',
+    romanian: 'ro',
+    russian: 'ru',
+    slovak: 'sk',
+    slovenian: 'sl',
+    spanish: 'es',
+    swedish: 'sv',
+    tagalog: 'tl',
+    thai: 'th',
+    turkish: 'tr',
+    ukrainian: 'uk',
+    urdu: 'ur',
+    vietnamese: 'vi',
+  }),
+);
+const sourceLanguage = supportedLanguages.get('french')!;
+const LIBRETRANSLATE_URL = 'http://localhost:5000';
+
+let dockerCmd = 'docker';
 
 /**
- * Unescapes a string by replacing escaped characters with their actual values
+ * Run a shell command
+ */
+function run(cmd: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    exec(cmd, (err, stdout, stderr) => {
+      if (err) {
+        console.error(stderr);
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
+/**
+ * Detect if docker requires sudo
+ */
+async function detectDockerCmd() {
+  try {
+    await run('docker info');
+  } catch {
+    console.log('Docker requires sudo');
+    dockerCmd = 'sudo docker';
+  }
+}
+
+/**
+ * Start LibreTranslate container
+ */
+async function startLibreTranslate() {
+  console.log('Starting LibreTranslate container...');
+  await detectDockerCmd();
+
+  try {
+    // Check if container already exists
+    await run(`${dockerCmd} inspect libretranslate`);
+    console.log('Container exists, starting...');
+    await run(`${dockerCmd} start libretranslate`);
+  } catch {
+    console.log('Container does not exist, creating...');
+    await run(`
+      ${dockerCmd} run -d -p 5000:5000 \
+      --name libretranslate \
+      -e PYTHONWARNINGS="ignore" \
+      libretranslate/libretranslate
+    `);
+  }
+}
+
+/**
+ * Wait until LibreTranslate API is ready
+ */
+async function waitForLibreTranslate() {
+  console.log('Waiting for LibreTranslate to be ready...');
+
+  while (true) {
+    try {
+      const res = await fetch(`${LIBRETRANSLATE_URL}/languages`);
+      if (res.ok) {
+        console.log('LibreTranslate is ready ✅');
+        return;
+      }
+    } catch {
+      console.log('LibreTranslate not ready yet, retrying...');
+    }
+    await new Promise((r) => setTimeout(r, 1000));
+  }
+}
+
+/**
+ * Mask tags as HTML spans so the engine translates the inner text
+ */
+function maskPlaceholders(text: string): { maskedText: string; placeholders: Map<string, string> } {
+  const placeholders = new Map<string, string>();
+  let index = 0;
+
+  const regex = /\{([#/])(.*?)\}/g;
+
+  const maskedText = text.replace(regex, (match, prefix, tagName) => {
+    const isOpening = prefix === '#';
+    const placeholderId = `t${index}`; // simple ID like t0, t1
+
+    placeholders.set(placeholderId, match);
+
+    if (isOpening) {
+      const html = `<span id="${placeholderId}">`;
+      index++;
+      return html;
+    } else {
+      return `</span>`;
+    }
+  });
+
+  return { maskedText, placeholders };
+}
+
+/**
+ * Restore tags from the translated HTML
+ */
+function restorePlaceholders(translatedHtml: string, placeholders: Map<string, string>): string {
+  let result = translatedHtml;
+
+  placeholders.forEach((originalTag, id) => {
+    const openingRegex = new RegExp(`<span id\\s*=\\s*["']${id}["']\\s*>`, 'g');
+    result = result.replace(openingRegex, originalTag);
+  });
+
+  const closingTags = Array.from(placeholders.values()).map((t) => t.replace('#', '/'));
+  let tagIdx = 0;
+  result = result.replace(/<\/span>/g, () => {
+    return closingTags[tagIdx++] || '</span>';
+  });
+
+  return result;
+}
+
+/**
+ * Updated Translation Call
+ */
+async function translate(text: string, target: string) {
+  const { maskedText, placeholders } = maskPlaceholders(text);
+
+  const res = await fetch(`${LIBRETRANSLATE_URL}/translate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      q: maskedText,
+      source: sourceLanguage,
+      target: supportedLanguages.get(target),
+      format: 'html',
+    }),
+  });
+
+  const data = await res.json();
+  if (!data.translatedText) return text;
+
+  return restorePlaceholders(data.translatedText, placeholders);
+}
+
+/**
+ * Unescape helper
  */
 function unescapeString(str: string): string {
   return str.replace(/(?<!\\)\\'/g, "'");
 }
+
 /**
- * Finds all translation keys in the project by looking for:
- * - HTML files: keys used with the i18n pipe (e.g., {{ 'key' | i18n }})
- * - TypeScript files: keys used with translate or translateSnapshot functions (e.g., translate('key'))
+ * Finds all translation keys in the project
  */
 async function findKeys(dir = 'src') {
   const keys = new Set<string>();
@@ -54,7 +249,7 @@ async function loadTranslations(dir = 'src/assets/i18n') {
   const files = await readdir(dir, { withFileTypes: true });
   const regex = /^\s*"(.*?)"\s*:/gm;
 
-  supportedLanguages.forEach((language) => {
+  supportedLanguages.forEach((langCode, language) => {
     translations.set(language, new Array());
   });
 
@@ -77,37 +272,89 @@ async function loadTranslations(dir = 'src/assets/i18n') {
   return translations;
 }
 
+import { mkdir, writeFile } from 'fs/promises';
+
 /**
- * Compares the keys found in the project with the existing translations and identifies missing translations for each language
- * Returns a map of language containing arrays of missing translation keys
+ * Merges new translations into existing files or creates new ones
  */
-async function generateMissingTranslations() {
-  const missingTranslation = new Map<string, Array<string>>();
+async function saveTranslations(
+  language: string,
+  newEntries: Record<string, string>,
+  dir = 'src/assets/i18n',
+) {
+  const filePath = join(dir, `${language}.json`);
+  let existingData: Record<string, string> = {};
 
-  const translations$ = loadTranslations();
-  const keys$ = findKeys();
-  const translations = await translations$;
-  const keys = await keys$;
+  await mkdir(dir, { recursive: true });
 
-  supportedLanguages.forEach((language) => {
-    missingTranslation.set(language, new Array());
-  });
+  try {
+    const content = await readFile(filePath, 'utf-8');
+    existingData = JSON.parse(content);
+  } catch {
+    existingData = {};
+  }
 
-  keys.forEach((key) => {
-    for (const [language, languageKeys] of translations) {
-      if (!languageKeys.some((val) => val === key)) {
-        missingTranslation.get(language)!.push(key);
-      }
-    }
-  });
-  return missingTranslation;
+  const updatedData = { ...existingData, ...newEntries };
+
+  const sortedData = Object.keys(updatedData)
+    .sort()
+    .reduce(
+      (acc, key) => {
+        acc[key] = updatedData[key];
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
+
+  await writeFile(filePath, JSON.stringify(sortedData, null, 2), 'utf-8');
 }
 
-console.log('For now, this tool only finds missing translations');
-console.log('At some point, it will auto translate keys');
-console.log('Finding missing translations...');
+/**
+ * Main logic
+ */
+async function main() {
+  console.log('Starting translation tool...');
 
-generateMissingTranslations().then((missingTranslations) => {
-  // TODO: Auto translate missing keys using an API like Google Translate or DeepL
-  console.log(missingTranslations);
-});
+  const dockerStart = startLibreTranslate();
+  const [translations, keys] = await Promise.all([loadTranslations(), findKeys()]);
+
+  await dockerStart;
+  await waitForLibreTranslate();
+
+  console.log('Translating missing keys...\n');
+
+  const results = new Map<string, Record<string, string>>();
+  supportedLanguages.forEach((_, lang) => results.set(lang, {}));
+
+  for (const key of keys) {
+    for (const [language, languageKeys] of translations) {
+      // If key is missing from the existing translation list
+      if (!languageKeys.includes(key)) {
+        try {
+          const translated = await translate(key, language);
+          console.log(`[${language}] ${key} → ${translated}`);
+
+          results.get(language)![key] = translated;
+        } catch (err) {
+          console.error(`Failed to translate "${key}" to ${language}:`, err);
+        }
+      }
+    }
+  }
+
+  console.log('\nSaving translations to files...');
+  for (const [language, newEntries] of results) {
+    if (Object.keys(newEntries).length > 0) {
+      await saveTranslations(language, newEntries);
+      console.log(`Updated ${language}.json`);
+    } else {
+      console.log(`No new keys for ${language}.`);
+    }
+  }
+
+  console.log('\nStopping LibreTranslate container...');
+  await run(`${dockerCmd} stop libretranslate`);
+  console.log('LibreTranslate stopped');
+}
+
+main();
