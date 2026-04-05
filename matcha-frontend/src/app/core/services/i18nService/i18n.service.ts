@@ -4,7 +4,12 @@ import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { I18nUpdateLang } from '../../stores/i18n/i18n.actions';
 import { I18nState } from '../../stores/i18n/i18n.state';
-import { I18nCollection, LangCode, TranslationKey } from '../../stores/i18n/i18n.state.types';
+import {
+  I18nCollection,
+  LangCode,
+  SUPPORTED_LANGUAGES,
+  TranslationKey,
+} from '../../stores/i18n/i18n.state.types';
 import { HydratableService } from '../hydratableService/hydratableService';
 
 @Injectable({
@@ -16,16 +21,10 @@ export class I18nService extends HydratableService {
   readonly #store = inject(Store);
 
   #getBrowserLanguage(): LangCode {
-    const langCode = globalThis.navigator.language?.split('-')?.at(0) ?? 'en';
+    const browserCode = globalThis.navigator.language?.split('-')?.at(0) ?? 'en';
+    const isSupported = Object.values(SUPPORTED_LANGUAGES).includes(browserCode as LangCode);
 
-    switch (langCode) {
-      case 'en':
-        return 'english';
-      case 'fr':
-        return 'french';
-      default:
-        return 'english';
-    }
+    return (isSupported ? browserCode : 'en') as LangCode;
   }
 
   hydrateService(): Observable<void> {
@@ -80,5 +79,9 @@ export class I18nService extends HydratableService {
     replace?: Record<string, string | { toString: () => string }>,
   ) {
     return this.translate(key, replace)();
+  }
+
+  public getCurrentLang() {
+    return this.#store.selectSnapshot(I18nState.getLang);
   }
 }

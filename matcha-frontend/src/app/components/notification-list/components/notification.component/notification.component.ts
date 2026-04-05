@@ -1,0 +1,100 @@
+import { Component, computed, inject, input } from '@angular/core';
+import { I18nPipe } from '../../../../core/pipes/i18n/i18n.pipe';
+import { I18nService } from '../../../../core/services/i18nService/i18n.service';
+import { ButtonLightPrimaryDirective } from '../../../../directives/buttons/button-light-primary.directive';
+import { ButtonPrimaryDirective } from '../../../../directives/buttons/button-primary.directive';
+import { NotificationItem } from '../../notification-list.types';
+
+@Component({
+  selector: 'app-notification',
+  imports: [ButtonPrimaryDirective, I18nPipe, ButtonLightPrimaryDirective],
+  templateUrl: './notification.component.html',
+})
+export class NotificationComponent {
+  readonly notification = input.required<NotificationItem>();
+  readonly i18nService = inject(I18nService);
+
+  readonly notificationTitle = computed(() => {
+    const notification = this.notification();
+
+    if (notification.view === 'message') {
+      return notification.relatedUser.displayName;
+    }
+
+    switch (notification.type) {
+      case 'match':
+        return this.i18nService.translate(
+          '{displayName} est une correspondance ! Commencez à discuter maintenant',
+          {
+            displayName: notification.relatedUser.displayName,
+          },
+        )();
+      case 'like':
+        return this.i18nService.translate('{displayName} a liké votre profil', {
+          displayName: notification.relatedUser.displayName,
+        })();
+      case 'visit':
+        return this.i18nService.translate('{displayName} a vu votre profil', {
+          displayName: notification.relatedUser.displayName,
+        })();
+      case 'message':
+        return this.i18nService.translate('{displayName} vous a envoyé un message', {
+          displayName: notification.relatedUser.displayName,
+        })();
+      default:
+        throw new Error(`Unknown notification type: ${notification.type}`);
+    }
+  });
+
+  readonly notificationSubtitle = computed(() => {
+    const notification = this.notification();
+
+    if (notification.view === 'message') {
+      return notification.content;
+    }
+
+    const now = new Date();
+    const createdAt = new Date(notification.createdAt);
+    const diffInSeconds = Math.floor((now.getTime() - createdAt.getTime()) / 1000);
+
+    const rtf = new Intl.RelativeTimeFormat(this.i18nService.getCurrentLang(), { numeric: 'auto' });
+
+    if (diffInSeconds < 60) {
+      return rtf.format(0, 'second');
+    } else if (diffInSeconds < 3600) {
+      const minutes = Math.floor(diffInSeconds / 60);
+      return rtf.format(-minutes, 'minute');
+    } else if (diffInSeconds < 86400) {
+      const hours = Math.floor(diffInSeconds / 3600);
+      return rtf.format(-hours, 'hour');
+    } else {
+      const days = Math.floor(diffInSeconds / 86400);
+      return rtf.format(-days, 'day');
+    }
+  });
+
+  readonly notificationSideText = computed(() => {
+    const notification = this.notification();
+
+    if (notification.view === 'notification') return;
+
+    const now = new Date();
+    const createdAt = new Date(notification.createdAt);
+    const diffInSeconds = Math.floor((now.getTime() - createdAt.getTime()) / 1000);
+
+    const rtf = new Intl.RelativeTimeFormat(this.i18nService.getCurrentLang(), { numeric: 'auto' });
+
+    if (diffInSeconds < 60) {
+      return rtf.format(0, 'second');
+    } else if (diffInSeconds < 3600) {
+      const minutes = Math.floor(diffInSeconds / 60);
+      return rtf.format(-minutes, 'minute');
+    } else if (diffInSeconds < 86400) {
+      const hours = Math.floor(diffInSeconds / 3600);
+      return rtf.format(-hours, 'hour');
+    } else {
+      const days = Math.floor(diffInSeconds / 86400);
+      return rtf.format(-days, 'day');
+    }
+  });
+}

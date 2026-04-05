@@ -1,0 +1,50 @@
+<div
+  class="flex cursor-pointer items-center justify-between px-6 py-4 hover:bg-white/60"
+  [class.bg-white/80]="!notification().isRead"
+>
+  <div class="flex items-center gap-2">
+    <img
+      class="aspect-square max-h-16 min-h-16 max-w-16 min-w-16 rounded-full object-cover"
+      [src]="notification().relatedUser.avatar"
+    />
+    <div class="flex flex-col gap-1">
+      <p [class.font-semibold]="notification().view === 'notification' && !notification().isRead">
+        {{ notificationTitle() }}
+      </p>
+      <p class="text-sm text-gray-500">
+        {{ notificationSubtitle() }}
+      </p>
+    </div>
+  </div>
+  <div class="flex flex-col gap-2">
+    @if (notification().view === 'message') {
+      <p class="text-sm text-gray-500">
+        {{ notificationSideText() }}
+      </p>
+    }
+    <div class="flex items-center justify-end gap-2">
+      @if (!notification().isRead) {
+        <div
+          class="bg-latte-maroon flex aspect-square min-h-3 min-w-3 animate-pulse items-center justify-center rounded-full"
+          [class.size-6]="
+            notification().view === 'message' &&
+            (notification().badgeCount ?? 0 > 0) &&
+            (notification().badgeCount ?? 0 <= 9)
+          "
+          [class.size-8]="notification().view === 'message' && (notification().badgeCount ?? 0) > 9"
+        >
+          @if (notification().view === 'message' && notification().badgeCount; as badgeCount) {
+            <p class="text-center text-xs text-white">
+              {{ badgeCount > 99 ? '99+' : badgeCount }}
+            </p>
+          }
+        </div>
+      }
+      @if (notification().view === 'notification' && notification().type === 'message') {
+        <button appButtonLightPrimary>
+          {{ ('Discuter' | i18n)() }}
+        </button>
+      }
+    </div>
+  </div>
+</div>
