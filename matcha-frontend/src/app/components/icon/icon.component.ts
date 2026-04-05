@@ -6,10 +6,11 @@ import { IconType } from './icon.generated.types';
   standalone: true,
   template: '',
   host: {
-    '[class]': '"inline-block w-6 h-6 bg-current"',
+    '[class]': '"inline-block bg-current"',
     '[style.mask-image]': 'maskUrl()',
     '[style.webkit-mask-image]': 'maskUrl()',
-    style: 'mask-size: contain; mask-repeat: no-repeat; mask-position: center;',
+    style:
+      'mask-size: contain; mask-repeat: no-repeat; mask-position: center; min-width: 1em; min-height: 1em;',
   },
 })
 export class IconComponent {
