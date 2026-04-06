@@ -1,4 +1,5 @@
 import { computed, Directive, ElementRef, inject, input, OnInit, Renderer2 } from '@angular/core';
+import { IconType } from '../../components/icon/icon.generated.types';
 
 @Directive({
   selector: '[appInputPrimary]',
@@ -7,7 +8,7 @@ export class InputPrimaryDirective implements OnInit {
   readonly #elementRef: ElementRef<HTMLElement> = inject(ElementRef);
   readonly #renderer2 = inject(Renderer2);
 
-  readonly inputIcon = input<string>();
+  readonly icon = input<IconType>();
 
   readonly #classes = [
     'focus:ring-latte-pink',
@@ -26,7 +27,7 @@ export class InputPrimaryDirective implements OnInit {
   readonly #iconClasses = ['pl-10'];
 
   readonly #inputOverrideElement = computed(() => {
-    const inputIcon = this.inputIcon();
+    const inputIcon = this.icon();
 
     if (!inputIcon) return undefined;
 
@@ -45,7 +46,7 @@ export class InputPrimaryDirective implements OnInit {
     const el = this.#elementRef.nativeElement;
     this.#classes.forEach((cls) => this.#renderer2.addClass(el, cls));
 
-    if (this.inputIcon()) {
+    if (this.icon()) {
       this.#iconClasses.forEach((cls) => this.#renderer2.addClass(el, cls));
     }
 

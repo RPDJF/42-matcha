@@ -1,0 +1,84 @@
+<div
+  class="flex cursor-pointer items-center justify-between px-6 py-4 hover:bg-white/60"
+  [class.bg-white/80]="!notification().isRead"
+>
+  <div class="flex items-center gap-2">
+    <div class="relative">
+      <img
+        class="aspect-square max-h-16 min-h-16 max-w-16 min-w-16 rounded-full object-cover"
+        [src]="notification().relatedUser.avatar"
+      />
+      @if (notification().shouldDisplayIcon) {
+        @switch (notification().type) {
+          @case ('like') {
+            <div
+              class="bg-frappe-maroon absolute -right-0.5 -bottom-0.5 flex aspect-square size-fit items-center justify-center rounded-full border border-white p-1"
+            >
+              <app-icon name="icon-heart-full" class="text-latte-maroon size-4" />
+            </div>
+          }
+          @case ('message') {
+            <div
+              class="bg-frappe-blue absolute -right-0.5 -bottom-0.5 flex aspect-square size-fit items-center justify-center rounded-full border border-white p-1"
+            >
+              <app-icon name="icon-reply" class="text-latte-blue size-4" />
+            </div>
+          }
+          @case ('visit') {
+            <div
+              class="bg-frappe-green absolute -right-0.5 -bottom-0.5 flex aspect-square size-fit items-center justify-center rounded-full border border-white p-1"
+            >
+              <app-icon name="icon-user-add" class="text-latte-green size-4" />
+            </div>
+          }
+          @case ('match') {
+            <div
+              class="bg-frappe-mauve absolute -right-0.5 -bottom-0.5 flex aspect-square size-fit items-center justify-center rounded-full border border-white p-1"
+            >
+              <app-icon name="icon-star-full" class="text-latte-mauve size-4" />
+            </div>
+          }
+        }
+      }
+    </div>
+    <div class="flex flex-col gap-1 font-semibold">
+      <p>
+        {{ notificationTitle() }}
+      </p>
+      <p class="text-sm text-gray-500">
+        {{ notificationSubtitle() }}
+      </p>
+    </div>
+  </div>
+  <div class="flex flex-col gap-2">
+    @if (notification().view === 'message') {
+      <p class="text-sm text-gray-500">
+        {{ notificationSideText() }}
+      </p>
+    }
+    <div class="flex items-center justify-end gap-2">
+      @if (notification().view === 'notification' && notification().type === 'message') {
+        <button appButtonLightPrimary>
+          {{ ('Discuter' | i18n)() }}
+        </button>
+      }
+      @if (!notification().isRead) {
+        <div
+          class="bg-latte-maroon flex aspect-square min-h-3 min-w-3 animate-pulse items-center justify-center rounded-full"
+          [class.size-6]="
+            notification().view === 'message' &&
+            (notification().badgeCount ?? 0 > 0) &&
+            (notification().badgeCount ?? 0 <= 9)
+          "
+          [class.size-8]="notification().view === 'message' && (notification().badgeCount ?? 0) > 9"
+        >
+          @if (notification().view === 'message' && notification().badgeCount; as badgeCount) {
+            <p class="text-center text-xs text-white">
+              {{ badgeCount > 99 ? '99+' : badgeCount }}
+            </p>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>

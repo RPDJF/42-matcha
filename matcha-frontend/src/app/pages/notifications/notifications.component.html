@@ -1,0 +1,31 @@
+<div class="flex h-full flex-col">
+  <app-layout-header
+    class="w-full shrink-0"
+    [title]="('Notifications' | i18n)()"
+    [subtitle]="('Restez à jours avec vos correspondances et messages' | i18n)()"
+    [showSubmenu]="showFilters()"
+  >
+    <div class="flex flex-wrap items-center gap-3" ngProjectAs="aside">
+      <button
+        appButtonLink
+        class="text-latte-maroon flex items-center gap-2"
+        (click)="onReadAllClick($event)"
+      >
+        {{ ('Tout marquer comme lu' | i18n)() }}
+      </button>
+    </div>
+    <form ngProjectAs="body" appFormBase class="mt-2 w-full p-0!">
+      <app-radio-button-group [formControl]="filtersFormGroup.controls.notificationsFilter">
+        <app-radio-button value="all">{{ ('Tout' | i18n)() }}</app-radio-button>
+        <app-radio-button value="like">{{ ('Likes' | i18n)() }}</app-radio-button>
+        <app-radio-button value="match">{{ ('Correspondances' | i18n)() }}</app-radio-button>
+        <app-radio-button value="message">{{ ('Messages' | i18n)() }}</app-radio-button>
+        <app-radio-button value="visit">{{ ('Visites' | i18n)() }}</app-radio-button>
+      </app-radio-button-group>
+    </form>
+  </app-layout-header>
+
+  <div class="w-full overflow-y-auto md:px-12">
+    <app-notification-list [notifications]="mockNotifications" [filter]="filter()" />
+  </div>
+</div>

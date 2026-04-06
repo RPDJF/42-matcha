@@ -4,8 +4,13 @@ import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { I18nUpdateLang } from '../../stores/i18n/i18n.actions';
 import { I18nState } from '../../stores/i18n/i18n.state';
-import { I18nCollection, LangCode, TranslationKey } from '../../stores/i18n/i18n.state.types';
+import {
+  I18nCollection,
+  SUPPORTED_LANGUAGES,
+  TranslationKey,
+} from '../../stores/i18n/i18n.state.types';
 import { HydratableService } from '../hydratableService/hydratableService';
+import { LangCode } from './../../stores/i18n/i18n.state.types';
 
 @Injectable({
   providedIn: 'root',
@@ -16,22 +21,17 @@ export class I18nService extends HydratableService {
   readonly #store = inject(Store);
 
   #getBrowserLanguage(): LangCode {
-    const langCode = globalThis.navigator.language?.split('-')?.at(0) ?? 'en';
+    const browserCode = globalThis.navigator.language?.split('-')?.at(0) ?? 'en';
+    const isSupported = Object.keys(SUPPORTED_LANGUAGES).includes(browserCode as LangCode);
 
-    switch (langCode) {
-      case 'en':
-        return 'english';
-      case 'fr':
-        return 'french';
-      default:
-        return 'english';
-    }
+    return (isSupported ? browserCode : 'en') as LangCode;
   }
 
   hydrateService(): Observable<void> {
     const langCode =
       (typeof window !== 'undefined' ? (localStorage.getItem('lang') as LangCode) : undefined) ||
-      this.#getBrowserLanguage();
+      this.#getBrowserLanguage() ||
+      'en';
 
     return this.#store.dispatch(
       new I18nUpdateLang({
@@ -41,8 +41,9 @@ export class I18nService extends HydratableService {
     );
   }
 
-  public loadTranslate(code: LangCode) {
-    return this.#httpClient.get<I18nCollection>(`assets/i18n/${code}.json`);
+  public loadTranslate(langCode: LangCode) {
+    const langName = SUPPORTED_LANGUAGES[langCode];
+    return this.#httpClient.get<I18nCollection>(`assets/i18n/${langName}.json`);
   }
 
   #sanityCheck(key: TranslationKey, value: string) {
@@ -80,5 +81,9 @@ export class I18nService extends HydratableService {
     replace?: Record<string, string | { toString: () => string }>,
   ) {
     return this.translate(key, replace)();
+  }
+
+  public getCurrentLang() {
+    return this.#store.selectSnapshot(I18nState.getLang);
   }
 }

@@ -55,6 +55,7 @@ const supportedLanguages = new Map(
 );
 const sourceLanguage = supportedLanguages.get('french')!;
 const LIBRETRANSLATE_URL = 'http://localhost:5000';
+const CONCURRENCY_LIMIT = 20;
 
 let dockerCmd = 'docker';
 
@@ -103,9 +104,10 @@ async function startLibreTranslate() {
     await run(`
       ${dockerCmd} run -d -p 5000:5000 \
       --name libretranslate \
-      -e PYTHONWARNINGS="ignore" \
+      --oom-kill-disable \
+      -e LT_UPDATE_MODELS=true \
       libretranslate/libretranslate
-    `);
+  `);
   }
 }
 
@@ -136,21 +138,19 @@ function maskPlaceholders(text: string): { maskedText: string; placeholders: Map
   const placeholders = new Map<string, string>();
   let index = 0;
 
-  const regex = /\{([#/])(.*?)\}/g;
+  const blockRegex = /\{#(\w+)\}([\s\S]*?)\{\/\1\}/g;
 
-  const maskedText = text.replace(regex, (match, prefix, tagName) => {
-    const isOpening = prefix === '#';
-    const placeholderId = `t${index}`; // simple ID like t0, t1
-
+  let maskedText = text.replace(blockRegex, (match, tagName, content) => {
+    const placeholderId = `b${index++}`; // b pour bloc
     placeholders.set(placeholderId, match);
+    return `<span id="${placeholderId}">${content}</span>`;
+  });
 
-    if (isOpening) {
-      const html = `<span id="${placeholderId}">`;
-      index++;
-      return html;
-    } else {
-      return `</span>`;
-    }
+  const varRegex = /\{([^\/#].*?)\}/g;
+  maskedText = maskedText.replace(varRegex, (match) => {
+    const placeholderId = `v${index++}`; // v pour variable
+    placeholders.set(placeholderId, match);
+    return `<span id="${placeholderId}" translate="no"></span>`;
   });
 
   return { maskedText, placeholders };
@@ -162,16 +162,26 @@ function maskPlaceholders(text: string): { maskedText: string; placeholders: Map
 function restorePlaceholders(translatedHtml: string, placeholders: Map<string, string>): string {
   let result = translatedHtml;
 
-  placeholders.forEach((originalTag, id) => {
-    const openingRegex = new RegExp(`<span id\\s*=\\s*["']${id}["']\\s*>`, 'g');
-    result = result.replace(openingRegex, originalTag);
-  });
+  const sortedIds = Array.from(placeholders.keys()).sort((a, b) => b.length - a.length);
 
-  const closingTags = Array.from(placeholders.values()).map((t) => t.replace('#', '/'));
-  let tagIdx = 0;
-  result = result.replace(/<\/span>/g, () => {
-    return closingTags[tagIdx++] || '</span>';
-  });
+  for (const id of sortedIds) {
+    const originalTag = placeholders.get(id)!;
+
+    const spanRegex = new RegExp(`<span id=["']${id}["'][^>]*>([\\s\\S]*?)</span>`, 'g');
+
+    if (id.startsWith('b')) {
+      const tagMatch = originalTag.match(/^\{#(\w+)\}/);
+      const tagName = tagMatch ? tagMatch[1] : '';
+
+      result = result.replace(spanRegex, (match, translatedInner) => {
+        return `{#${tagName}}${translatedInner}{/${tagName}}`;
+      });
+    } else {
+      result = result.replace(spanRegex, originalTag);
+    }
+  }
+
+  result = result.replace(/(\b\w{4,}\b)(?:\s+\1)+/gi, '$1');
 
   return result;
 }
@@ -326,20 +336,28 @@ async function main() {
   const results = new Map<string, Record<string, string>>();
   supportedLanguages.forEach((_, lang) => results.set(lang, {}));
 
+  const tasks: Array<{ key: string; language: string }> = [];
   for (const key of keys) {
     for (const [language, languageKeys] of translations) {
-      // If key is missing from the existing translation list
       if (!languageKeys.includes(key)) {
-        try {
-          const translated = await translate(key, language);
-          console.log(`[${language}] ${key} → ${translated}`);
-
-          results.get(language)![key] = translated;
-        } catch (err) {
-          console.error(`Failed to translate "${key}" to ${language}:`, err);
-        }
+        tasks.push({ key, language });
       }
     }
+  }
+
+  const executeTask = async (task: { key: string; language: string }) => {
+    try {
+      const translated = await translate(task.key, task.language);
+      console.log(`[${task.language}] ${task.key} → ${translated}`);
+      results.get(task.language)![task.key] = translated;
+    } catch (err) {
+      console.error(`Failed to translate "${task.key}" to ${task.language}:`, err);
+    }
+  };
+
+  for (let i = 0; i < tasks.length; i += CONCURRENCY_LIMIT) {
+    const chunk = tasks.slice(i, i + CONCURRENCY_LIMIT);
+    await Promise.all(chunk.map((task) => executeTask(task)));
   }
 
   console.log('\nSaving translations to files...');

@@ -12,9 +12,9 @@
     <div class="z-1 flex h-full flex-col justify-between">
       <button
         (click)="clickDetails.emit($event)"
-        class="ml-auto aspect-square cursor-pointer rounded-full bg-gray-200/50 p-3 transition-colors duration-200 hover:bg-gray-200/80"
+        class="ml-auto flex aspect-square cursor-pointer items-center justify-center rounded-full bg-gray-200/50 p-3 transition-colors duration-200 hover:bg-white/80"
       >
-        <img class="size-6 invert" src="assets/images/icons/icon-info.svg" />
+        <app-icon class="size-6 text-white" name="icon-info" />
       </button>
       <div class="flex flex-col gap-3 self-end p-4">
         <div class="flex items-end gap-2">
@@ -25,9 +25,11 @@
         <p class="text-sm text-gray-300">
           {{ ('à {userDistance} km' | i18n: { userDistance: user.distance })() }}
         </p>
-        <div class="flex gap-2">
+        <div class="flex flex-wrap gap-2">
           @for (interest of user.interests; track interest) {
-            <p class="flex items-center gap-2 rounded-3xl bg-gray-600 px-2 py-1 text-sm">
+            <p
+              class="flex items-center gap-2 rounded-3xl bg-gray-600 px-2 py-1 text-sm text-nowrap"
+            >
               {{ interest }}
             </p>
           }

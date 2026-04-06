@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngxs/store';
+import { IconComponent } from '../../components/icon/icon.component';
 import { I18nPipe } from '../../core/pipes/i18n/i18n.pipe';
 import { AuthServiceLoginProp } from '../../core/services/authService/auth.service.types';
 import { AuthLogin } from '../../core/stores/auth/auth.actions';
@@ -24,6 +25,7 @@ import { MarkupReplacerTemplate } from '../../directives/markupReplacer/markupRe
     RouterLink,
     ReactiveFormsModule,
     appFormPrimary,
+    IconComponent,
   ],
   templateUrl: './authentification.component.html',
   standalone: true,

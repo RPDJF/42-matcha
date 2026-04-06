@@ -3,14 +3,17 @@
   [routerLink]="routerLink()"
 >
   <button
-    class="aspect-square size-10 cursor-pointer rounded-2xl p-2 transition-all duration-150 md:size-12 md:rounded-xl md:p-3"
+    class="relative aspect-square size-10 cursor-pointer rounded-2xl p-2 transition-all duration-150 md:size-12 md:rounded-xl md:p-3"
     [class]="this.currentClasses()"
   >
-    <img
-      [src]="`assets/images/icons/${icon()}.svg`"
-      class="aspect-square size-full invert"
-      [class.invert]="selected()"
-    />
+    <app-icon [name]="icon()" class="aspect-square size-full" [class.text-white]="selected()" />
+    @if (badge(); as badge) {
+      <div
+        class="absolute -right-2 -bottom-0.5 flex h-5 min-w-5 animate-bounce items-center justify-center rounded-full bg-red-500 px-1 text-xs text-white md:-right-1"
+      >
+        {{ badge > 99 ? '99+' : badge }}
+      </div>
+    }
   </button>
   @if (name(); as name) {
     <label class="block w-full max-w-full truncate text-center text-xs md:hidden">

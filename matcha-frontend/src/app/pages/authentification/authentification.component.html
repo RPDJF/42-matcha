@@ -1,10 +1,10 @@
 <div
   class="to-latte-mauve via-latte-pink from-latte-maroon fixed top-0 right-0 bottom-0 left-0 -z-1 min-h-screen bg-linear-to-br"
 ></div>
-<div class="mt-16 flex w-full justify-center text-gray-100">
+<div class="mt-16 flex w-full justify-center text-gray-200">
   <div class="flex w-96 flex-col items-center gap-8">
-    <div class="bg-latte-pink aspect-square size-20 rounded-full p-4">
-      <img src="assets/images/icons/icon-heart.svg" class="invert" />
+    <div class="bg-latte-pink aspect-square size-20 rounded-full p-5">
+      <app-icon name="icon-heart-full" class="h-full w-full text-white" />
     </div>
     <div class="text-center">
       <h1 class="text-3xl text-white">{{ ('Adopte ton Dev' | i18n)() }}</h1>
@@ -19,7 +19,7 @@
             appInputPrimary
             [placeholder]="('ton@email.com' | i18n)()"
             [formControl]="authForm.controls.email"
-            inputIcon="icon-email"
+            icon="icon-email"
             type="email"
             required
           />
@@ -31,7 +31,7 @@
             appInputPrimary
             placeholder="••••••••"
             [formControl]="authForm.controls.password"
-            inputIcon="icon-locker-locked"
+            icon="icon-locker-locked"
             type="password"
             required
           />
@@ -51,7 +51,7 @@
         "
       >
         <ng-template appMarkupReplacerTemplate="linkref" let-content>
-          <a class="underline" routerLink="register">{{ content }}</a>
+          <a class="text-white underline" routerLink="register">{{ content }}</a>
         </ng-template>
       </p>
     </div>

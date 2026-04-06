@@ -1,12 +1,17 @@
-import { AfterViewInit, Directive, effect, input, signal } from '@angular/core';
+import { AfterViewInit, Directive, effect, inject, input, ViewContainerRef } from '@angular/core';
+import { IconComponent } from '../../components/icon/icon.component';
+import { IconType } from '../../components/icon/icon.generated.types';
 import { AbstractButtonDirective } from './AbstractButtonDirective';
 
 @Directive({
   selector: '[appButtonIcon]',
 })
 export class ButtonIconDirective extends AbstractButtonDirective implements AfterViewInit {
-  readonly icon = input.required<string>();
-  readonly #iconElementRef = signal<HTMLImageElement | undefined>(undefined);
+  readonly #vcr = inject(ViewContainerRef);
+
+  readonly icon = input.required<IconType>();
+
+  #iconRef?: any;
 
   override readonly classes: string[] = [
     'aspect-square',
@@ -18,7 +23,6 @@ export class ButtonIconDirective extends AbstractButtonDirective implements Afte
     'size-fit',
     'transition-all',
     'duration-150',
-    'text-white',
   ];
 
   override readonly disabledClasses: string[] = [
@@ -31,7 +35,6 @@ export class ButtonIconDirective extends AbstractButtonDirective implements Afte
     'transition-all',
     'duration-150',
     'opacity-70',
-    'text-white',
   ];
 
   override readonly loadingClasses: string[] = [
@@ -48,29 +51,24 @@ export class ButtonIconDirective extends AbstractButtonDirective implements Afte
     'justify-center',
     'items-center',
     'gap-1',
-    'text-white',
   ];
 
   constructor() {
     super();
 
     effect(() => {
-      this.#iconElementRef.update((iconElementRef) => {
-        if (!iconElementRef) {
-          iconElementRef = document.createElement('img');
-          iconElementRef.className = 'transition-all duration-200 size-6';
-        }
+      if (!this.#iconRef) return;
 
-        iconElementRef.src = `assets/images/icons/icon-${this.icon()}.svg`;
-        return iconElementRef;
-      });
+      this.#iconRef.setInput('name', this.icon());
     });
   }
-
   override ngAfterViewInit(): void {
     super.ngAfterViewInit();
 
-    this.addNativeElement(this.#iconElementRef()!);
+    this.#iconRef = this.#vcr.createComponent(IconComponent);
+    this.#iconRef.setInput('name', this.icon());
+    this.#iconRef.location.nativeElement.className = 'transition-all duration-200 size-6';
+    this.addNativeElement(this.#iconRef.location.nativeElement);
   }
 
   protected override readonly loadingIconClasses: string[] = ['min-w-6', 'invert'];
