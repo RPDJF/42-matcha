@@ -6,11 +6,11 @@ import { I18nUpdateLang } from '../../stores/i18n/i18n.actions';
 import { I18nState } from '../../stores/i18n/i18n.state';
 import {
   I18nCollection,
-  LangCode,
   SUPPORTED_LANGUAGES,
   TranslationKey,
 } from '../../stores/i18n/i18n.state.types';
 import { HydratableService } from '../hydratableService/hydratableService';
+import { LangCode } from './../../stores/i18n/i18n.state.types';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +22,7 @@ export class I18nService extends HydratableService {
 
   #getBrowserLanguage(): LangCode {
     const browserCode = globalThis.navigator.language?.split('-')?.at(0) ?? 'en';
-    const isSupported = Object.values(SUPPORTED_LANGUAGES).includes(browserCode as LangCode);
+    const isSupported = Object.keys(SUPPORTED_LANGUAGES).includes(browserCode as LangCode);
 
     return (isSupported ? browserCode : 'en') as LangCode;
   }
@@ -30,7 +30,8 @@ export class I18nService extends HydratableService {
   hydrateService(): Observable<void> {
     const langCode =
       (typeof window !== 'undefined' ? (localStorage.getItem('lang') as LangCode) : undefined) ||
-      this.#getBrowserLanguage();
+      this.#getBrowserLanguage() ||
+      'en';
 
     return this.#store.dispatch(
       new I18nUpdateLang({
@@ -40,8 +41,9 @@ export class I18nService extends HydratableService {
     );
   }
 
-  public loadTranslate(code: LangCode) {
-    return this.#httpClient.get<I18nCollection>(`assets/i18n/${code}.json`);
+  public loadTranslate(langCode: LangCode) {
+    const langName = SUPPORTED_LANGUAGES[langCode];
+    return this.#httpClient.get<I18nCollection>(`assets/i18n/${langName}.json`);
   }
 
   #sanityCheck(key: TranslationKey, value: string) {

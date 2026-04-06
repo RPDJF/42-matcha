@@ -4,16 +4,17 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { RadioButtonGroupComponent } from '../../components/forms/inputs/radio-button-group/radio-button-group.component';
 import { RadioButtonComponent } from '../../components/forms/inputs/radio-button-group/radio-button/radio-button.component';
 import { RangeSelectorComponent } from '../../components/forms/inputs/range-selector/range-selector.component';
+import { IconComponent } from '../../components/icon/icon.component';
 import { LayoutHeaderComponent } from '../../components/layout/layout-header/layout-header.component';
 import { RESEARCH_FILTERS_LIMITS } from '../../core/consts/researchFiltersLimits.consts';
 import { I18nPipe } from '../../core/pipes/i18n/i18n.pipe';
-import { PublicUser } from '../../core/stores/user/user.state.types';
 import { ButtonIconPrimaryDirective } from '../../directives/buttons/button-icon-primary.directive';
 import { ButtonIconSecondaryDirective } from '../../directives/buttons/button-icon-secondary.directive';
 import { ButtonIconDirective } from '../../directives/buttons/button-icon.directive';
 import { ButtonPrimaryDirective } from '../../directives/buttons/button-primary.directive';
 import { ButtonSecondaryDirective } from '../../directives/buttons/button-secondary.directive';
 import { appFormBase } from '../../directives/forms/form-base.directive';
+import { publicUsersMock } from '../../helpers/mocks/ressource.mocks';
 import { UserCardComponent } from './components/user-card/user-card.component';
 
 type UserStatusFilter = 'all' | 'online' | 'new';
@@ -34,6 +35,7 @@ type UserStatusFilter = 'all' | 'online' | 'new';
     ButtonIconPrimaryDirective,
     ButtonIconSecondaryDirective,
     ButtonIconDirective,
+    IconComponent,
   ],
   templateUrl: './discover.component.html',
   host: {
@@ -97,23 +99,5 @@ export class DiscoverComponent {
   }
 
   // TODO: remove mock and use real values
-  readonly mockUser: PublicUser = {
-    age: 20,
-    biography:
-      "Incroyable hôte de l'incroyable cirque digital | Responsable du divertissement des humains | Je cherche des copains",
-    displayName: 'Caine',
-    gender: 'female',
-    interests: ['Aventures', 'Humains', 'Cirque'],
-    isAdmin: false,
-    lastAlive: 29809,
-    pictures: ['error'],
-    rating: 4,
-    sexuality: 'bisexual',
-    status: 'free',
-    userUUID: 'jfh473264238gd',
-    avatar:
-      'https://i.ytimg.com/vi/aAg3bwzSuLk/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLAbUo54f58ng1XF1-V6KrD_vmVNSw',
-    city: 'Charrat',
-    distance: 9999,
-  };
+  readonly mockUsers = publicUsersMock.sort(() => Math.random() - 0.5);
 }

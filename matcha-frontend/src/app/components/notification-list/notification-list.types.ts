@@ -13,3 +13,7 @@ export interface NotificationItem {
   shouldDisplayChatButton: boolean;
   shouldDisplayBadge: boolean;
 }
+
+export interface NotificationListFilter {
+  type?: 'match' | 'message' | 'like' | 'visit';
+}

@@ -1,19 +1,22 @@
 import { Component, computed, inject, input, model } from '@angular/core';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { filter } from 'rxjs';
+import { IconComponent } from '../../icon/icon.component';
+import { IconType } from '../../icon/icon.generated.types';
 
 @Component({
   selector: 'app-sidemenu-button',
-  imports: [RouterLink],
+  imports: [RouterLink, IconComponent],
   templateUrl: './sidemenu-button.component.html',
 })
 export class SidemenuButtonComponent {
   readonly #router = inject(Router);
 
   readonly name = input<string>();
-  readonly icon = input.required<string>();
+  readonly icon = input.required<IconType>();
   readonly routerLink = input<string>();
   readonly selected = model<boolean>();
+  readonly badge = input<number>();
 
   readonly currentClasses = computed(() =>
     (this.selected() ? this.#activeClasses : this.#inactiveClasses).join(' '),

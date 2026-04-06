@@ -11,14 +11,14 @@
         class="hidden items-center gap-2 md:flex"
         (click)="showFilters.set(!showFilters())"
       >
-        <img class="size-5 invert" src="assets/images/icons/icon-filters.svg" />
+        <app-icon class="size-5 text-white" name="icon-filters" />
         {{ ('Filtres' | i18n)() }}
       </button>
       <button
         (click)="showFilters.set(!showFilters())"
         class="block md:hidden"
         appButtonIcon
-        icon="filters"
+        icon="icon-filters"
       ></button>
     </div>
     <form ngProjectAs="submenu" appFormBase class="container mx-auto">
@@ -89,11 +89,21 @@
   </app-layout-header>
 
   <div class="flex h-full flex-col items-center justify-center gap-8 p-8 md:p-12">
-    <app-user-card [user]="mockUser" class="h-fit" (clickDetails)="onDetailsClick($event)" />
+    <app-user-card [user]="mockUsers[0]" class="h-fit" (clickDetails)="onDetailsClick($event)" />
     <div class="flex w-fit items-center gap-8">
-      <button appButtonIconSecondary icon="close" (click)="onPassClick($event)"></button>
-      <button appButtonIconPrimary icon="heart" (click)="onSmashClick($event)"></button>
-      <button appButtonIconSecondary icon="info" (click)="onDetailsClick($event)"></button>
+      <button
+        appButtonIconSecondary
+        icon="icon-close"
+        (click)="onPassClick($event)"
+        class="text-red-300"
+      ></button>
+      <button appButtonIconPrimary icon="icon-heart-full" (click)="onSmashClick($event)"></button>
+      <button
+        appButtonIconSecondary
+        icon="icon-info"
+        (click)="onDetailsClick($event)"
+        class="text-blue-300"
+      ></button>
     </div>
   </div>
 </div>
