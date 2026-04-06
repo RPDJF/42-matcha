@@ -1,58 +1,80 @@
-# MatchaFrontend
+# 🧩 Matcha Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.3.
+> Frontend for the 42 Matcha project — a 42 school project.
 
-## Development server
+This repository contains the Angular frontend. The instructions below explain the project layout and available scripts.
 
-To start a local development server, run:
+## Quick Start
+
+- **Install deps:** `npm install`
+- **Dev server:** `npm run start:dev` (defaults to `http://localhost:4200`)
+- **Production serve (local):** `npm run start`
+- **Build:** `npm run build` → outputs into `dist/`
+- **Tests:** `npm run test`
+
+## Project Info
+
+- **Framework:** `Angular` (v21.x)
+- **Package manager:** npm (see `package.json`)
+- **Styling:** `Tailwind CSS` + utility classes
+
+## Directory Structure
+
+Top-level files/folders you care about:
+
+- `angular.json`: Angular workspace configuration.
+- `package.json`: NPM scripts & dependencies.
+- `scripts/`: helper scripts used at build time (`buildIcons.ts`, `translate.ts`).
+- `src/` — main frontend source:
+  - `src/index.html` — main HTML entry.
+  - `src/main.ts` — Angular bootstrap.
+  - `src/styles.css` — global styles (Tailwind entry).
+  - `src/app/` — application sources:
+    - `app.component.*` — root component files.
+    - `app.routes.ts` — routing configuration.
+    - `components/` — reusable UI components (icons, layout, spinner, sidemenu, notification list, etc.).
+    - `core/` — app core logic, services, stores (e.g. `stores/i18n`).
+    - `directives/` — custom directives.
+    - `helpers/` — mocks and small helpers.
+    - `modals/` — modal components.
+    - `pages/` — route pages: `authentification`, `discover`, `notifications`, etc.
+  - `src/assets/` — static assets:
+    - `assets/i18n/` — many locale JSON files used by the app (translations).
+    - `assets/images/` — icons and images.
+
+## Important files
+
+- `environments/environment.ts` and `environments/environment.dev.ts` — environment-specific settings (API URLs, flags).
+- `tailwind.config.js` and `postcss` setup — Tailwind tooling.
+
+## NPM Scripts
+
+- `npm run ng` : helper wrapper for the Angular CLI.
+- `npm run start` : `ng serve --configuration production` — serve with production configuration.
+- `npm run start:dev` : `ng serve --configuration=development` — development server.
+- `npm run build` : `ng build` — produce a production build.
+- `npm run build:translations` : `node scripts/translate.ts` — build translations.
+- `npm run build:icons` : `node scripts/buildIcons.ts` — generate icon assets.
+- `npm run watch` : `ng build --watch --configuration development` — watch build.
+- `npm run test` : `ng test` — run unit tests (Jest setup present).
+- `npm run format` : `prettier --write "src/**/*.{ts,html,css,scss}"` — format code.
+- `npm run format:check` : `prettier --check "src/**/*.{ts,html,css,scss}"` — check formatting.
+
+## Icons
+
+This project uses normalized icons. For any icons you add in `src/assets/images/icons`, don't forget to run
 
 ```bash
-ng serve
+npm run build:icons
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+It will update icon types in `src/app/components/icon/icon.generated.types.ts`
 
-## Code scaffolding
+### Icon Gallery
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Icon gallery is automaticall generated from the build script
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+[Icon Gallery](src/app/components/icon/README.md)
 
 ## Auto translations
 
