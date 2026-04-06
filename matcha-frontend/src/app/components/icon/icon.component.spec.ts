@@ -13,6 +13,7 @@ describe('IconComponent', () => {
 
     fixture = TestBed.createComponent(IconComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('name', 'icon-heart');
     await fixture.whenStable();
   });
 
