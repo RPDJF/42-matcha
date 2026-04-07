@@ -12,6 +12,7 @@
 | ![](../../../assets/images/icons/icon-info.svg) | `icon-info` |
 | ![](../../../assets/images/icons/icon-locker-locked.svg) | `icon-locker-locked` |
 | ![](../../../assets/images/icons/icon-reply.svg) | `icon-reply` |
+| ![](../../../assets/images/icons/icon-search.svg) | `icon-search` |
 | ![](../../../assets/images/icons/icon-settings.svg) | `icon-settings` |
 | ![](../../../assets/images/icons/icon-spinner.svg) | `icon-spinner` |
 | ![](../../../assets/images/icons/icon-star.svg) | `icon-star` |

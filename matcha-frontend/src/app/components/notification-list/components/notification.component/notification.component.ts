@@ -48,6 +48,32 @@ export class NotificationComponent {
     }
   });
 
+  readonly dateLabel = computed(() => {
+    const notification = this.notification();
+
+    const now = new Date();
+    const createdAt = new Date(notification.createdAt);
+    const diffInSeconds = Math.floor((now.getTime() - createdAt.getTime()) / 1000);
+
+    const rtf = new Intl.RelativeTimeFormat(this.#i18nService.getCurrentLang(), {
+      numeric: 'auto',
+      style: notification.view === 'message' ? 'narrow' : undefined,
+    });
+
+    if (diffInSeconds < 60) {
+      return rtf.format(0, 'second');
+    } else if (diffInSeconds < 3600) {
+      const minutes = Math.floor(diffInSeconds / 60);
+      return rtf.format(-minutes, 'minute');
+    } else if (diffInSeconds < 86400) {
+      const hours = Math.floor(diffInSeconds / 3600);
+      return rtf.format(-hours, 'hour');
+    } else {
+      const days = Math.floor(diffInSeconds / 86400);
+      return rtf.format(-days, 'day');
+    }
+  });
+
   readonly notificationSubtitle = computed(() => {
     const notification = this.notification();
 
@@ -55,52 +81,8 @@ export class NotificationComponent {
       return notification.content;
     }
 
-    const now = new Date();
-    const createdAt = new Date(notification.createdAt);
-    const diffInSeconds = Math.floor((now.getTime() - createdAt.getTime()) / 1000);
-
-    const rtf = new Intl.RelativeTimeFormat(this.#i18nService.getCurrentLang(), {
-      numeric: 'auto',
-    });
-
-    if (diffInSeconds < 60) {
-      return rtf.format(0, 'second');
-    } else if (diffInSeconds < 3600) {
-      const minutes = Math.floor(diffInSeconds / 60);
-      return rtf.format(-minutes, 'minute');
-    } else if (diffInSeconds < 86400) {
-      const hours = Math.floor(diffInSeconds / 3600);
-      return rtf.format(-hours, 'hour');
-    } else {
-      const days = Math.floor(diffInSeconds / 86400);
-      return rtf.format(-days, 'day');
-    }
+    return this.dateLabel();
   });
 
-  readonly notificationSideText = computed(() => {
-    const notification = this.notification();
-
-    if (notification.view === 'notification') return;
-
-    const now = new Date();
-    const createdAt = new Date(notification.createdAt);
-    const diffInSeconds = Math.floor((now.getTime() - createdAt.getTime()) / 1000);
-
-    const rtf = new Intl.RelativeTimeFormat(this.#i18nService.getCurrentLang(), {
-      numeric: 'auto',
-    });
-
-    if (diffInSeconds < 60) {
-      return rtf.format(0, 'second');
-    } else if (diffInSeconds < 3600) {
-      const minutes = Math.floor(diffInSeconds / 60);
-      return rtf.format(-minutes, 'minute');
-    } else if (diffInSeconds < 86400) {
-      const hours = Math.floor(diffInSeconds / 3600);
-      return rtf.format(-hours, 'hour');
-    } else {
-      const days = Math.floor(diffInSeconds / 86400);
-      return rtf.format(-days, 'day');
-    }
-  });
+  readonly notificationSideText = computed(() => this.dateLabel());
 }

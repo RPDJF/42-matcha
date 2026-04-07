@@ -16,4 +16,5 @@ export interface NotificationItem {
 
 export interface NotificationListFilter {
   type?: 'match' | 'message' | 'like' | 'visit';
+  searchDisplayname?: string;
 }

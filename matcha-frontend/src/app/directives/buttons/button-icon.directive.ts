@@ -1,4 +1,12 @@
-import { AfterViewInit, Directive, effect, inject, input, ViewContainerRef } from '@angular/core';
+import {
+  AfterViewInit,
+  ComponentRef,
+  Directive,
+  effect,
+  inject,
+  input,
+  ViewContainerRef,
+} from '@angular/core';
 import { IconComponent } from '../../components/icon/icon.component';
 import { IconType } from '../../components/icon/icon.generated.types';
 import { AbstractButtonDirective } from './AbstractButtonDirective';
@@ -11,7 +19,7 @@ export class ButtonIconDirective extends AbstractButtonDirective implements Afte
 
   readonly icon = input.required<IconType>();
 
-  #iconRef?: any;
+  #iconRef?: ComponentRef<IconComponent>;
 
   override readonly classes: string[] = [
     'aspect-square',

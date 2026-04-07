@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { AuthentificationComponent } from './pages/authentification/authentification.component';
 import { DiscoverComponent } from './pages/discover/discover.component';
+import { ChatsComponent } from './pages/messages/chats.component';
 import { NotificationsComponent } from './pages/notifications/notifications.component';
 
 export const routes: Routes = [
@@ -21,6 +22,10 @@ export const routes: Routes = [
   {
     path: 'discover',
     component: DiscoverComponent,
+  },
+  {
+    path: 'chats',
+    component: ChatsComponent,
   },
   {
     path: 'notifications',

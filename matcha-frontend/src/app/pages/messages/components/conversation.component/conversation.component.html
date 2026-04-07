@@ -1,0 +1,56 @@
+@if (conversationData(); as conversationData) {
+  <div class="flex h-full flex-col">
+    <header class="bg-white px-6 py-4">
+      <div class="flex items-center gap-4">
+        <div class="relative">
+          <img
+            class="max-h-12 min-h-12 max-w-12 min-w-12 rounded-full"
+            [src]="conversationData.relatedUser.avatar"
+          />
+        </div>
+        <div class="flex flex-col items-start justify-center">
+          <p class="text-xl font-medium text-black">
+            {{ conversationData.relatedUser.displayName }}
+          </p>
+          <p class="text-latte-green text-xs">Online</p>
+        </div>
+      </div>
+    </header>
+    <div class="flex h-full w-full grow flex-col gap-4 bg-white/50 p-8">
+      @if (conversationData.messages.length) {
+        @for (message of conversationData.messages; track message) {
+          <div
+            class="flex w-fit max-w-3/5 flex-col gap-1"
+            [class.self-end]="message.relatedUserUUID === 'me'"
+          >
+            <div
+              class="rounded-2xl border border-gray-100 bg-white px-4 py-3 text-black shadow-md"
+              [class.from-latte-maroon]="message.relatedUserUUID === 'me'"
+              [class.to-latte-pink]="message.relatedUserUUID === 'me'"
+              [class.bg-linear-to-br]="message.relatedUserUUID === 'me'"
+              [class.text-white]="message.relatedUserUUID === 'me'"
+              [class.rounded-br-md]="message.relatedUserUUID === 'me'"
+              [class.rounded-bl-md]="message.relatedUserUUID !== 'me'"
+            >
+              <span>{{ message.message }}</span>
+            </div>
+            <span class="mx-2 text-xs" [class.self-end]="message.relatedUserUUID === 'me'"
+              >10:33 AM</span
+            >
+          </div>
+        }
+      } @else {
+        <!-- TODO: no messages yet, start a conversation -->
+      }
+    </div>
+    <footer>pp</footer>
+  </div>
+} @else {
+  <div class="flex h-full flex-col items-center justify-center gap-2">
+    <div class="bg-frappe-flamingo flex items-center justify-center rounded-full p-5">
+      <app-icon name="icon-reply" class="text-latte-maroon size-10" />
+    </div>
+    <p class="text-2xl text-black">{{ ('Sélectionnez une conversation' | i18n)() }}</p>
+    <p>{{ ('Choisissez un tchat pour commencer à discuter' | i18n)() }}</p>
+  </div>
+}

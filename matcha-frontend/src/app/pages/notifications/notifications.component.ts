@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { map, tap } from 'rxjs';
@@ -32,7 +32,6 @@ import { NotificationListFilter } from './../../components/notification-list/not
   },
 })
 export class NotificationsComponent {
-  readonly showFilters = signal<boolean>(false);
   readonly researchFiltersLimits = RESEARCH_FILTERS_LIMITS;
 
   readonly filtersFormGroup = new FormGroup({

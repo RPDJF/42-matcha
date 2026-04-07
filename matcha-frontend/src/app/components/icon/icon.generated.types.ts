@@ -10,6 +10,7 @@ export type IconType =
   | 'icon-info'
   | 'icon-locker-locked'
   | 'icon-reply'
+  | 'icon-search'
   | 'icon-settings'
   | 'icon-spinner'
   | 'icon-star'
