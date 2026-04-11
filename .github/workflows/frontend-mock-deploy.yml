@@ -39,10 +39,15 @@ jobs:
         run: |
           npm run build -- --configuration production --base-href "/${{ github.event.repository.name }}/"
 
+      - name: Prepare Pages artifact
+        run: |
+          mkdir pages
+          cp -r dist/matcha-frontend/browser/* pages/
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: matcha-frontend/dist/matcha-frontend
+          path: pages
 
   deploy:
     name: Deploy to GitHub Pages
