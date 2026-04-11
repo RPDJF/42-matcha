@@ -14,7 +14,7 @@ import { ButtonIconDirective } from '../../directives/buttons/button-icon.direct
 import { ButtonPrimaryDirective } from '../../directives/buttons/button-primary.directive';
 import { ButtonSecondaryDirective } from '../../directives/buttons/button-secondary.directive';
 import { appFormBase } from '../../directives/forms/form-base.directive';
-import { publicUsersMock } from '../../helpers/mocks/ressource.mocks';
+import { publicUsersMock } from '../../helpers/mocks/users.mock';
 import { UserCardComponent } from './components/user-card/user-card.component';
 
 type UserStatusFilter = 'all' | 'online' | 'new';

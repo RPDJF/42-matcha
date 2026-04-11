@@ -1,4 +1,12 @@
-import { AfterViewInit, Directive, effect, inject, input, ViewContainerRef } from '@angular/core';
+import {
+  AfterViewInit,
+  ComponentRef,
+  Directive,
+  effect,
+  inject,
+  input,
+  ViewContainerRef,
+} from '@angular/core';
 import { IconComponent } from '../../components/icon/icon.component';
 import { IconType } from '../../components/icon/icon.generated.types';
 import { AbstractButtonDirective } from './AbstractButtonDirective';
@@ -11,11 +19,13 @@ export class ButtonIconDirective extends AbstractButtonDirective implements Afte
 
   readonly icon = input.required<IconType>();
 
-  #iconRef?: any;
+  #iconRef?: ComponentRef<IconComponent>;
 
   override readonly classes: string[] = [
     'aspect-square',
-    'block',
+    'flex',
+    'items-center',
+    'justify-center',
     'hover:bg-black/5',
     'cursor-pointer',
     'rounded-full',
@@ -27,7 +37,9 @@ export class ButtonIconDirective extends AbstractButtonDirective implements Afte
 
   override readonly disabledClasses: string[] = [
     'aspect-square',
-    'block',
+    'flex',
+    'items-center',
+    'justify-center',
     'cursor-not-allowed',
     'rounded-full',
     'p-2',
@@ -39,7 +51,9 @@ export class ButtonIconDirective extends AbstractButtonDirective implements Afte
 
   override readonly loadingClasses: string[] = [
     'aspect-square',
-    'block',
+    'flex',
+    'items-center',
+    'justify-center',
     'cursor-not-allowed',
     'rounded-full',
     'p-2',

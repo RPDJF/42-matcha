@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { map, tap } from 'rxjs';
@@ -11,7 +11,7 @@ import { RESEARCH_FILTERS_LIMITS } from '../../core/consts/researchFiltersLimits
 import { I18nPipe } from '../../core/pipes/i18n/i18n.pipe';
 import { ButtonLinkDirective } from '../../directives/buttons/button-link.directive';
 import { appFormBase } from '../../directives/forms/form-base.directive';
-import { mockPublicUsers } from '../../helpers/mocks/ressource.mocks';
+import { generateRandomPublicUsers } from '../../helpers/mocks/users.mock';
 import { NotificationListFilter } from './../../components/notification-list/notification-list.types';
 
 @Component({
@@ -32,7 +32,6 @@ import { NotificationListFilter } from './../../components/notification-list/not
   },
 })
 export class NotificationsComponent {
-  readonly showFilters = signal<boolean>(false);
   readonly researchFiltersLimits = RESEARCH_FILTERS_LIMITS;
 
   readonly filtersFormGroup = new FormGroup({
@@ -73,7 +72,7 @@ export class NotificationsComponent {
   }
 
   // TODO: remove mock and use real values
-  readonly mockNotifications: NotificationItem[] = mockPublicUsers(96)
+  readonly mockNotifications: NotificationItem[] = generateRandomPublicUsers(96)
     .map(
       (user, index) =>
         ({
@@ -82,10 +81,10 @@ export class NotificationsComponent {
           type: ['message', 'like', 'match', 'visit'][index % 4] as NotificationItem['type'],
           content: 'Salut, ça te dirait de discuter ?',
           createdAt: new Date(new Date().getTime() - index * 5 * 60 * 1000),
-          relatedUser: user,
-          shouldDisplayBadge: true,
-          shouldDisplayChatButton: true,
+          user: user,
           shouldDisplayIcon: true,
+          shouldDisplayChatButton: true,
+          shouldDisplayBadge: true,
           badgeCount: index % 5 === 0 ? 100 : index % 5,
           isRead: index % 3 === 0,
         }) as NotificationItem,

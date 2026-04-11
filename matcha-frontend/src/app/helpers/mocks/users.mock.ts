@@ -1,4 +1,4 @@
-import { PublicUser } from './../../core/stores/user/user.state.types';
+import { PublicUser } from '../../core/stores/user/user.state.types';
 
 export const publicUsersMock: PublicUser[] = [
   {
@@ -152,11 +152,11 @@ export const publicUsersMock: PublicUser[] = [
   },
 ];
 
-export function mockRandomPublicUser(): PublicUser {
+export function getRandomPublicUser(): PublicUser {
   const randomIndex = Math.floor(Math.random() * publicUsersMock.length);
   return publicUsersMock[randomIndex];
 }
 
-export function mockPublicUsers(count: number): PublicUser[] {
-  return Array.from({ length: count }, () => mockRandomPublicUser());
+export function generateRandomPublicUsers(count: number): PublicUser[] {
+  return Array.from({ length: count }, () => getRandomPublicUser());
 }

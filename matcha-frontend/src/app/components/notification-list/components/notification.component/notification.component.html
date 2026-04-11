@@ -1,58 +1,58 @@
 <div
-  class="flex cursor-pointer items-center justify-between px-6 py-4 hover:bg-white/60"
-  [class.bg-white/80]="!notification().isRead"
+  class="flex cursor-pointer items-center justify-between gap-2 px-6 py-4 hover:bg-white/60"
+  [class.bg-white/80]="!notification().isRead || notification().view === 'message'"
 >
   <div class="flex items-center gap-2">
-    <div class="relative">
-      <img
-        class="aspect-square max-h-16 min-h-16 max-w-16 min-w-16 rounded-full object-cover"
-        [src]="notification().relatedUser.avatar"
-      />
-      @if (notification().shouldDisplayIcon) {
-        @switch (notification().type) {
-          @case ('like') {
-            <div
-              class="bg-frappe-maroon absolute -right-0.5 -bottom-0.5 flex aspect-square size-fit items-center justify-center rounded-full border border-white p-1"
-            >
-              <app-icon name="icon-heart-full" class="text-latte-maroon size-4" />
-            </div>
+    @if (notification().view === 'notification') {
+      <app-avatar [user]="notification().user" [displayBadge]="notification().shouldDisplayIcon">
+        <div ngProjectAs="badge">
+          @switch (notification().type) {
+            @case ('like') {
+              <div
+                class="bg-frappe-maroon absolute -right-0.5 -bottom-0.5 flex aspect-square size-fit items-center justify-center rounded-full border border-white p-1"
+              >
+                <app-icon name="icon-heart-full" class="text-latte-maroon size-4" />
+              </div>
+            }
+            @case ('message') {
+              <div
+                class="bg-frappe-blue absolute -right-0.5 -bottom-0.5 flex aspect-square size-fit items-center justify-center rounded-full border border-white p-1"
+              >
+                <app-icon name="icon-reply" class="text-latte-blue size-4" />
+              </div>
+            }
+            @case ('visit') {
+              <div
+                class="bg-frappe-green absolute -right-0.5 -bottom-0.5 flex aspect-square size-fit items-center justify-center rounded-full border border-white p-1"
+              >
+                <app-icon name="icon-user-add" class="text-latte-green size-4" />
+              </div>
+            }
+            @case ('match') {
+              <div
+                class="bg-frappe-mauve absolute -right-0.5 -bottom-0.5 flex aspect-square size-fit items-center justify-center rounded-full border border-white p-1"
+              >
+                <app-icon name="icon-star-full" class="text-latte-mauve size-4" />
+              </div>
+            }
           }
-          @case ('message') {
-            <div
-              class="bg-frappe-blue absolute -right-0.5 -bottom-0.5 flex aspect-square size-fit items-center justify-center rounded-full border border-white p-1"
-            >
-              <app-icon name="icon-reply" class="text-latte-blue size-4" />
-            </div>
-          }
-          @case ('visit') {
-            <div
-              class="bg-frappe-green absolute -right-0.5 -bottom-0.5 flex aspect-square size-fit items-center justify-center rounded-full border border-white p-1"
-            >
-              <app-icon name="icon-user-add" class="text-latte-green size-4" />
-            </div>
-          }
-          @case ('match') {
-            <div
-              class="bg-frappe-mauve absolute -right-0.5 -bottom-0.5 flex aspect-square size-fit items-center justify-center rounded-full border border-white p-1"
-            >
-              <app-icon name="icon-star-full" class="text-latte-mauve size-4" />
-            </div>
-          }
-        }
-      }
-    </div>
-    <div class="flex flex-col gap-1 font-semibold">
-      <p>
+        </div>
+      </app-avatar>
+    } @else {
+      <app-avatar [user]="notification().user" [displayBadge]="notification().shouldDisplayIcon" />
+    }
+    <div class="flex flex-col gap-1">
+      <p [class.font-medium]="notification().isRead" [class.font-semibold]="!notification().isRead">
         {{ notificationTitle() }}
       </p>
-      <p class="text-sm text-gray-500">
+      <p class="text-sm text-gray-500" [class.line-clamp-1]="notification().view === 'message'">
         {{ notificationSubtitle() }}
       </p>
     </div>
   </div>
   <div class="flex flex-col gap-2">
     @if (notification().view === 'message') {
-      <p class="text-sm text-gray-500">
+      <p class="text-sm text-nowrap text-gray-500">
         {{ notificationSideText() }}
       </p>
     }

@@ -7,7 +7,7 @@ export interface NotificationItem {
   content: string;
   isRead?: boolean;
   createdAt: Date;
-  relatedUser: PublicUser;
+  user: PublicUser;
   badgeCount?: number;
   shouldDisplayIcon: boolean;
   shouldDisplayChatButton: boolean;
@@ -16,4 +16,5 @@ export interface NotificationItem {
 
 export interface NotificationListFilter {
   type?: 'match' | 'message' | 'like' | 'visit';
+  searchDisplayname?: string;
 }

@@ -1,0 +1,36 @@
+<div class="flex h-full">
+  <div
+    class="w-full flex-col border-r border-r-gray-300 md:flex md:w-96 lg:w-md"
+    [class.hidden]="conversationData()"
+    [class.flex]="!conversationData()"
+  >
+    <app-layout-header
+      class="shrink-0 flex-col md:flex-row"
+      [title]="('Messages' | i18n)()"
+      [subtitle]="('Restez à jours avec vos correspondances et messages' | i18n)()"
+    >
+      <form ngProjectAs="body" appFormBase class="mt-2 w-full p-0!">
+        <input
+          class="w-full"
+          appInputSecondary
+          icon="icon-search"
+          [placeholder]="('Rechercher des messages...' | i18n)()"
+          [(ngModel)]="searchValue"
+          name="search"
+        />
+      </form>
+    </app-layout-header>
+    <app-notification-list
+      class="overflow-y-auto"
+      [notifications]="mockNotifications"
+      [filter]="filter()"
+      (openChat)="onChatClick($event)"
+    />
+  </div>
+  <app-conversation
+    class="md:block"
+    [class.hidden]="!conversationData()"
+    [conversationData]="conversationData()"
+    (goBack)="conversationData.set(undefined)"
+  />
+</div>

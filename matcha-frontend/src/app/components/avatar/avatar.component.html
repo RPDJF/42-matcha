@@ -1,0 +1,38 @@
+<div class="relative">
+  <img
+    class="aspect-square rounded-full object-cover"
+    [class.max-h-16]="size() === 'md'"
+    [class.min-h-16]="size() === 'md'"
+    [class.max-w-16]="size() === 'md'"
+    [class.min-w-16]="size() === 'md'"
+    [class.max-h-12]="size() === 'sm'"
+    [class.min-h-12]="size() === 'sm'"
+    [class.max-w-12]="size() === 'sm'"
+    [class.min-w-12]="size() === 'sm'"
+    [src]="user().avatar"
+  />
+
+  @if (displayBadge()) {
+    <ng-content select="badge">
+      <div #presenceBadge>
+        @if (presence()?.isOnline) {
+          <div
+            class="bg-latte-green absolute right-0 bottom-0 flex aspect-square items-center justify-center rounded-full border-2 border-white"
+            [class.size-4]="size() === 'md'"
+            [class.border-2]="size() === 'md'"
+            [class.size-3]="size() === 'sm'"
+            [class.border-1]="size() === 'sm'"
+          ></div>
+        } @else {
+          <div
+            class="bg-latte-overlay-0 absolute right-0 bottom-0 flex aspect-square items-center justify-center rounded-full border-white"
+            [class.size-4]="size() === 'md'"
+            [class.border-2]="size() === 'md'"
+            [class.size-3]="size() === 'sm'"
+            [class.border-1]="size() === 'sm'"
+          ></div>
+        }
+      </div>
+    </ng-content>
+  }
+</div>

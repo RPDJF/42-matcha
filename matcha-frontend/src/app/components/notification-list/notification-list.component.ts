@@ -1,10 +1,11 @@
 import { Component, computed, input, model, output } from '@angular/core';
+import { I18nPipe } from '../../core/pipes/i18n/i18n.pipe';
 import { NotificationComponent } from './components/notification.component/notification.component';
-import { NotificationItem } from './notification-list.types';
+import { NotificationItem, NotificationListFilter } from './notification-list.types';
 
 @Component({
   selector: 'app-notification-list',
-  imports: [NotificationComponent],
+  imports: [NotificationComponent, I18nPipe],
   templateUrl: './notification-list.component.html',
   host: {
     class: 'w-full',
@@ -13,18 +14,25 @@ import { NotificationItem } from './notification-list.types';
 export class NotificationListComponent {
   readonly notifications = model.required<NotificationItem[]>();
   readonly isLoading = input<boolean>(false);
-  readonly filter = input<{
-    type?: 'match' | 'message' | 'like' | 'visit';
-  }>();
+  readonly filter = input<NotificationListFilter>();
 
   readonly openChat = output<string>();
   readonly openProfile = output<string>();
 
   readonly filteredNotifications = computed(() => {
-    const notifications = this.notifications();
+    const filter = this.filter();
+    let notifications = this.notifications();
 
-    if (!this.filter()?.type) return notifications;
-    return notifications.filter((notification) => notification.type === this.filter()?.type);
+    if (filter?.type)
+      notifications = notifications.filter((notification) => notification.type === filter.type);
+    if (filter?.searchDisplayname) {
+      notifications = notifications.filter((notification) =>
+        notification.user.displayName
+          .toLowerCase()
+          .includes(filter.searchDisplayname!.toLowerCase()),
+      );
+    }
+    return notifications;
   });
 
   onNotificationClick(notification: NotificationItem) {
@@ -39,12 +47,12 @@ export class NotificationListComponent {
 
     switch (notification.type) {
       case 'message':
-        this.openChat.emit(notification.relatedUser.userUUID);
+        this.openChat.emit(notification.user.userUUID);
         break;
       case 'match':
       case 'like':
       case 'visit':
-        this.openProfile.emit(notification.relatedUser.userUUID);
+        this.openProfile.emit(notification.user.userUUID);
         break;
     }
   }

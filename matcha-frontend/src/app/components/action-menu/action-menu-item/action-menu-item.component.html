@@ -1,0 +1,9 @@
+<button
+  class="relative flex w-full cursor-pointer items-center gap-2 rounded-lg p-2 text-sm duration-200 hover:bg-gray-100"
+  (click)="this.action()()"
+>
+  @if (icon(); as icon) {
+    <app-icon [name]="icon" />
+  }
+  <ng-content />
+</button>

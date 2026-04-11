@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuthentificationComponent } from './pages/authentification/authentification.component';
+import { ChatsComponent } from './pages/chats/chats.component';
 import { DiscoverComponent } from './pages/discover/discover.component';
 import { NotificationsComponent } from './pages/notifications/notifications.component';
 
@@ -21,6 +22,10 @@ export const routes: Routes = [
   {
     path: 'discover',
     component: DiscoverComponent,
+  },
+  {
+    path: 'chats',
+    component: ChatsComponent,
   },
   {
     path: 'notifications',

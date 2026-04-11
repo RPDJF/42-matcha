@@ -15,7 +15,9 @@ import { I18nService } from './core/services/i18nService/i18n.service';
 import { UserService } from './core/services/userService/user.service';
 import { AuthState } from './core/stores/auth/auth.state';
 import { I18nState } from './core/stores/i18n/i18n.state';
+import { SidemenuState } from './core/stores/sidemenu/sidemenu.state';
 import { UserState } from './core/stores/user/user.state';
+import { UserPresenceState } from './core/stores/userPresence/userPresence.state';
 
 function hydrateFactory() {
   const hydrationServices: Array<HydratableService> = [inject(I18nService), inject(UserService)];
@@ -29,7 +31,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideStore([]),
     provideHttpClient(withFetch()),
-    provideStore([I18nState, UserState, AuthState]),
+    provideStore([I18nState, UserState, AuthState, UserPresenceState, SidemenuState]),
     provideAppInitializer(hydrateFactory),
   ],
 };
