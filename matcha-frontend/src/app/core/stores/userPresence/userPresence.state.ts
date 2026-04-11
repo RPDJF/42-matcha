@@ -40,7 +40,7 @@ export class UserPresenceState {
   ): (state: UserPresenceStateModel) => UserPresence | undefined {
     return createSelector(
       [UserPresenceState],
-      (state: UserPresenceStateModel) => state.presences[userUUID],
+      (state: UserPresenceStateModel) => state.presences[userUUID] ?? undefined,
     );
   }
 

@@ -10,7 +10,7 @@ import { RESEARCH_FILTERS_LIMITS } from '../../core/consts/researchFiltersLimits
 import { I18nPipe } from '../../core/pipes/i18n/i18n.pipe';
 import { appFormBase } from '../../directives/forms/form-base.directive';
 import { InputSecondaryDirective } from '../../directives/inputs/input-secondary.directive';
-import { mockPublicUsers } from '../../helpers/mocks/ressource.mocks';
+import { generateRandomPublicUsers } from '../../helpers/mocks/users.mock';
 import { ConversationComponent } from './components/conversation.component/conversation.component';
 import { ConversationData } from './components/conversation.component/conversation.component.types';
 
@@ -177,7 +177,7 @@ export class ChatsComponent {
   }
 
   // TODO: remove mock and use real values
-  readonly mockNotifications: NotificationItem[] = mockPublicUsers(24)
+  readonly mockNotifications: NotificationItem[] = generateRandomPublicUsers(24)
     .map((user, index) => {
       // Define message banks mapped to DisplayNames
       const messageBanks: Record<string, string[]> = {

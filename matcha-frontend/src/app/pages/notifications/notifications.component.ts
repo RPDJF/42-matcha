@@ -11,7 +11,7 @@ import { RESEARCH_FILTERS_LIMITS } from '../../core/consts/researchFiltersLimits
 import { I18nPipe } from '../../core/pipes/i18n/i18n.pipe';
 import { ButtonLinkDirective } from '../../directives/buttons/button-link.directive';
 import { appFormBase } from '../../directives/forms/form-base.directive';
-import { mockPublicUsers } from '../../helpers/mocks/ressource.mocks';
+import { generateRandomPublicUsers } from '../../helpers/mocks/users.mock';
 import { NotificationListFilter } from './../../components/notification-list/notification-list.types';
 
 @Component({
@@ -72,7 +72,7 @@ export class NotificationsComponent {
   }
 
   // TODO: remove mock and use real values
-  readonly mockNotifications: NotificationItem[] = mockPublicUsers(96)
+  readonly mockNotifications: NotificationItem[] = generateRandomPublicUsers(96)
     .map(
       (user, index) =>
         ({

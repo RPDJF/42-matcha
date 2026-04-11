@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { provideStore } from '@ngxs/store';
 import { I18nState } from '../../core/stores/i18n/i18n.state';
-import { mockPublicUsers } from '../../helpers/mocks/ressource.mocks';
+import { generateRandomPublicUsers } from '../../helpers/mocks/users.mock';
 import { NotificationListComponent } from './notification-list.component';
 import { NotificationItem } from './notification-list.types';
 
@@ -20,7 +20,7 @@ describe('NotificationList', () => {
     component = fixture.componentInstance;
     fixture.componentRef.setInput(
       'notifications',
-      mockPublicUsers(12).map(
+      generateRandomPublicUsers(12).map(
         (user, index) =>
           ({
             id: index.toString(),

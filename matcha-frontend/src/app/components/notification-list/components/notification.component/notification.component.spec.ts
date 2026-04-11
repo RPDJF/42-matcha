@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { provideStore } from '@ngxs/store';
 import { I18nState } from '../../../../core/stores/i18n/i18n.state';
-import { mockRandomPublicUser } from '../../../../helpers/mocks/ressource.mocks';
+import { getRandomPublicUser } from '../../../../helpers/mocks/users.mock';
 import { NotificationItem } from '../../notification-list.types';
 import { NotificationComponent } from './notification.component';
 
@@ -19,7 +19,7 @@ describe('NotificationComponent', () => {
     fixture = TestBed.createComponent(NotificationComponent);
     component = fixture.componentInstance;
     fixture.componentRef.setInput('notification', {
-      user: mockRandomPublicUser(),
+      user: getRandomPublicUser(),
       type: 'match',
       content: 'You have a new match!',
       createdAt: new Date(),
