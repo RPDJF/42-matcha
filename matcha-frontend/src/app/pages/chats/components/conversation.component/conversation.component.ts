@@ -4,6 +4,7 @@ import {
   ElementRef,
   inject,
   model,
+  OnDestroy,
   output,
   signal,
   viewChild,
@@ -43,7 +44,7 @@ import { ConversationData, Message } from './conversation.component.types';
     class: 'grow min-w-0',
   },
 })
-export class ConversationComponent {
+export class ConversationComponent implements OnDestroy {
   readonly #store = inject(Store);
 
   readonly conversationData = model.required<ConversationData | undefined>();
@@ -81,6 +82,10 @@ export class ConversationComponent {
       // scroll to bottom on conversation data update
       this.#messagesScrollBottom();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.#store.dispatch(new SidemenuShowMobile());
   }
 
   #messagesScrollBottom() {
