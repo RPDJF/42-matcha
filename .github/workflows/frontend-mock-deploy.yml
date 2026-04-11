@@ -42,7 +42,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: matcha-frontend/dist/matcha-frontend/browser
+          path: matcha-frontend/dist/matcha-frontend
 
   deploy:
     name: Deploy to GitHub Pages
