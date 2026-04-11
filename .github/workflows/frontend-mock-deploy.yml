@@ -41,8 +41,9 @@ jobs:
 
       - name: Prepare Pages artifact
         run: |
-          mkdir pages
-          cp -r dist/matcha-frontend/browser/* pages/
+          mkdir -p ../pages
+          cp -r dist/matcha-frontend/browser/* ../pages/
+          cp ../pages/index.html ../pages/404.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
