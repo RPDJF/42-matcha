@@ -1,4 +1,4 @@
-import { inject, Injectable, OnInit } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { filter } from 'rxjs';
 import { UserPresenceUpdatePresence } from '../../stores/userPresence/userPresence.actions';
@@ -8,14 +8,14 @@ import { WebSocketClientPresenceMessage } from '../webSocketService/webSocket.se
 @Injectable({
   providedIn: 'root',
 })
-export class UserPresenceService implements OnInit {
+export class UserPresenceService {
   readonly #store = inject(Store);
   readonly #websocketService = inject(WebSocketService);
-  readonly #onWsPresenceMessage$ = this.#websocketService
-    .getMessages$()
-    .pipe(filter((message) => message.type === 'presence'));
+  readonly #onWsPresenceMessage$ = this.#websocketService.messages$.pipe(
+    filter((message) => message.type === 'presence'),
+  );
 
-  ngOnInit(): void {
+  constructor() {
     this.#onWsPresenceMessage$.subscribe((message) => {
       this.#store.dispatch(
         new UserPresenceUpdatePresence(message.payload.userUUID, message.payload.presence),

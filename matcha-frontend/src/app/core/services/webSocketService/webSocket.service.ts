@@ -8,6 +8,8 @@ import { WebSocketClientMessage, WebSocketServerMessage } from './webSocket.serv
 })
 export class WebSocketService {
   #webSocket?: WebSocket;
+  readonly #close: Subject<void> = new Subject();
+  readonly #ready: Subject<void> = new Subject();
   readonly #messages: Subject<WebSocketServerMessage> = new Subject();
   readonly #errorMessages: Subject<Event> = new Subject();
 
@@ -17,7 +19,13 @@ export class WebSocketService {
 
   #connect(wasClosed?: boolean) {
     const connect = () => {
+      console.log('Opening websocket connection...');
       this.#webSocket = new WebSocket(environment.CORE_WS_ENDPOINT);
+
+      this.#webSocket.onopen = (event) => {
+        console.log('Websocket established');
+        this.#ready.next();
+      };
 
       this.#webSocket.onmessage = (event) => {
         this.#messages.next(JSON.parse(event.data));
@@ -29,6 +37,7 @@ export class WebSocketService {
 
       this.#webSocket.onclose = () => {
         console.log('Websocket connection closed');
+        this.#close.next();
         this.#connect(true);
       };
     };
@@ -46,7 +55,15 @@ export class WebSocketService {
     }
   }
 
-  getMessages$(): Observable<WebSocketServerMessage> {
+  get messages$(): Observable<WebSocketServerMessage> {
     return this.#messages.asObservable();
+  }
+
+  get onReady$(): Observable<void> {
+    return this.#ready.asObservable();
+  }
+
+  get onClose$(): Observable<void> {
+    return this.#close.asObservable();
   }
 }
