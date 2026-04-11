@@ -19,7 +19,7 @@ describe('NotificationComponent', () => {
     fixture = TestBed.createComponent(NotificationComponent);
     component = fixture.componentInstance;
     fixture.componentRef.setInput('notification', {
-      relatedUser: mockRandomPublicUser(),
+      user: mockRandomPublicUser(),
       type: 'match',
       content: 'You have a new match!',
       createdAt: new Date(),

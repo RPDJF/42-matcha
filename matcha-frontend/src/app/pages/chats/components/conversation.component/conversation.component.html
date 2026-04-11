@@ -2,17 +2,17 @@
   <div class="flex h-full flex-col">
     <header class="bg-white px-6 py-4">
       <div class="flex items-center gap-4">
-        <div class="relative">
-          <img
-            class="max-h-12 min-h-12 max-w-12 min-w-12 rounded-full"
-            [src]="conversationData.relatedUser.avatar"
-          />
-        </div>
+        <app-avatar [user]="conversationData.user" size="sm" />
         <div class="flex flex-col items-start justify-center">
           <p class="text-xl font-medium text-black">
-            {{ conversationData.relatedUser.displayName }}
+            {{ conversationData.user.displayName }}
           </p>
-          <p class="text-latte-green text-xs">Online</p>
+          @if (isUserOnline(conversationData.user.userUUID)()?.isOnline) {
+            <p class="text-latte-green text-xs">{{ ('En Ligne' | i18n)() }}</p>
+          } @else {
+            <!-- TODO: implement something like "last login 2 hours ago"-->
+            <p class="text-xs">{{ ('Hors Ligne' | i18n)() }}</p>
+          }
         </div>
       </div>
     </header>
@@ -21,22 +21,20 @@
         @for (message of conversationData.messages; track message) {
           <div
             class="flex w-fit max-w-3/5 flex-col gap-1"
-            [class.self-end]="message.relatedUserUUID === 'me'"
+            [class.self-end]="message.userUUID === 'me'"
           >
             <div
               class="rounded-2xl border border-gray-100 bg-white px-4 py-3 text-black shadow-md"
-              [class.from-latte-maroon]="message.relatedUserUUID === 'me'"
-              [class.to-latte-pink]="message.relatedUserUUID === 'me'"
-              [class.bg-linear-to-br]="message.relatedUserUUID === 'me'"
-              [class.text-white]="message.relatedUserUUID === 'me'"
-              [class.rounded-br-md]="message.relatedUserUUID === 'me'"
-              [class.rounded-bl-md]="message.relatedUserUUID !== 'me'"
+              [class.from-latte-maroon]="message.userUUID === 'me'"
+              [class.to-latte-pink]="message.userUUID === 'me'"
+              [class.bg-linear-to-br]="message.userUUID === 'me'"
+              [class.text-white]="message.userUUID === 'me'"
+              [class.rounded-br-md]="message.userUUID === 'me'"
+              [class.rounded-bl-md]="message.userUUID !== 'me'"
             >
               <span>{{ message.message }}</span>
             </div>
-            <span class="mx-2 text-xs" [class.self-end]="message.relatedUserUUID === 'me'"
-              >10:33 AM</span
-            >
+            <span class="mx-2 text-xs" [class.self-end]="message.userUUID === 'me'">10:33 AM</span>
           </div>
         }
       } @else {

@@ -1,13 +1,18 @@
 import { PublicUser } from '../../../../core/stores/user/user.state.types';
 
 export interface Message {
+  conversationUUID: string;
+  userUUID: string;
+  messageUUID: string;
   message: string;
-  attachments?: string[];
+  attachments?: {
+    type: 'image';
+    url: string;
+  }[];
   createdAt: number;
-  relatedUserUUID: string;
 }
 
 export interface ConversationData {
-  relatedUser: PublicUser;
+  user: PublicUser;
   messages: Message[];
 }

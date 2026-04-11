@@ -1,14 +1,17 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Store } from '@ngxs/store';
 import { LayoutHeaderComponent } from '../../components/layout/layout-header/layout-header.component';
 import { NotificationListComponent } from '../../components/notification-list/notification-list.component';
-import { NotificationItem } from '../../components/notification-list/notification-list.types';
+import {
+  NotificationItem,
+  NotificationListFilter,
+} from '../../components/notification-list/notification-list.types';
 import { RESEARCH_FILTERS_LIMITS } from '../../core/consts/researchFiltersLimits.consts';
 import { I18nPipe } from '../../core/pipes/i18n/i18n.pipe';
 import { appFormBase } from '../../directives/forms/form-base.directive';
 import { InputSecondaryDirective } from '../../directives/inputs/input-secondary.directive';
 import { mockPublicUsers } from '../../helpers/mocks/ressource.mocks';
-import { NotificationListFilter } from './../../components/notification-list/notification-list.types';
 import { ConversationComponent } from './components/conversation.component/conversation.component';
 import { ConversationData } from './components/conversation.component/conversation.component.types';
 
@@ -30,6 +33,8 @@ import { ConversationData } from './components/conversation.component/conversati
   },
 })
 export class ChatsComponent {
+  readonly #store = inject(Store);
+
   readonly researchFiltersLimits = RESEARCH_FILTERS_LIMITS;
 
   readonly searchValue = signal<string>('');
@@ -54,19 +59,22 @@ export class ChatsComponent {
   onChatClick(userUUID: string) {
     //  TODO: implement real data
     this.conversationData.set({
-      relatedUser: this.mockNotifications.find(
-        (conversation) => conversation.relatedUser.userUUID === userUUID,
-      )!.relatedUser,
+      user: this.mockNotifications.find((conversation) => conversation.user.userUUID === userUUID)!
+        .user,
       messages: [
         {
           createdAt: Date.now(),
           message: 'coucou',
-          relatedUserUUID: userUUID,
+          userUUID: userUUID,
+          conversationUUID: '',
+          messageUUID: '',
         },
         {
           createdAt: Date.now(),
           message: 'comment va',
-          relatedUserUUID: 'me',
+          userUUID: 'me',
+          conversationUUID: '',
+          messageUUID: '',
         },
       ],
     });
@@ -137,10 +145,10 @@ export class ChatsComponent {
         type: 'message',
         content: randomContent,
         createdAt: new Date(new Date().getTime() - index * 5 * 60 * 1000),
-        relatedUser: user,
-        shouldDisplayBadge: true,
-        shouldDisplayChatButton: true,
+        user: user,
         shouldDisplayIcon: true,
+        shouldDisplayChatButton: true,
+        shouldDisplayBadge: true,
         badgeCount: index % 5 === 0 ? 100 : index % 5,
         isRead: index % 3 === 0,
       } as NotificationItem;

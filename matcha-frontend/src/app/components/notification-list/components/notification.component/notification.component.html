@@ -3,13 +3,9 @@
   [class.bg-white/80]="!notification().isRead || notification().view === 'message'"
 >
   <div class="flex items-center gap-2">
-    <div class="relative">
-      <img
-        class="aspect-square max-h-16 min-h-16 max-w-16 min-w-16 rounded-full object-cover"
-        [src]="notification().relatedUser.avatar"
-      />
-      @if (notification().shouldDisplayIcon) {
-        @if (notification().view === 'notification') {
+    @if (notification().view === 'notification') {
+      <app-avatar [user]="notification().user" [displayBadge]="notification().shouldDisplayIcon">
+        <div ngProjectAs="badge">
           @switch (notification().type) {
             @case ('like') {
               <div
@@ -40,14 +36,11 @@
               </div>
             }
           }
-        } @else {
-          <!-- TODO: implement status badge -->
-          <div
-            class="bg-latte-green absolute right-0 bottom-0 flex aspect-square size-4 items-center justify-center rounded-full border-2 border-white"
-          ></div>
-        }
-      }
-    </div>
+        </div>
+      </app-avatar>
+    } @else {
+      <app-avatar [user]="notification().user" [displayBadge]="notification().shouldDisplayIcon" />
+    }
     <div class="flex flex-col gap-1">
       <p [class.font-medium]="notification().isRead" [class.font-semibold]="!notification().isRead">
         {{ notificationTitle() }}

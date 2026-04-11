@@ -27,7 +27,7 @@ export class NotificationListComponent {
       notifications = notifications.filter((notification) => notification.type === filter.type);
     if (filter?.searchDisplayname) {
       notifications = notifications.filter((notification) =>
-        notification.relatedUser.displayName
+        notification.user.displayName
           .toLowerCase()
           .includes(filter.searchDisplayname!.toLowerCase()),
       );
@@ -47,12 +47,12 @@ export class NotificationListComponent {
 
     switch (notification.type) {
       case 'message':
-        this.openChat.emit(notification.relatedUser.userUUID);
+        this.openChat.emit(notification.user.userUUID);
         break;
       case 'match':
       case 'like':
       case 'visit':
-        this.openProfile.emit(notification.relatedUser.userUUID);
+        this.openProfile.emit(notification.user.userUUID);
         break;
     }
   }

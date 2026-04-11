@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { provideStore } from '@ngxs/store';
+import { I18nState } from '../../core/stores/i18n/i18n.state';
 import { mockPublicUsers } from '../../helpers/mocks/ressource.mocks';
 import { NotificationListComponent } from './notification-list.component';
 import { NotificationItem } from './notification-list.types';
-import { provideStore } from '@ngxs/store';
-import { I18nState } from '../../core/stores/i18n/i18n.state';
 
 describe('NotificationList', () => {
   let component: NotificationListComponent;
@@ -25,7 +25,7 @@ describe('NotificationList', () => {
           ({
             id: index.toString(),
             type: ['match', 'message', 'like', 'visit'][index % 4] as any,
-            relatedUser: user,
+            user: user,
             isRead: false,
             content: `Notification content ${index}`,
             createdAt: new Date(new Date().getTime() - index * 5 * 60 * 1000),
