@@ -73,7 +73,9 @@
             >
               <span>{{ message.message }}</span>
             </div>
-            <span class="mx-2 text-xs" [class.self-end]="message.userUUID === 'me'">10:33 AM</span>
+            <span class="mx-2 text-xs" [class.self-end]="message.userUUID === 'me'">{{
+              generateDateLabel(message)
+            }}</span>
           </div>
         }
       } @else {

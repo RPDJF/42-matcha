@@ -23,7 +23,7 @@ import { UserPresenceState } from '../../../../core/stores/userPresence/userPres
 import { ActionMenuTriggerDirective } from '../../../../directives/action-menu-trigger/action-menu-trigger.directive';
 import { ButtonIconDirective } from '../../../../directives/buttons/button-icon.directive';
 import { InputSecondaryDirective } from '../../../../directives/inputs/input-secondary.directive';
-import { ConversationData } from './conversation.component.types';
+import { ConversationData, Message } from './conversation.component.types';
 
 @Component({
   selector: 'app-conversation',
@@ -158,5 +158,28 @@ export class ConversationComponent {
   actionMenuAction() {
     // TODO: implement actions
     alert('implement action');
+  }
+
+  generateDateLabel(message: Message) {
+    const currentDate = new Date();
+    const messageDate = new Date(message.createdAt);
+
+    const isSameDay =
+      currentDate.getFullYear() === messageDate.getFullYear() &&
+      currentDate.getMonth() === messageDate.getMonth() &&
+      currentDate.getDate() === messageDate.getDate();
+
+    if (isSameDay) {
+      return messageDate.toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    }
+
+    return messageDate.toLocaleDateString([], {
+      year: 'numeric',
+      month: 'short',
+      day: '2-digit',
+    });
   }
 }
