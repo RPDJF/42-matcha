@@ -1,9 +1,22 @@
-import { Component, effect, ElementRef, inject, model, signal, viewChild } from '@angular/core';
+import {
+  Component,
+  effect,
+  ElementRef,
+  inject,
+  model,
+  output,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { AvatarComponent } from '../../../../components/avatar/avatar.component';
 import { IconComponent } from '../../../../components/icon/icon.component';
 import { I18nPipe } from '../../../../core/pipes/i18n/i18n.pipe';
+import {
+  SidemenuHide as SidemenuHideMobile,
+  SidemenuShow as SidemenuShowMobile,
+} from '../../../../core/stores/sidemenu/sidemenu.actions';
 import { UserPresenceState } from '../../../../core/stores/userPresence/userPresence.state';
 import { ButtonIconDirective } from '../../../../directives/buttons/button-icon.directive';
 import { InputSecondaryDirective } from '../../../../directives/inputs/input-secondary.directive';
@@ -28,6 +41,7 @@ export class ConversationComponent {
   readonly #store = inject(Store);
 
   readonly conversationData = model.required<ConversationData | undefined>();
+  readonly goBack = output<void>();
 
   readonly presences = this.#store.selectSignal(UserPresenceState.getPresences);
 
@@ -43,7 +57,12 @@ export class ConversationComponent {
     effect(() => {
       const conversationData = this.conversationData();
 
-      if (!conversationData) return;
+      if (!conversationData) {
+        this.#store.dispatch(new SidemenuShowMobile());
+        return;
+      } else {
+        this.#store.dispatch(new SidemenuHideMobile());
+      }
 
       // reset message value if user changed
       if (this.lastconversationUUID() !== conversationData.conversationUUID) {

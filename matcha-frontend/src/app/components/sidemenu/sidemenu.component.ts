@@ -1,4 +1,6 @@
 import { Component, ElementRef, inject } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { SidemenuState } from '../../core/stores/sidemenu/sidemenu.state';
 import { SidemenuButtonComponent } from './sidemenuButton/sidemenu-button.component';
 
 @Component({
@@ -7,7 +9,10 @@ import { SidemenuButtonComponent } from './sidemenuButton/sidemenu-button.compon
   templateUrl: './sidemenu.component.html',
 })
 export class SidemenuComponent {
+  readonly #store = inject(Store);
   readonly #componentRef = inject(ElementRef);
+
+  readonly showNavbar = this.#store.selectSignal(SidemenuState.getShowNavbar);
 
   get nativeElement(): HTMLElement {
     return this.#componentRef.nativeElement;
