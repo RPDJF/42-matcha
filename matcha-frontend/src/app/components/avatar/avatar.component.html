@@ -14,23 +14,25 @@
 
   @if (displayBadge()) {
     <ng-content select="badge">
-      @if (presence()?.isOnline) {
-        <div
-          class="bg-latte-green absolute right-0 bottom-0 flex aspect-square items-center justify-center rounded-full border-2 border-white"
-          [class.size-4]="size() === 'md'"
-          [class.border-2]="size() === 'md'"
-          [class.size-3]="size() === 'sm'"
-          [class.border-1]="size() === 'sm'"
-        ></div>
-      } @else {
-        <div
-          class="bg-latte-overlay-0 absolute right-0 bottom-0 flex aspect-square items-center justify-center rounded-full border-white"
-          [class.size-4]="size() === 'md'"
-          [class.border-2]="size() === 'md'"
-          [class.size-3]="size() === 'sm'"
-          [class.border-1]="size() === 'sm'"
-        ></div>
-      }
+      <div #presenceBadge>
+        @if (presence()?.isOnline) {
+          <div
+            class="bg-latte-green absolute right-0 bottom-0 flex aspect-square items-center justify-center rounded-full border-2 border-white"
+            [class.size-4]="size() === 'md'"
+            [class.border-2]="size() === 'md'"
+            [class.size-3]="size() === 'sm'"
+            [class.border-1]="size() === 'sm'"
+          ></div>
+        } @else {
+          <div
+            class="bg-latte-overlay-0 absolute right-0 bottom-0 flex aspect-square items-center justify-center rounded-full border-white"
+            [class.size-4]="size() === 'md'"
+            [class.border-2]="size() === 'md'"
+            [class.size-3]="size() === 'sm'"
+            [class.border-1]="size() === 'sm'"
+          ></div>
+        }
+      </div>
     </ng-content>
   }
 </div>
