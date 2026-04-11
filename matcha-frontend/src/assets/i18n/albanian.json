@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} km",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} - {maxAgeFilter} vite",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "Mosha: {minAgeFilter} - {maxAgeFilter}",
+  "Écrivez un message...": "Shkruaj një mesazh...",
   "à {userDistance} km": "për {userDistance} km"
 }

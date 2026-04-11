@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} borough",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} - Tidak. {maxAgeFilter} years",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "Umur: {minAgeFilter} - Tidak. {maxAgeFilter}",
+  "Écrivez un message...": "Woinchi menulis pesan...",
   "à {userDistance} km": "Ke {userDistance} borough"
 }

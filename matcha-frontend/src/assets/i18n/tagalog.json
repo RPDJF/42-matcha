@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} km",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} - {maxAgeFilter} mga taon",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "Edad: {minAgeFilter} - {maxAgeFilter}",
+  "Écrivez un message...": "Sumulat ng mensahe...",
   "à {userDistance} km": "hanggang sa {userDistance} km"
 }

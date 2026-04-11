@@ -1,6 +1,5 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Store } from '@ngxs/store';
 import { LayoutHeaderComponent } from '../../components/layout/layout-header/layout-header.component';
 import { NotificationListComponent } from '../../components/notification-list/notification-list.component';
 import {
@@ -33,8 +32,6 @@ import { ConversationData } from './components/conversation.component/conversati
   },
 })
 export class ChatsComponent {
-  readonly #store = inject(Store);
-
   readonly researchFiltersLimits = RESEARCH_FILTERS_LIMITS;
 
   readonly searchValue = signal<string>('');
@@ -61,20 +58,119 @@ export class ChatsComponent {
     this.conversationData.set({
       user: this.mockNotifications.find((conversation) => conversation.user.userUUID === userUUID)!
         .user,
+      conversationUUID: crypto.randomUUID(),
       messages: [
         {
           createdAt: Date.now(),
           message: 'coucou',
           userUUID: userUUID,
-          conversationUUID: '',
-          messageUUID: '',
+          conversationUUID: crypto.randomUUID(),
+          messageUUID: crypto.randomUUID(),
         },
         {
           createdAt: Date.now(),
           message: 'comment va',
           userUUID: 'me',
-          conversationUUID: '',
-          messageUUID: '',
+          conversationUUID: crypto.randomUUID(),
+          messageUUID: crypto.randomUUID(),
+        },
+        {
+          createdAt: Date.now(),
+          message: 'coucou',
+          userUUID: userUUID,
+          conversationUUID: crypto.randomUUID(),
+          messageUUID: crypto.randomUUID(),
+        },
+        {
+          createdAt: Date.now(),
+          message: 'comment va',
+          userUUID: 'me',
+          conversationUUID: crypto.randomUUID(),
+          messageUUID: crypto.randomUUID(),
+        },
+        {
+          createdAt: Date.now(),
+          message: 'coucou',
+          userUUID: userUUID,
+          conversationUUID: crypto.randomUUID(),
+          messageUUID: crypto.randomUUID(),
+        },
+        {
+          createdAt: Date.now(),
+          message: 'comment va',
+          userUUID: 'me',
+          conversationUUID: crypto.randomUUID(),
+          messageUUID: crypto.randomUUID(),
+        },
+        {
+          createdAt: Date.now(),
+          message: 'coucou',
+          userUUID: userUUID,
+          conversationUUID: crypto.randomUUID(),
+          messageUUID: crypto.randomUUID(),
+        },
+        {
+          createdAt: Date.now(),
+          message: 'comment va',
+          userUUID: 'me',
+          conversationUUID: crypto.randomUUID(),
+          messageUUID: crypto.randomUUID(),
+        },
+        {
+          createdAt: Date.now(),
+          message: 'coucou',
+          userUUID: userUUID,
+          conversationUUID: crypto.randomUUID(),
+          messageUUID: crypto.randomUUID(),
+        },
+        {
+          createdAt: Date.now(),
+          message: 'comment va',
+          userUUID: 'me',
+          conversationUUID: crypto.randomUUID(),
+          messageUUID: crypto.randomUUID(),
+        },
+        {
+          createdAt: Date.now(),
+          message: 'coucou',
+          userUUID: userUUID,
+          conversationUUID: crypto.randomUUID(),
+          messageUUID: crypto.randomUUID(),
+        },
+        {
+          createdAt: Date.now(),
+          message: 'comment va',
+          userUUID: 'me',
+          conversationUUID: crypto.randomUUID(),
+          messageUUID: crypto.randomUUID(),
+        },
+        {
+          createdAt: Date.now(),
+          message: 'coucou',
+          userUUID: userUUID,
+          conversationUUID: crypto.randomUUID(),
+          messageUUID: crypto.randomUUID(),
+        },
+        {
+          createdAt: Date.now(),
+          message: 'comment va',
+          userUUID: 'me',
+          conversationUUID: crypto.randomUUID(),
+          messageUUID: crypto.randomUUID(),
+        },
+        {
+          createdAt: Date.now(),
+          message: 'coucou',
+          userUUID: userUUID,
+          conversationUUID: crypto.randomUUID(),
+          messageUUID: crypto.randomUUID(),
+        },
+        {
+          createdAt: Date.now(),
+          message: 'comment va',
+          userUUID: 'me',
+          conversationUUID: crypto.randomUUID(),
+          messageUUID: crypto.randomUUID(),
         },
       ],
     });

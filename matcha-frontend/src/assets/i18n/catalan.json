@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} kmunit description in lists",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} - {maxAgeFilter} anys",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "Edat: {minAgeFilter} - {maxAgeFilter}",
+  "Écrivez un message...": "Escriu un missatge...",
   "à {userDistance} km": "a {userDistance} kmunit description in lists"
 }

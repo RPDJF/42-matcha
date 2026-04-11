@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} マイル",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} - - - {maxAgeFilter} 生年月日",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "年齢: {minAgeFilter} - - - {maxAgeFilter}",
+  "Écrivez un message...": "メッセージを書く",
   "à {userDistance} km": "お問い合わせ {userDistance} マイル"
 }

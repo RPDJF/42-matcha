@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} 24시간",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} - - - {maxAgeFilter} - 연혁",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "나이: {minAgeFilter} - - - {maxAgeFilter}",
+  "Écrivez un message...": "자주 묻는 질문",
   "à {userDistance} km": "으로 {userDistance} 24시간"
 }

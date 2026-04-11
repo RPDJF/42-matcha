@@ -6,13 +6,14 @@ export interface Message {
   messageUUID: string;
   message: string;
   attachments?: {
-    type: 'image';
+    type: string;
     url: string;
   }[];
   createdAt: number;
 }
 
 export interface ConversationData {
+  conversationUUID: string;
   user: PublicUser;
   messages: Message[];
 }

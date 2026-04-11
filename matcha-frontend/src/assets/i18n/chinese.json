@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} 公里",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} - 怎么样? {maxAgeFilter} 年份",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "年龄 : {minAgeFilter} - 怎么样? {maxAgeFilter}",
+  "Écrivez un message...": "写个消息...",
   "à {userDistance} km": "改为 {userDistance} 公里"
 }

@@ -23,7 +23,9 @@ export class ButtonIconDirective extends AbstractButtonDirective implements Afte
 
   override readonly classes: string[] = [
     'aspect-square',
-    'block',
+    'flex',
+    'items-center',
+    'justify-center',
     'hover:bg-black/5',
     'cursor-pointer',
     'rounded-full',
@@ -35,7 +37,9 @@ export class ButtonIconDirective extends AbstractButtonDirective implements Afte
 
   override readonly disabledClasses: string[] = [
     'aspect-square',
-    'block',
+    'flex',
+    'items-center',
+    'justify-center',
     'cursor-not-allowed',
     'rounded-full',
     'p-2',
@@ -47,7 +51,9 @@ export class ButtonIconDirective extends AbstractButtonDirective implements Afte
 
   override readonly loadingClasses: string[] = [
     'aspect-square',
-    'block',
+    'flex',
+    'items-center',
+    'justify-center',
     'cursor-not-allowed',
     'rounded-full',
     'p-2',

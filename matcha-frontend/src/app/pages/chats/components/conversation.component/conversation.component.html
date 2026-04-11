@@ -1,6 +1,8 @@
 @if (conversationData(); as conversationData) {
   <div class="flex h-full flex-col">
-    <header class="bg-white px-6 py-4">
+    <header
+      class="flex items-center justify-between border-b border-gray-300 bg-white px-6 py-4 shadow-sm"
+    >
       <div class="flex items-center gap-4">
         <app-avatar [user]="conversationData.user" size="sm" />
         <div class="flex flex-col items-start justify-center">
@@ -15,10 +17,29 @@
           }
         </div>
       </div>
+      <button appButtonIcon icon="icon-options"></button>
     </header>
-    <div class="flex h-full w-full grow flex-col gap-4 bg-white/50 p-8">
+    <div
+      #messagesContainer
+      class="flex h-full w-full grow flex-col gap-4 overflow-y-auto bg-white/50 p-8"
+    >
       @if (conversationData.messages.length) {
-        @for (message of conversationData.messages; track message) {
+        @for (message of conversationData.messages; track $index) {
+          @if (message.attachments?.length) {
+            <div
+              class="flex flex-col gap-4"
+              [class.ml-auto]="message.userUUID === 'me'"
+              [class.justify-end]="message.userUUID === 'me'"
+            >
+              @for (attachment of message.attachments; track attachment.url) {
+                <img
+                  class="h-fit max-h-80 w-fit max-w-80 rounded-xl"
+                  [src]="attachment.url"
+                  [class.ml-auto]="message.userUUID === 'me'"
+                />
+              }
+            </div>
+          }
           <div
             class="flex w-fit max-w-3/5 flex-col gap-1"
             [class.self-end]="message.userUUID === 'me'"
@@ -41,7 +62,70 @@
         <!-- TODO: no messages yet, start a conversation -->
       }
     </div>
-    <footer>pp</footer>
+    <footer class="flex flex-col gap-2 bg-white px-6 py-4">
+      @if (attachments().length > 0) {
+        <div class="flex gap-4 overflow-x-auto pb-4">
+          @for (attachment of attachments(); track attachment.UUID) {
+            @if (attachment.imageUrl; as imageUrl) {
+              <div
+                class="group relative max-h-48 min-h-48 max-w-48 min-w-48 overflow-hidden rounded-xl"
+              >
+                <img
+                  class="absolute top-0 right-0 bottom-0 left-0 aspect-square max-h-full min-h-full max-w-full min-w-full object-cover"
+                  [src]="imageUrl"
+                />
+                <div
+                  class="absolute top-0 right-0 bottom-0 left-0 h-full bg-linear-to-b from-transparent to-gray-900"
+                ></div>
+                <p
+                  class="absolute right-2 bottom-2 left-2 overflow-hidden text-ellipsis whitespace-nowrap text-white"
+                >
+                  {{ attachment.file.name }}
+                </p>
+                <button
+                  appButtonIcon
+                  class="absolute top-1 right-1 text-white"
+                  icon="icon-close"
+                  (click)="onFileRemove(attachment.UUID)"
+                ></button>
+              </div>
+            }
+          }
+        </div>
+      }
+      <div class="flex items-center justify-between gap-4">
+        <input
+          (change)="onFilesSelected($event)"
+          type="file"
+          class="hidden"
+          #fileUpload
+          multiple
+          [accept]="authorizedFileTypes.join(', ')"
+        />
+        <button
+          appButtonIcon
+          icon="icon-gallery"
+          class="text-gray-400"
+          (click)="fileUpload.click()"
+        ></button>
+        <input
+          appInputSecondary
+          class="grow"
+          [placeholder]="('Écrivez un message...' | i18n)()"
+          [(ngModel)]="message"
+          (keypress)="onInputKeyPress($event)"
+        />
+        <button
+          (click)="onSendMessage()"
+          class="flex aspect-square size-11 items-center justify-center rounded-full p-3"
+          [class.bg-frappe-maroon]="!message()"
+          [class.bg-latte-maroon]="message()"
+          [class.cursor-pointer]="message()"
+        >
+          <app-icon class="size-full text-white" name="icon-paper-plane" />
+        </button>
+      </div>
+    </footer>
   </div>
 } @else {
   <div class="flex h-full flex-col items-center justify-center gap-2">

@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} km",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} - {maxAgeFilter} gadi",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "Vecums: {minAgeFilter} - {maxAgeFilter}",
+  "Écrivez un message...": "Rakstīt vēstuli...",
   "à {userDistance} km": "līdz {userDistance} km"
 }

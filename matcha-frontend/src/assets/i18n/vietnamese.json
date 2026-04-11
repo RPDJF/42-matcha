@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} km",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} - {maxAgeFilter} năm",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "Tuổi: {minAgeFilter} - {maxAgeFilter}",
+  "Écrivez un message...": "Viết một tin nhắn...",
   "à {userDistance} km": "phải {userDistance} km"
 }

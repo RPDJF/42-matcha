@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} km",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} - {maxAgeFilter} roky",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "Vek: {minAgeFilter} - {maxAgeFilter}",
+  "Écrivez un message...": "Napíš správu...",
   "à {userDistance} km": "do {userDistance} km"
 }

@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} کیلومتر",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} - {maxAgeFilter} سال ها",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "سن: {minAgeFilter} - {maxAgeFilter}",
+  "Écrivez un message...": "یک پیام بنویسید ...",
   "à {userDistance} km": "برای {userDistance} کیلومتر"
 }

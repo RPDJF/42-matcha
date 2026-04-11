@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} km",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} - {maxAgeFilter} il",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "Yaş: {minAgeFilter} - {maxAgeFilter}",
+  "Écrivez un message...": "Bir mesaj yazın...",
   "à {userDistance} km": "Oxunub {userDistance} km"
 }

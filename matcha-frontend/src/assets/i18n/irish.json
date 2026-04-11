@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} km km km",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} - - - - - {maxAgeFilter} blianta nua",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "Aois: {minAgeFilter} - - - - - {maxAgeFilter}",
+  "Écrivez un message...": "Scríobh teachtaireacht...",
   "à {userDistance} km": "go dtí {userDistance} km km km"
 }

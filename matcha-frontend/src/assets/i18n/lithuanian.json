@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} km",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} - {maxAgeFilter} metai",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "Amžius: {minAgeFilter} - {maxAgeFilter}",
+  "Écrivez un message...": "Rašyti pranešimą...",
   "à {userDistance} km": "iki {userDistance} km"
 }

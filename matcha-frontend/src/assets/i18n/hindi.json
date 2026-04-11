@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} किमी",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} - {maxAgeFilter} साल",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "आयु: {minAgeFilter} - {maxAgeFilter}",
+  "Écrivez un message...": "एक संदेश लिखें...",
   "à {userDistance} km": "to {userDistance} किमी"
 }

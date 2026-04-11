@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} km",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} - {maxAgeFilter} évek",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "Életkor: {minAgeFilter} - {maxAgeFilter}",
+  "Écrivez un message...": "Írj egy üzenetet...",
   "à {userDistance} km": "- {userDistance} km"
 }

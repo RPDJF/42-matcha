@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} км",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} до {maxAgeFilter} роки",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "Вік: {minAgeFilter} до {maxAgeFilter}",
+  "Écrivez un message...": "Напишіть повідомлення...",
   "à {userDistance} km": "до {userDistance} км"
 }

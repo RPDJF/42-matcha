@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} কিলোমিটার",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} -কি? {maxAgeFilter} হেডার",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "বয়স: {minAgeFilter} -কি? {maxAgeFilter}",
+  "Écrivez un message...": "বার্তা লিখুন",
   "à {userDistance} km": "চিহ্নিত স্থানে চলুন {userDistance} কিলোমিটার"
 }

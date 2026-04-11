@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} km",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} - {maxAgeFilter} tahun",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "Umur: {minAgeFilter} - {maxAgeFilter}",
+  "Écrivez un message...": "Tulis pesan...",
   "à {userDistance} km": "ke {userDistance} km"
 }

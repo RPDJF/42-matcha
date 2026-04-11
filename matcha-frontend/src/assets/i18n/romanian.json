@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} km",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} - {maxAgeFilter} ani",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "Vârsta: {minAgeFilter} - {maxAgeFilter}",
+  "Écrivez un message...": "Scrie un mesaj...",
   "à {userDistance} km": "la {userDistance} km"
 }

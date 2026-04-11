@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} กิโลเมตร",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} - {maxAgeFilter} ปี",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "อายุ: {minAgeFilter} - {maxAgeFilter}",
+  "Écrivez un message...": "เขียนจดหมาย...",
   "à {userDistance} km": "ถึง {userDistance} กิโลเมตร"
 }

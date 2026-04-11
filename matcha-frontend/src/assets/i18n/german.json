@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} km",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} - Ja. {maxAgeFilter} Jahre",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "Alter: {minAgeFilter} - Ja. {maxAgeFilter}",
+  "Écrivez un message...": "Eine Nachricht schreiben...",
   "à {userDistance} km": "bis {userDistance} km"
 }

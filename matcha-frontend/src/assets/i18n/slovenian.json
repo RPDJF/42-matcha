@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} km",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} -Kaj? {maxAgeFilter} leta",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "Starost: {minAgeFilter} -Kaj? {maxAgeFilter}",
+  "Écrivez un message...": "Napiši sporočilo...",
   "à {userDistance} km": "do {userDistance} km"
 }

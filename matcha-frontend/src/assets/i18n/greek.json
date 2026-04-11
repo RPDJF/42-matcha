@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} km",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} - Ναι. {maxAgeFilter} έτη",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "Ηλικία: {minAgeFilter} - Ναι. {maxAgeFilter}",
+  "Écrivez un message...": "Γράψτε ένα μήνυμα...",
   "à {userDistance} km": "προς {userDistance} km"
 }

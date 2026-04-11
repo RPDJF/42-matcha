@@ -37,5 +37,6 @@
   "{distanceFilter} km": "{distanceFilter} km",
   "{minAgeFilter} - {maxAgeFilter} ans": "{minAgeFilter} - {maxAgeFilter} aastaid",
   "Âge: {minAgeFilter} - {maxAgeFilter}": "Vanus: {minAgeFilter} - {maxAgeFilter}",
+  "Écrivez un message...": "Kirjuta sõnum...",
   "à {userDistance} km": "kuni {userDistance} km"
 }
