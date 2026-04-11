@@ -6,11 +6,6 @@ on:
       - main
     paths:
       - "matcha-frontend/**"
-  pull_request:
-    branches:
-      - main
-    paths:
-      - "matcha-frontend/**"
 
 permissions:
   contents: read
