@@ -10,6 +10,8 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngxs/store';
+import { ActionMenuItemComponent } from '../../../../components/action-menu/action-menu-item/action-menu-item.component';
+import { ActionMenuComponent } from '../../../../components/action-menu/action-menu.component';
 import { AvatarComponent } from '../../../../components/avatar/avatar.component';
 import { IconComponent } from '../../../../components/icon/icon.component';
 import { I18nPipe } from '../../../../core/pipes/i18n/i18n.pipe';
@@ -18,6 +20,7 @@ import {
   SidemenuShow as SidemenuShowMobile,
 } from '../../../../core/stores/sidemenu/sidemenu.actions';
 import { UserPresenceState } from '../../../../core/stores/userPresence/userPresence.state';
+import { ActionMenuTriggerDirective } from '../../../../directives/action-menu-trigger/action-menu-trigger.directive';
 import { ButtonIconDirective } from '../../../../directives/buttons/button-icon.directive';
 import { InputSecondaryDirective } from '../../../../directives/inputs/input-secondary.directive';
 import { ConversationData } from './conversation.component.types';
@@ -31,6 +34,9 @@ import { ConversationData } from './conversation.component.types';
     InputSecondaryDirective,
     FormsModule,
     ButtonIconDirective,
+    ActionMenuComponent,
+    ActionMenuItemComponent,
+    ActionMenuTriggerDirective,
   ],
   templateUrl: './conversation.component.html',
   host: {
@@ -50,6 +56,7 @@ export class ConversationComponent {
   readonly message = signal<string>('');
   readonly attachments = signal<{ file: File; imageUrl: string; UUID: string }[]>([]);
   readonly lastconversationUUID = signal<string | undefined>(undefined);
+  readonly showConversationOptions = signal<boolean>(false);
 
   readonly authorizedFileTypes = ['image/jpeg', 'image/png'];
 
@@ -146,5 +153,10 @@ export class ConversationComponent {
     this.attachments.update((attachments) =>
       attachments.filter((attachment) => attachment.UUID !== fileUUID),
     );
+  }
+
+  actionMenuAction() {
+    // TODO: implement actions
+    alert('implement action');
   }
 }

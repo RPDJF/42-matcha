@@ -21,4 +21,5 @@
 | ![](../../../assets/images/icons/icon-spinner.svg) | `icon-spinner` |
 | ![](../../../assets/images/icons/icon-star.svg) | `icon-star` |
 | ![](../../../assets/images/icons/icon-star-full.svg) | `icon-star-full` |
+| ![](../../../assets/images/icons/icon-user.svg) | `icon-user` |
 | ![](../../../assets/images/icons/icon-user-add.svg) | `icon-user-add` |

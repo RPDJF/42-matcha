@@ -18,7 +18,24 @@
           }
         </div>
       </div>
-      <button appButtonIcon icon="icon-options"></button>
+      <app-action-menu #conversationActionMenu>
+        <app-action-menu-item icon="icon-user" [action]="() => actionMenuAction()">{{
+          ('Voir le profil' | i18n)()
+        }}</app-action-menu-item>
+        <app-action-menu-item
+          class="text-red-500"
+          icon="icon-close"
+          [action]="() => actionMenuAction()"
+        >
+          {{ ('Retirer la correspondance' | i18n)() }}
+        </app-action-menu-item>
+      </app-action-menu>
+      <button
+        appActionMenuTrigger
+        [menu]="conversationActionMenu"
+        appButtonIcon
+        icon="icon-options"
+      ></button>
     </header>
     <div
       #messagesContainer

@@ -19,4 +19,5 @@ export type IconType =
   | 'icon-spinner'
   | 'icon-star'
   | 'icon-star-full'
+  | 'icon-user'
   | 'icon-user-add';
