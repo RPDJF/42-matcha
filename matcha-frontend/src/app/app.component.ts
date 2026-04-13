@@ -15,7 +15,7 @@ export class AppComponent implements AfterViewInit {
 
   readonly sidemenuComponentRef = viewChild(SidemenuComponent);
 
-  readonly userMe = this.#store.selectSignal(UserState.getMe);
+  readonly userIsProfileComplete = this.#store.selectSignal(UserState.isProfileComplete);
 
   #touchStartY: number = 0;
 
@@ -24,6 +24,7 @@ export class AppComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
+    // swipe menu up on gesture
     const sidemenuComponentRef = this.sidemenuComponentRef();
     if (sidemenuComponentRef) {
       this.nativeElement.addEventListener('touchstart', (e) => {

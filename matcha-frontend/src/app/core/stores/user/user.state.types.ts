@@ -1,9 +1,10 @@
 export interface BaseUser {
   userUUID: string;
   displayName: string;
-  age: number;
+  firstName: string;
+  lastName?: string;
   lastAlive: number;
-  isAdmin: boolean;
+  age: number;
   avatar?: string;
   /**
    * @param single looking for someone
@@ -12,17 +13,21 @@ export interface BaseUser {
    */
   status: 'single' | 'couple' | 'free';
   gender: 'male' | 'female';
-  sexuality: 'heterosexual' | 'homosexual' | 'bisexual';
-  biography: string;
-  interests: string[];
-  pictures: string[];
-  rating: number;
   city: string;
+  rating?: number;
+  pictures: string[];
+  interests: string[];
+  biography: string;
+  sexuality: 'heterosexual' | 'homosexual' | 'bisexual';
+  role: 'user' | 'administrator';
 }
 
 export interface FullUser extends BaseUser {
   emailAddress?: string;
-  location: string;
+  location?: {
+    lat: number;
+    lng: number;
+  };
 }
 
 export interface PublicUser extends BaseUser {

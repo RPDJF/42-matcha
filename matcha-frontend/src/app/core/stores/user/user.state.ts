@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
-import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Action, createSelector, Selector, State, StateContext } from '@ngxs/store';
 import { catchError, tap, throwError } from 'rxjs';
 import { ServiceApiStatus } from '../../interfaces/http.interfaces';
 import { UserService } from '../../services/userService/user.service';
-import { UserFetchMe, UserLogout, UserUpdateProfile } from './user.actions';
+import { UserFetchMe, UserLogout, UserSetUser, UserUpdateProfile } from './user.actions';
 import { FullUser } from './user.state.types';
 
 export interface UserStateModel {
@@ -44,6 +44,20 @@ export class UserState {
   @Selector()
   static getMe(state: UserStateModel) {
     return state.me;
+  }
+
+  /**
+   * Check if user profile is complete
+   */
+  static isProfileComplete = createSelector([UserState], (state: UserStateModel) =>
+    Boolean(state.me?.location && state.me.pictures.length && state.me.biography),
+  );
+
+  @Action(UserSetUser)
+  userSetUser(ctx: StateContext<UserStateModel>, { user }: UserSetUser) {
+    return ctx.patchState({
+      me: user,
+    });
   }
 
   @Action(UserFetchMe)

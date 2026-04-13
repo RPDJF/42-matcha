@@ -2,7 +2,7 @@
   class="bg-frappe-pink/20 text-latte-text container mx-auto flex h-dvh flex-col-reverse md:flex-row"
 >
   <!-- TODO: remove true debug condition -->
-  @if (userMe() || true) {
+  @if (userIsProfileComplete()) {
     <app-sidemenu class="shrink-0" />
   }
   <div class="flex flex-1 flex-col overflow-y-auto">

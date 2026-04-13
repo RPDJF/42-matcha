@@ -21,8 +21,10 @@ export const publicUsersMock: PublicUser[] = [
     rating: 5,
     lastAlive: Date.now(),
     status: 'free',
-    isAdmin: true,
     distance: 0,
+    firstName: 'Caine',
+    role: 'administrator',
+    lastName: 'C&A',
   },
   {
     userUUID: 'a1b2c3d4-5f0a-4c3e-9c8e-1d25f0a4c3e9',
@@ -39,8 +41,9 @@ export const publicUsersMock: PublicUser[] = [
     rating: 1,
     lastAlive: Date.now() - 3600000,
     status: 'free',
-    isAdmin: false,
     distance: 10,
+    firstName: 'Jax',
+    role: 'user',
   },
   {
     userUUID: 'c3d4e5f6-5f0a-4c3e-9c8e-1d25f0a4c3e9',
@@ -57,8 +60,9 @@ export const publicUsersMock: PublicUser[] = [
     rating: 5,
     lastAlive: Date.now() - 120000,
     status: 'free',
-    isAdmin: false,
     distance: 5,
+    firstName: 'Pomni',
+    role: 'user',
   },
   {
     userUUID: 'd4e5f6g7-5f0a-4c3e-9c8e-1d25f0a4c3e9',
@@ -75,8 +79,9 @@ export const publicUsersMock: PublicUser[] = [
     rating: 5,
     lastAlive: Date.now() - 600000,
     status: 'free',
-    isAdmin: false,
     distance: 12,
+    firstName: 'Ragatha',
+    role: 'user',
   },
   {
     userUUID: 'e5f6g7h8-5f0a-4c3e-9c8e-1d25f0a4c3e9',
@@ -93,8 +98,9 @@ export const publicUsersMock: PublicUser[] = [
     rating: 3,
     lastAlive: Date.now() - 900000,
     status: 'free',
-    isAdmin: false,
     distance: 15,
+    firstName: 'Gangle',
+    role: 'user',
   },
   {
     userUUID: 'f6g7h8i9-5f0a-4c3e-9c8e-1d25f0a4c3e9',
@@ -111,7 +117,8 @@ export const publicUsersMock: PublicUser[] = [
     rating: 2,
     lastAlive: Date.now() - 1800000,
     status: 'free',
-    isAdmin: false,
+    firstName: 'Kinger',
+    role: 'administrator',
     distance: 20,
   },
   {
@@ -129,8 +136,9 @@ export const publicUsersMock: PublicUser[] = [
     rating: 2,
     lastAlive: Date.now() - 43200000,
     status: 'free',
-    isAdmin: false,
     distance: 30,
+    firstName: 'Zooble',
+    role: 'user',
   },
   {
     userUUID: 'h8i9j0k1-5f0a-4c3e-9c8e-1d25f0a4c3e9',
@@ -147,8 +155,9 @@ export const publicUsersMock: PublicUser[] = [
     rating: 1,
     lastAlive: Date.now(),
     status: 'free',
-    isAdmin: true,
     distance: 0,
+    firstName: 'Bubble',
+    role: 'administrator',
   },
 ];
 

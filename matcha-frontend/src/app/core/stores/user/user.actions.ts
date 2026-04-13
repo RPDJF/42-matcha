@@ -1,4 +1,10 @@
 import { UpdateUserProfileProp } from '../../services/userService/user.service.types';
+import { FullUser } from './user.state.types';
+
+export class UserSetUser {
+  static readonly type = '[User] SetUser';
+  constructor(readonly user: FullUser) {}
+}
 
 export class UserFetchMe {
   static readonly type = '[User] FetchMe';
