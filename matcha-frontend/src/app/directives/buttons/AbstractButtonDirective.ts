@@ -37,10 +37,10 @@ export abstract class AbstractButtonDirective implements AfterViewInit {
   #baseClassName: string | undefined;
 
   constructor() {
+    effect(() => this.isReady() && this.effectLoadingHandler(this.loading()));
     effect(() => {
       if (this.isReady() && !this.loading()) this.effectDisabledHandler(this.disabled());
     });
-    effect(() => this.isReady() && this.effectLoadingHandler(this.loading()));
     effect(() => {
       if (!this.isReady()) return;
       if (this.disabled() || this.loading()) {

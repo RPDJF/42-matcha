@@ -1,1 +1,14 @@
-<p>onboarding-component works!</p>
+<app-stepper>
+  <app-stepper-step [title]="('Ajouter des photos' | i18n)()" [isValid]="false">
+    <p>p1</p>
+  </app-stepper-step>
+  <app-stepper-step [title]="('Informations de base' | i18n)()" [isValid]="true">
+    <p>p2</p>
+  </app-stepper-step>
+  <app-stepper-step [title]="('Vos centres d\'intérêts' | i18n)()" [isValid]="false"
+    ><p>p3</p></app-stepper-step
+  >
+  <app-stepper-step [title]="('Préférences' | i18n)()" [isValid]="false">
+    <p>p4</p>
+  </app-stepper-step>
+</app-stepper>

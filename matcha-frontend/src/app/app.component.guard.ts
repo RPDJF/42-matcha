@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateChildFn, Router } from '@angular/router';
 import { Store } from '@ngxs/store';
+import { environment } from '../../environments/environment';
 import { UserState } from './core/stores/user/user.state';
 
 function enforceAuthentification(store: Store, router: Router) {
@@ -15,6 +16,9 @@ export const appGuard: CanActivateChildFn = (childRoute, state) => {
   const store = inject(Store);
   const router = inject(Router);
 
+  if (environment.ENVIRONMENT !== 'PRODUCTION' && state.url.includes('skipAppGuard=true'))
+    return true;
+
   switch (state.url.split('?')[0].split('/')[1]) {
     case 'discover':
     case 'chats':
@@ -26,5 +30,4 @@ export const appGuard: CanActivateChildFn = (childRoute, state) => {
     default:
       return false;
   }
-  return false;
 };
