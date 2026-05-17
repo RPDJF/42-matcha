@@ -5,6 +5,7 @@
 | ![](../../../assets/images/icons/icon-arrow-left.svg) | `icon-arrow-left` |
 | ![](../../../assets/images/icons/icon-arrow-right.svg) | `icon-arrow-right` |
 | ![](../../../assets/images/icons/icon-bell.svg) | `icon-bell` |
+| ![](../../../assets/images/icons/icon-camera.svg) | `icon-camera` |
 | ![](../../../assets/images/icons/icon-close.svg) | `icon-close` |
 | ![](../../../assets/images/icons/icon-email.svg) | `icon-email` |
 | ![](../../../assets/images/icons/icon-filters.svg) | `icon-filters` |

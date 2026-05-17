@@ -17,6 +17,7 @@
           <input
             class="w-full"
             appInputPrimary
+            [allowPasswordManager]="true"
             [placeholder]="('ton@email.com' | i18n)()"
             [formControl]="authForm.controls.email"
             icon="icon-email"
@@ -29,6 +30,7 @@
           <input
             class="w-full"
             appInputPrimary
+            [allowPasswordManager]="true"
             placeholder="••••••••"
             [formControl]="authForm.controls.password"
             icon="icon-locker-locked"

@@ -28,6 +28,7 @@ export class RadioButtonGroupComponent implements AfterViewInit, ControlValueAcc
   readonly mode = input<'single' | 'multi'>('single');
   readonly selected = model<string[]>([]);
   readonly selectedChange = output<string[]>();
+  readonly maxSelections = input<number>();
 
   // Formcontrols magic formulas
   private onChange = (value: any) => {};
@@ -61,7 +62,10 @@ export class RadioButtonGroupComponent implements AfterViewInit, ControlValueAcc
           }
         } else {
           if (isSelected) {
-            this.selected.update((selecteds) => [...selecteds, radioButtonRef.value()]);
+            const maxSelections = this.maxSelections();
+            if (!maxSelections || this.selected().length < maxSelections) {
+              this.selected.update((selecteds) => [...selecteds, radioButtonRef.value()]);
+            }
           } else if (!this.required() || this.selected().length > 1) {
             this.selected.update((selecteds) =>
               selecteds.filter((selected) => selected !== radioButtonRef.value()),

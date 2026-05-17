@@ -5,7 +5,8 @@ import { Component, effect, input, output, signal } from '@angular/core';
   imports: [],
   templateUrl: './stepper-step.component.html',
   host: {
-    '[style.display]': "isVisible() ? 'block' : 'none'",
+    '[style.display]': "isVisible() ? 'flex' : 'none'",
+    class: 'flex-col gap-6 p-6',
   },
 })
 export class StepperStepComponent {

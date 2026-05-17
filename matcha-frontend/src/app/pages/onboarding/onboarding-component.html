@@ -1,14 +1,131 @@
 <app-stepper>
-  <app-stepper-step [title]="('Ajouter des photos' | i18n)()" [isValid]="false">
-    <p>p1</p>
-  </app-stepper-step>
-  <app-stepper-step [title]="('Informations de base' | i18n)()" [isValid]="true">
-    <p>p2</p>
-  </app-stepper-step>
-  <app-stepper-step [title]="('Vos centres d\'intérêts' | i18n)()" [isValid]="false"
-    ><p>p3</p></app-stepper-step
+  <app-stepper-step
+    [title]="('Ajouter des photos' | i18n)()"
+    [isValid]="formGroup.controls.pictures.valid"
   >
-  <app-stepper-step [title]="('Préférences' | i18n)()" [isValid]="false">
-    <p>p4</p>
+    <p class="text-center">{{ ('Au moins 2 photos pour continuer' | i18n)() }}</p>
+    <div class="mx-auto flex max-w-lg flex-wrap items-center justify-center gap-4">
+      @for (i of [].constructor(9); track $index) {
+        <app-image-selector
+          [preventSelfControl]="true"
+          (imageChange)="onPictureChange($event)"
+          (imageClear)="onPicturesClear($index)"
+          [imageSrc]="pictureSrcs()[$index]"
+        />
+      }
+    </div>
+  </app-stepper-step>
+  <app-stepper-step
+    [title]="('Informations de base' | i18n)()"
+    [isValid]="formGroup.controls.basicInformation.valid"
+  >
+    <form appFormBase>
+      <div class="flex gap-4">
+        <div class="flex grow flex-col">
+          <label>{{ ('Prénom' | i18n)() }}</label>
+          <input
+            appInputPrimary
+            placeholder="{{ ('Ton prénom' | i18n)() }}"
+            [formControl]="formGroup.controls.basicInformation.controls.firstName"
+          />
+        </div>
+        <div class="flex grow flex-col">
+          <label>{{ ('Nom de famille' | i18n)() }}</label>
+          <input
+            appInputPrimary
+            placeholder="{{ ('Ton nom de famille' | i18n)() }}"
+            [formControl]="formGroup.controls.basicInformation.controls.lastName"
+          />
+        </div>
+      </div>
+      <label>{{ ('Âge' | i18n)() }}</label>
+      <input
+        appInputPrimary
+        type="number"
+        placeholder="{{ ('Ton âge' | i18n)() }}"
+        [formControl]="formGroup.controls.basicInformation.controls.age"
+      />
+      <label>{{ ('Sexe' | i18n)() }}</label>
+      <app-radio-button-group [formControl]="formGroup.controls.basicInformation.controls.gender">
+        <app-radio-button value="male">{{ ('Homme' | i18n)() }}</app-radio-button>
+        <app-radio-button value="female">{{ ('Femme' | i18n)() }}</app-radio-button>
+      </app-radio-button-group>
+      <label>{{ ('Biographie' | i18n)() }}</label>
+      <textarea
+        class="min-h-36 resize-none"
+        appInputPrimary
+        placeholder="{{ ('Parle-nous de toi' | i18n)() }}"
+      ></textarea>
+    </form>
+  </app-stepper-step>
+  <app-stepper-step
+    [title]="('Vos centres d\'intérêts' | i18n)()"
+    [isValid]="formGroup.controls.interests.valid"
+  >
+    <p class="text-center">{{ ("Sélectionnez au moins 3 centres d'intérêts" | i18n)() }}</p>
+    <form appFormBase>
+      <app-radio-button-group
+        mode="multi"
+        [maxSelections]="6"
+        [formControl]="formGroup.controls.interests"
+      >
+        <app-radio-button value="voyage">{{ ('Voyage' | i18n)() }} ✈️</app-radio-button>
+        <app-radio-button value="music">{{ ('Musique' | i18n)() }} 🎵</app-radio-button>
+        <app-radio-button value="cinema">{{ ('Cinéma' | i18n)() }} 🎬</app-radio-button>
+        <app-radio-button value="sport">{{ ('Sport' | i18n)() }} ⚽</app-radio-button>
+        <app-radio-button value="nourriture">{{ ('Nourriture' | i18n)() }} 🍔</app-radio-button>
+        <app-radio-button value="art">{{ ('Art' | i18n)() }} 🎨</app-radio-button>
+        <app-radio-button value="films">{{ ('Films' | i18n)() }} 🍿</app-radio-button>
+        <app-radio-button value="fitness">{{ ('Fitness' | i18n)() }} 🏋️</app-radio-button>
+        <app-radio-button value="gaming">{{ ('Gaming' | i18n)() }} 🎮</app-radio-button>
+        <app-radio-button value="lecture">{{ ('Lecture' | i18n)() }} 📚</app-radio-button>
+        <app-radio-button value="cuisine">{{ ('Cuisine' | i18n)() }} 🍳</app-radio-button>
+        <app-radio-button value="photographie">{{ ('Photographie' | i18n)() }} 📸</app-radio-button>
+        <app-radio-button value="danse">{{ ('Danse' | i18n)() }} 💃</app-radio-button>
+        <app-radio-button value="mode">{{ ('Mode' | i18n)() }} 👗</app-radio-button>
+        <app-radio-button value="technologie">{{ ('Technologie' | i18n)() }} 💻</app-radio-button>
+        <app-radio-button value="nature">{{ ('Nature' | i18n)() }} 🌿</app-radio-button>
+      </app-radio-button-group>
+    </form>
+  </app-stepper-step>
+  <app-stepper-step
+    [title]="('Préférences' | i18n)()"
+    [isValid]="formGroup.controls.preferences.valid"
+  >
+    <form appFormBase>
+      <label>{{ ("Range d'âge" | i18n)() }}</label>
+      <div class="rounded-xl bg-white px-8 py-4">
+        <div class="flex items-center justify-between gap-4">
+          <span>{{ researchFiltersLimits.MIN_AGE }}</span>
+          <span>{{ researchFiltersLimits.MAX_AGE }}</span>
+        </div>
+        <app-range-selector
+          [minRangeLimit]="researchFiltersLimits.MIN_AGE"
+          [maxRangeLimit]="researchFiltersLimits.MAX_AGE"
+          [minFormControl]="formGroup.controls.preferences.controls.minAge"
+          [maxFormControl]="formGroup.controls.preferences.controls.maxAge"
+        />
+      </div>
+      <label>{{ ('Distance' | i18n)() }}</label>
+      <div class="rounded-xl bg-white px-8 py-4">
+        <div class="flex items-center justify-between gap-4">
+          <span>{{ researchFiltersLimits.MIN_DISTANCE }} km</span>
+          <span>{{ researchFiltersLimits.MAX_DISTANCE }} km</span>
+        </div>
+        <input
+          class="w-full"
+          type="range"
+          [min]="researchFiltersLimits.MIN_DISTANCE"
+          [max]="researchFiltersLimits.MAX_DISTANCE"
+          [formControl]="formGroup.controls.preferences.controls.distance"
+        />
+      </div>
+      <label>{{ ('Orientation sexuelle' | i18n)() }}</label>
+      <app-radio-button-group [formControl]="formGroup.controls.preferences.controls.gender">
+        <app-radio-button value="heterosexual">{{ ('Hétérosexuel' | i18n)() }}</app-radio-button>
+        <app-radio-button value="homosexual">{{ ('Homosexuel' | i18n)() }}</app-radio-button>
+        <app-radio-button value="bisexual">{{ ('Bisexuel' | i18n)() }}</app-radio-button>
+      </app-radio-button-group>
+    </form>
   </app-stepper-step>
 </app-stepper>

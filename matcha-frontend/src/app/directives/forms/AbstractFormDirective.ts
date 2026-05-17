@@ -1,7 +1,7 @@
 import { Directive, effect, ElementRef, inject, input, OnInit } from '@angular/core';
 
 @Directive({
-  selector: '[appFormBase]',
+  selector: '[appFormBaseDirective]',
 })
 export abstract class AbstractFormDirective implements OnInit {
   readonly #elementRef = inject(ElementRef);

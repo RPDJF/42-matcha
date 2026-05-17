@@ -1,0 +1,27 @@
+<div
+  class="relative flex h-40 w-32 items-center justify-center rounded-xl border-dashed border-gray-400 bg-white"
+  [class.border]="!imageSrc()"
+>
+  @if (!imageSrc()) {
+    <app-icon class="text-[32px] text-gray-400" name="icon-camera" />
+    <input
+      class="absolute h-full w-full cursor-pointer opacity-0"
+      type="file"
+      accept="image/*"
+      (change)="onFileSelected($event)"
+    />
+  } @else {
+    <div class="h-full w-full overflow-hidden rounded-xl">
+      <img
+        class="size-full max-h-full min-h-full max-w-full min-w-full object-cover"
+        [src]="imageSrc()"
+      />
+    </div>
+    <button
+      class="absolute -top-2 -left-2"
+      appButtonIcon
+      icon="icon-close"
+      (click)="onClearImage()"
+    ></button>
+  }
+</div>

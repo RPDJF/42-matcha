@@ -16,7 +16,10 @@ export const appGuard: CanActivateChildFn = (childRoute, state) => {
   const store = inject(Store);
   const router = inject(Router);
 
-  if (environment.ENVIRONMENT !== 'PRODUCTION' && state.url.includes('skipAppGuard=true'))
+  if (
+    environment.ENVIRONMENT !== 'PRODUCTION' &&
+    (state.url.includes('skipAppGuard=true') || state.url.includes('debug=true'))
+  )
     return true;
 
   switch (state.url.split('?')[0].split('/')[1]) {

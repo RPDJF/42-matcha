@@ -1,4 +1,13 @@
-import { computed, Directive, ElementRef, inject, input, OnInit, Renderer2 } from '@angular/core';
+import {
+  computed,
+  Directive,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  OnInit,
+  Renderer2,
+} from '@angular/core';
 import { IconType } from '../../components/icon/icon.generated.types';
 
 @Directive({
@@ -9,6 +18,7 @@ export class InputPrimaryDirective implements OnInit {
   readonly #renderer2 = inject(Renderer2);
 
   readonly icon = input<IconType>();
+  readonly allowPasswordManager = input<boolean>(false);
 
   readonly #classes = [
     'focus:ring-latte-pink',
@@ -20,8 +30,10 @@ export class InputPrimaryDirective implements OnInit {
     'focus:ring-2',
     'transition-all',
     'duration-150',
-    'ring-latte-crust',
-    'ring-1',
+    'outline-none',
+    'focus:outline-none',
+    'appearance-none',
+    'focus:border-transparent',
   ];
 
   readonly #iconClasses = ['pl-10'];
@@ -41,6 +53,33 @@ export class InputPrimaryDirective implements OnInit {
 
     return templateElement.content.firstElementChild as HTMLElement;
   });
+
+  constructor() {
+    const attributes = [
+      { name: 'autocomplete', value: 'off' },
+      { name: 'autocorrect', value: 'off' },
+      { name: 'autocapitalize', value: 'off' },
+      { name: 'spellcheck', value: 'false' },
+      { name: 'data-lpignore', value: 'true' },
+      { name: 'data-form-type', value: 'other' },
+      { name: 'data-lp-ignore', value: 'true' },
+      { name: 'data-bwignore', value: 'true' },
+      { name: 'data-protonpass-ignore', value: 'true' },
+    ];
+
+    effect(() => {
+      const allowPasswordManager = this.allowPasswordManager();
+      if (!allowPasswordManager) {
+        attributes.forEach(({ name, value }) =>
+          this.#renderer2.setAttribute(this.#elementRef.nativeElement, name, value),
+        );
+      } else {
+        attributes.forEach(({ name }) =>
+          this.#renderer2.removeAttribute(this.#elementRef.nativeElement, name),
+        );
+      }
+    });
+  }
 
   ngOnInit(): void {
     const el = this.#elementRef.nativeElement;

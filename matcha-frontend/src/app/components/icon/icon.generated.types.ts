@@ -3,6 +3,7 @@ export type IconType =
   | 'icon-arrow-left'
   | 'icon-arrow-right'
   | 'icon-bell'
+  | 'icon-camera'
   | 'icon-close'
   | 'icon-email'
   | 'icon-filters'
