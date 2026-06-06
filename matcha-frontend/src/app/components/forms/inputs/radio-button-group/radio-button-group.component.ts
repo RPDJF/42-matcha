@@ -1,12 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  contentChildren,
-  forwardRef,
-  input,
-  model,
-  output,
-} from '@angular/core';
+import { AfterViewInit, Component, contentChildren, forwardRef, input, model } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { RadioButtonComponent } from './radio-button/radio-button.component';
 
@@ -27,7 +19,6 @@ export class RadioButtonGroupComponent implements AfterViewInit, ControlValueAcc
   readonly required = input<boolean>(true);
   readonly mode = input<'single' | 'multi'>('single');
   readonly selected = model<string[]>([]);
-  readonly selectedChange = output<string[]>();
   readonly maxSelections = input<number>();
 
   // Formcontrols magic formulas
@@ -53,7 +44,7 @@ export class RadioButtonGroupComponent implements AfterViewInit, ControlValueAcc
     }
 
     for (const radioButtonRef of radioButtonRefs) {
-      radioButtonRef.selectedChange.subscribe((isSelected) => {
+      radioButtonRef.userSelectedChange.subscribe((isSelected) => {
         if (this.mode() === 'single') {
           if (isSelected) {
             this.selected.set([radioButtonRef.value()]);
@@ -74,7 +65,6 @@ export class RadioButtonGroupComponent implements AfterViewInit, ControlValueAcc
         }
 
         this.onChange(this.mode() === 'single' ? (this.selected()[0] ?? null) : this.selected());
-        this.selectedChange.emit(this.selected());
 
         radioButtonRefs.forEach((otherRadioButtonRef) =>
           otherRadioButtonRef.selected.set(this.selected().includes(otherRadioButtonRef.value())),

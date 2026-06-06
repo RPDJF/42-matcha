@@ -9,7 +9,7 @@ export class RadioButtonComponent {
   readonly value = input.required<string>();
   readonly required = input(false);
   readonly selected = model<boolean>(false);
-  readonly selectedChange = output<boolean>();
+  readonly userSelectedChange = output<boolean>();
 
   readonly classes = computed(() =>
     this.#baseClasses.concat(this.selected() ? this.#activeClasses : this.#inactiveClasses),
@@ -38,6 +38,6 @@ export class RadioButtonComponent {
 
   onClick(event: Event) {
     event.preventDefault();
-    this.selectedChange.emit(!this.selected());
+    this.userSelectedChange.emit(!this.selected());
   }
 }
