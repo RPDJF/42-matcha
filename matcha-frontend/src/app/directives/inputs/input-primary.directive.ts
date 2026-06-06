@@ -9,9 +9,11 @@ import {
   Renderer2,
 } from '@angular/core';
 import { IconType } from '../../components/icon/icon.generated.types';
+import { InputValidationDirective } from './input-validation.directive';
 
 @Directive({
   selector: '[appInputPrimary]',
+  hostDirectives: [InputValidationDirective],
 })
 export class InputPrimaryDirective implements OnInit {
   readonly #elementRef: ElementRef<HTMLElement> = inject(ElementRef);

@@ -34,8 +34,8 @@
       class="hidden w-full max-w-96 items-center justify-center gap-2 md:flex"
       (click)="currentStepIdx() > 0 ? goPreviousStep() : cancel.emit()"
     >
+      <app-icon name="icon-arrow-left" />
       {{ currentStepIdx() > 0 ? ('Retour' | i18n)() : ('Annuler' | i18n)() }}
-      <app-icon name="icon-arrow-right" />
     </button>
     <button
       appButtonPrimary

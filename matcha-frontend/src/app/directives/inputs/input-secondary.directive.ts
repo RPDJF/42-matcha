@@ -1,8 +1,10 @@
 import { computed, Directive, ElementRef, inject, input, OnInit, Renderer2 } from '@angular/core';
 import { IconType } from '../../components/icon/icon.generated.types';
+import { InputValidationDirective } from './input-validation.directive';
 
 @Directive({
   selector: '[appInputSecondary]',
+  hostDirectives: [InputValidationDirective],
 })
 export class InputSecondaryDirective implements OnInit {
   readonly #elementRef: ElementRef<HTMLInputElement> = inject(ElementRef);

@@ -1,4 +1,4 @@
-<app-stepper>
+<app-stepper (cancel)="this.onCancel()" (complete)="this.onComplete()">
   <app-stepper-step
     [title]="('Ajouter des photos' | i18n)()"
     [isValid]="formGroup.controls.pictures.valid"
@@ -21,52 +21,192 @@
   >
     <form appFormBase>
       <div class="flex gap-4">
-        <div class="flex grow flex-col">
+        <div class="flex w-full flex-col">
           <label>{{ ('Prénom' | i18n)() }}</label>
-          <input
-            appInputPrimary
-            placeholder="{{ ('Ton prénom' | i18n)() }}"
-            [formControl]="formGroup.controls.basicInformation.controls.firstName"
-          />
+          <div>
+            <input
+              class="w-full"
+              appInputPrimary
+              placeholder="{{ ('Ton prénom' | i18n)() }}"
+              [formControl]="formGroup.controls.basicInformation.controls.firstName"
+            />
+            @if (
+              (formGroup.controls.basicInformation.controls.firstName.touched &&
+                formGroup.controls.basicInformation.controls.firstName.dirty &&
+                formGroup.controls.basicInformation.controls.firstName.errors) ||
+                {};
+              as errors
+            ) {
+              <div>
+                @if (errors?.['required']) {
+                  <label class="text-muted-foreground text-frappe-red text-sm">
+                    {{ ('Ce champ est requis' | i18n)() }}
+                  </label>
+                }
+                @if (errors?.['pattern']) {
+                  <label class="text-muted-foreground text-frappe-red text-sm">
+                    {{ ('Ne doit pas contenir de caractères spéciaux ou de chiffres' | i18n)() }}
+                  </label>
+                }
+                @if (errors?.['maxlength']; as maxLengthError) {
+                  <label class="text-muted-foreground text-frappe-red text-sm">
+                    {{
+                      (
+                        'Ne doit pas dépasser {count} caractères'
+                        | i18n: { count: maxLengthError.requiredLength }
+                      )()
+                    }}
+                  </label>
+                }
+              </div>
+            }
+          </div>
         </div>
-        <div class="flex grow flex-col">
+        <div class="flex w-full flex-col">
           <label>{{ ('Nom de famille' | i18n)() }}</label>
-          <input
-            appInputPrimary
-            placeholder="{{ ('Ton nom de famille' | i18n)() }}"
-            [formControl]="formGroup.controls.basicInformation.controls.lastName"
-          />
+          <div>
+            <input
+              class="w-full"
+              appInputPrimary
+              placeholder="{{ ('Ton nom de famille' | i18n)() }}"
+              [formControl]="formGroup.controls.basicInformation.controls.lastName"
+            />
+            @if (
+              (formGroup.controls.basicInformation.controls.lastName.touched &&
+                formGroup.controls.basicInformation.controls.lastName.dirty &&
+                formGroup.controls.basicInformation.controls.lastName.errors) ||
+                {};
+              as errors
+            ) {
+              <div>
+                @if (errors?.['required']) {
+                  <label class="text-muted-foreground text-frappe-red text-sm">
+                    {{ ('Ce champ est requis' | i18n)() }}
+                  </label>
+                }
+                @if (errors?.['pattern']) {
+                  <label class="text-muted-foreground text-frappe-red text-sm">
+                    {{ ('Ne doit pas contenir de chiffres ou de caractères spéciaux' | i18n)() }}
+                  </label>
+                }
+                @if (errors?.['maxlength']; as maxLengthError) {
+                  <label class="text-muted-foreground text-frappe-red text-sm">
+                    {{
+                      (
+                        'Ne doit pas dépasser {count} caractères'
+                        | i18n: { count: maxLengthError.requiredLength }
+                      )()
+                    }}
+                  </label>
+                }
+              </div>
+            }
+          </div>
         </div>
       </div>
       <label>{{ ('Âge' | i18n)() }}</label>
-      <input
-        appInputPrimary
-        type="number"
-        placeholder="{{ ('Ton âge' | i18n)() }}"
-        [formControl]="formGroup.controls.basicInformation.controls.age"
-      />
+      <div>
+        <input
+          appInputPrimary
+          class="w-full"
+          placeholder="{{ ('Ton âge' | i18n)() }}"
+          [formControl]="formGroup.controls.basicInformation.controls.age"
+        />
+        @if (
+          (formGroup.controls.basicInformation.controls.age.touched &&
+            formGroup.controls.basicInformation.controls.age.dirty &&
+            formGroup.controls.basicInformation.controls.age.errors) ||
+            {};
+          as errors
+        ) {
+          <div>
+            @if (errors?.['required']) {
+              <label class="text-muted-foreground text-frappe-red text-sm">
+                {{ ('Ce champ est requis' | i18n)() }}
+              </label>
+            }
+            @if (errors?.['min']; as minError) {
+              <label class="text-muted-foreground text-frappe-red text-sm">
+                {{ ("L'âge minimum est de {min} ans" | i18n: { min: minError.min })() }}
+              </label>
+            }
+            @if (errors?.['max']; as maxError) {
+              <label class="text-muted-foreground text-frappe-red text-sm">
+                {{ ("L'âge maximum est de {max} ans" | i18n: { max: maxError.max })() }}
+              </label>
+            }
+            @if (errors?.['pattern']) {
+              <label class="text-muted-foreground text-frappe-red text-sm">
+                {{ ("L'âge doit être un nombre entier" | i18n)() }}
+              </label>
+            }
+          </div>
+        }
+      </div>
       <label>{{ ('Sexe' | i18n)() }}</label>
       <app-radio-button-group [formControl]="formGroup.controls.basicInformation.controls.gender">
         <app-radio-button value="male">{{ ('Homme' | i18n)() }}</app-radio-button>
         <app-radio-button value="female">{{ ('Femme' | i18n)() }}</app-radio-button>
       </app-radio-button-group>
+
       <label>{{ ('Biographie' | i18n)() }}</label>
-      <textarea
-        class="min-h-36 resize-none"
-        appInputPrimary
-        placeholder="{{ ('Parle-nous de toi' | i18n)() }}"
-      ></textarea>
+      <div>
+        <textarea
+          class="min-h-36 w-full resize-none"
+          appInputPrimary
+          placeholder="{{ ('Parle-nous de toi' | i18n)() }}"
+          [formControl]="formGroup.controls.basicInformation.controls.biography"
+        ></textarea>
+        @if (
+          (formGroup.controls.basicInformation.controls.biography.touched &&
+            formGroup.controls.basicInformation.controls.biography.dirty &&
+            formGroup.controls.basicInformation.controls.biography.errors) ||
+            {};
+          as errors
+        ) {
+          <div>
+            @if (errors?.['required']) {
+              <label class="text-muted-foreground text-frappe-red text-sm">
+                {{ ('Ce champ est requis' | i18n)() }}
+              </label>
+            }
+            @if (errors?.['maxlength']; as maxLengthError) {
+              <label class="text-muted-foreground text-frappe-red text-sm">
+                {{
+                  (
+                    'Ne doit pas dépasser {count} caractères'
+                    | i18n: { count: maxLengthError.requiredLength }
+                  )()
+                }}
+              </label>
+            }
+            @if (errors?.['minlength']; as minLengthError) {
+              <label class="text-muted-foreground text-frappe-red text-sm">
+                {{
+                  (
+                    'Doit comporter au moins {count} caractères'
+                    | i18n: { count: minLengthError.requiredLength }
+                  )()
+                }}
+              </label>
+            }
+          </div>
+        }
+      </div>
     </form>
   </app-stepper-step>
+
   <app-stepper-step
     [title]="('Vos centres d\'intérêts' | i18n)()"
     [isValid]="formGroup.controls.interests.valid"
   >
-    <p class="text-center">{{ ("Sélectionnez au moins 3 centres d'intérêts" | i18n)() }}</p>
+    <p class="text-center">
+      {{ ("Sélectionnez au moins 3 centres d'intérêts" | i18n)() }}
+    </p>
     <form appFormBase>
       <app-radio-button-group
         mode="multi"
-        [maxSelections]="6"
+        [maxSelections]="maxInterests"
         [formControl]="formGroup.controls.interests"
       >
         <app-radio-button value="voyage">{{ ('Voyage' | i18n)() }} ✈️</app-radio-button>
@@ -93,7 +233,16 @@
     [isValid]="formGroup.controls.preferences.valid"
   >
     <form appFormBase>
-      <label>{{ ("Range d'âge" | i18n)() }}</label>
+      <label>{{
+        (
+          'Âge: {minAgeFilter} - {maxAgeFilter}'
+          | i18n
+            : {
+                minAgeFilter: formGroup.controls.preferences.controls.minAge.value ?? '',
+                maxAgeFilter: formGroup.controls.preferences.controls.maxAge.value ?? '',
+              }
+        )()
+      }}</label>
       <div class="rounded-xl bg-white px-8 py-4">
         <div class="flex items-center justify-between gap-4">
           <span>{{ researchFiltersLimits.MIN_AGE }}</span>
@@ -106,7 +255,13 @@
           [maxFormControl]="formGroup.controls.preferences.controls.maxAge"
         />
       </div>
-      <label>{{ ('Distance' | i18n)() }}</label>
+
+      <label>{{
+        (
+          'Distance: {distanceFilter} km'
+          | i18n: { distanceFilter: formGroup.controls.preferences.controls.distance.value ?? '' }
+        )()
+      }}</label>
       <div class="rounded-xl bg-white px-8 py-4">
         <div class="flex items-center justify-between gap-4">
           <span>{{ researchFiltersLimits.MIN_DISTANCE }} km</span>

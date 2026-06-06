@@ -1,4 +1,4 @@
-import { Component, computed } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
   FormControl,
@@ -7,6 +7,7 @@ import {
   Validators,
   ɵInternalFormsSharedModule,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 import { map } from 'rxjs';
 import { ImageSelectorComponent } from '../../components/forms/inputs/image-selector/image-selector.component';
 import { RadioButtonGroupComponent } from '../../components/forms/inputs/radio-button-group/radio-button-group.component';
@@ -41,7 +42,10 @@ import { InputPrimaryDirective } from '../../directives/inputs/input-primary.dir
   },
 })
 export class OnboardingComponent {
+  readonly #router = inject(Router);
+
   readonly researchFiltersLimits = RESEARCH_FILTERS_LIMITS;
+  readonly maxInterests = 6;
 
   readonly formGroup = new FormGroup({
     pictures: new FormControl<File[]>(
@@ -49,19 +53,32 @@ export class OnboardingComponent {
       [Validators.required, Validators.minLength(2), Validators.maxLength(9)],
     ),
     basicInformation: new FormGroup({
-      firstName: new FormControl<string>('', [Validators.required]),
-      lastName: new FormControl<string>('', [Validators.required]),
+      firstName: new FormControl<string>('', [
+        Validators.required,
+        Validators.pattern(/^[a-zA-ZÀ-ÿœŒæÆ]+(?:[ '-][a-zA-ZÀ-ÿœŒæÆ]+)*$/),
+        Validators.maxLength(50),
+      ]),
+      lastName: new FormControl<string>('', [
+        Validators.required,
+        Validators.pattern(/^[a-zA-ZÀ-ÿœŒæÆ]+(?:[ '-][a-zA-ZÀ-ÿœŒæÆ]+)*$/),
+        Validators.maxLength(50),
+      ]),
       age: new FormControl<number | null>(null, [
         Validators.required,
         Validators.min(this.researchFiltersLimits.MIN_AGE),
         Validators.max(this.researchFiltersLimits.MAX_AGE),
+        Validators.pattern(/^\d+$/),
       ]),
       gender: new FormControl<BaseUser['gender'] | undefined>(undefined, [Validators.required]),
-      biography: new FormControl<string>('', [Validators.required]),
+      biography: new FormControl<string>('', [
+        Validators.required,
+        Validators.maxLength(500),
+        Validators.minLength(20),
+      ]),
     }),
     interests: new FormControl<string[]>(
       [],
-      [Validators.required, Validators.minLength(3), Validators.maxLength(6)],
+      [Validators.required, Validators.minLength(3), Validators.maxLength(this.maxInterests)],
     ),
     preferences: new FormGroup({
       minAge: new FormControl<number>(18, [
@@ -82,6 +99,31 @@ export class OnboardingComponent {
       gender: new FormControl<BaseUser['sexuality']>('heterosexual', [Validators.required]),
     }),
   });
+
+  constructor() {
+    // test
+    this.formGroup.controls.basicInformation.statusChanges.subscribe((status) => {
+      console.log('Basic Information Status:', status);
+      console.log('Current Errors:', this.formGroup.controls.basicInformation.errors);
+      console.log(
+        'First Name Errors:',
+        this.formGroup.controls.basicInformation.controls.firstName.errors,
+      );
+      console.log(
+        'Last Name Errors:',
+        this.formGroup.controls.basicInformation.controls.lastName.errors,
+      );
+      console.log('Age Errors:', this.formGroup.controls.basicInformation.controls.age.errors);
+      console.log(
+        'Gender Errors:',
+        this.formGroup.controls.basicInformation.controls.gender.errors,
+      );
+      console.log(
+        'Biography Errors:',
+        this.formGroup.controls.basicInformation.controls.biography.errors,
+      );
+    });
+  }
 
   readonly pictureFiles = toSignal(
     this.formGroup.controls.pictures.valueChanges.pipe(map((v) => v ?? [])),
@@ -104,5 +146,14 @@ export class OnboardingComponent {
     this.formGroup.controls.pictures.setValue(
       this.formGroup.controls.pictures.value?.filter((_, i) => i !== idx) ?? [],
     );
+  }
+
+  onCancel() {
+    this.#router.navigate(['']);
+  }
+
+  onComplete() {
+    if (this.formGroup.valid) {
+    }
   }
 }

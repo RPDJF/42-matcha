@@ -70,7 +70,7 @@ export class I18nService extends HydratableService {
 
       if (replace)
         for (const [key, value] of Object.entries(replace)) {
-          translation = translation.replaceAll(`{${key}}`, value.toString());
+          translation = translation.replaceAll(`{${key}}`, value?.toString());
         }
       return translation;
     });
