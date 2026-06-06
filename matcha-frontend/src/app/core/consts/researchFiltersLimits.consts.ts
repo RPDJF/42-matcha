@@ -4,9 +4,9 @@ export const RESEARCH_FILTERS_LIMITS = {
   /**
    * distance in km
    */
-  MIN_DISTANCE: 0,
+  MIN_DISTANCE: 1,
   /**
    * distance in km
    */
-  MAX_DISTANCE: 100,
+  MAX_DISTANCE: 200,
 };

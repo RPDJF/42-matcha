@@ -5,7 +5,7 @@
   >
     <p class="text-center">{{ ('Au moins 2 photos pour continuer' | i18n)() }}</p>
     <div class="mx-auto flex max-w-lg flex-wrap items-center justify-center gap-4">
-      @for (i of [].constructor(9); track $index) {
+      @for (i of [].constructor(this.maxPictures); track $index) {
         <app-image-selector
           [preventSelfControl]="true"
           (imageChange)="onPictureChange($event)"
@@ -20,7 +20,7 @@
     [isValid]="formGroup.controls.basicInformation.valid"
   >
     <form appFormBase>
-      <div class="flex gap-4">
+      <div class="flex flex-col gap-4 md:flex-row">
         <div class="flex w-full flex-col">
           <label>{{ ('Prénom' | i18n)() }}</label>
           <div>
@@ -256,6 +256,13 @@
         />
       </div>
 
+      <label>{{ ('Orientation sexuelle' | i18n)() }}</label>
+      <app-radio-button-group [formControl]="formGroup.controls.preferences.controls.gender">
+        <app-radio-button value="heterosexual">{{ ('Hétérosexuel' | i18n)() }}</app-radio-button>
+        <app-radio-button value="homosexual">{{ ('Homosexuel' | i18n)() }}</app-radio-button>
+        <app-radio-button value="bisexual">{{ ('Bisexuel' | i18n)() }}</app-radio-button>
+      </app-radio-button-group>
+
       <label>{{
         (
           'Distance: {distanceFilter} km'
@@ -275,12 +282,13 @@
           [formControl]="formGroup.controls.preferences.controls.distance"
         />
       </div>
-      <label>{{ ('Orientation sexuelle' | i18n)() }}</label>
-      <app-radio-button-group [formControl]="formGroup.controls.preferences.controls.gender">
-        <app-radio-button value="heterosexual">{{ ('Hétérosexuel' | i18n)() }}</app-radio-button>
-        <app-radio-button value="homosexual">{{ ('Homosexuel' | i18n)() }}</app-radio-button>
-        <app-radio-button value="bisexual">{{ ('Bisexuel' | i18n)() }}</app-radio-button>
-      </app-radio-button-group>
+
+      <label>{{ ('Localisation' | i18n)() }}</label>
+      <app-leaflet-map
+        class="h-125 w-full"
+        [(pointLocation)]="location"
+        [perimeterRadius]="formGroup.controls.preferences.controls.distance.value ?? 0"
+      />
     </form>
   </app-stepper-step>
 </app-stepper>

@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
   FormControl,
@@ -15,11 +15,13 @@ import { RadioButtonComponent } from '../../components/forms/inputs/radio-button
 import { RangeSelectorComponent } from '../../components/forms/inputs/range-selector/range-selector.component';
 import { StepperComponent } from '../../components/stepper/stepper.component';
 import { StepperStepComponent } from '../../components/stepper/views/stepper-step.component/stepper-step.component';
+import { LeafletMapComponent } from '../../components/wrappers/leaflet-map/leaflet-map.component';
 import { RESEARCH_FILTERS_LIMITS } from '../../core/consts/researchFiltersLimits.consts';
 import { I18nPipe } from '../../core/pipes/i18n/i18n.pipe';
 import { BaseUser } from '../../core/stores/user/user.state.types';
 import { appFormBase } from '../../directives/forms/form-base.directive';
 import { InputPrimaryDirective } from '../../directives/inputs/input-primary.directive';
+import { MapCoordinates } from './../../components/wrappers/leaflet-map/leaflet-map.component';
 
 @Component({
   selector: 'app-onboarding-component',
@@ -35,6 +37,7 @@ import { InputPrimaryDirective } from '../../directives/inputs/input-primary.dir
     ɵInternalFormsSharedModule,
     ReactiveFormsModule,
     RangeSelectorComponent,
+    LeafletMapComponent,
   ],
   templateUrl: './onboarding-component.html',
   host: {
@@ -46,11 +49,13 @@ export class OnboardingComponent {
 
   readonly researchFiltersLimits = RESEARCH_FILTERS_LIMITS;
   readonly maxInterests = 6;
+  readonly maxPictures = 6;
+  readonly location = signal<MapCoordinates>({ lat: 46.5332, lng: 6.5912 });
 
   readonly formGroup = new FormGroup({
     pictures: new FormControl<File[]>(
       [],
-      [Validators.required, Validators.minLength(2), Validators.maxLength(9)],
+      [Validators.required, Validators.minLength(2), Validators.maxLength(this.maxPictures)],
     ),
     basicInformation: new FormGroup({
       firstName: new FormControl<string>('', [
@@ -91,6 +96,7 @@ export class OnboardingComponent {
         Validators.min(this.researchFiltersLimits.MIN_AGE),
         Validators.max(this.researchFiltersLimits.MAX_AGE),
       ]),
+      location: new FormControl<string>('', [Validators.required]),
       distance: new FormControl<number>(5, [
         Validators.required,
         Validators.min(this.researchFiltersLimits.MIN_DISTANCE),
@@ -101,7 +107,13 @@ export class OnboardingComponent {
   });
 
   constructor() {
-    // test
+    effect(() => {
+      const location = this.location();
+      this.formGroup.controls.preferences.controls.location.setValue(
+        `${location.lat},${location.lng}`,
+      );
+    });
+
     this.formGroup.controls.basicInformation.statusChanges.subscribe((status) => {
       console.log('Basic Information Status:', status);
       console.log('Current Errors:', this.formGroup.controls.basicInformation.errors);
@@ -155,5 +167,9 @@ export class OnboardingComponent {
   onComplete() {
     if (this.formGroup.valid) {
     }
+  }
+
+  onTest(event: any) {
+    console.log(event);
   }
 }

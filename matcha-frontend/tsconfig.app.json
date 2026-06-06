@@ -6,6 +6,6 @@
     "outDir": "./out-tsc/app",
     "types": ["jest", "node"]
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/app/components/wrappers/leaflet-map"],
   "exclude": ["src/**/*.spec.ts"]
 }

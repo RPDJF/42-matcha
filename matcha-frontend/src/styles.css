@@ -2,4 +2,6 @@
 
 @import 'tailwindcss';
 @import 'tailwind-animations';
+@import 'leaflet/dist/leaflet.css';
+@import 'leaflet-geosearch/dist/geosearch.css';
 @config '../tailwind.config.js';
