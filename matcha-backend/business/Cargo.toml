@@ -1,0 +1,8 @@
+[package]
+name = "matcha-business"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+uuid = { version = "1.23.3", features = ["v4"] }
+serde = { version = "1.0.228", features = ["derive"] }
