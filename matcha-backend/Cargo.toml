@@ -1,0 +1,30 @@
+# **************************************************************************** #
+#                    Matcha Backend Workspace Cargo.toml
+# **************************************************************************** #
+
+[workspace]
+resolver = "2"
+members = [
+	"crates/userlib",
+	"crates/business",
+	"crates/webapi",
+]
+
+[workspace.dependencies]
+tokio = { version = "1.52.1", features = ["macros", "rt-multi-thread", "signal", "process", "net"] }
+serde = { version = "1.0.228", features = ["derive"] }
+sea-orm = { version = "2.0.2", features = ["runtime-tokio-rustls", "sqlx-mysql", "sqlx-sqlite", "with-json", "with-uuid"] }
+uuid = { version = "1.23.3", features = ["v4"] }
+anyhow = "1.0.104"
+thiserror = "2.0.20"
+
+[workspace.package]
+edition = "2024"
+
+[profile.release]
+debug = false
+opt-level = 3
+lto = true
+
+[profile.dev]
+debug = "line-tables-only"

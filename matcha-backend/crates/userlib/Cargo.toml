@@ -1,0 +1,15 @@
+[package]
+name = "userlib"
+version = "0.1.0"
+edition.workspace = true
+
+[dependencies]
+argon2 = { version = "0.5.3", features = ["std"] }
+regex = "1.12.4"
+email_address = "0.2.9"
+uuid = { workspace = true}
+tokio = { workspace = true}
+serde = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+sea-orm = { workspace = true }

@@ -5,9 +5,11 @@ edition = "2024"
 
 [dependencies]
 axum = { version = "0.8.9", features = ["http2", "ws"] }
-tokio = { version = "1.52.1", features = ["macros", "rt-multi-thread", "signal", "process", "net"] }
 axum-extra = { version = "0.12.6", features = ["form", "file-stream", "routing", "query", "multipart", "cookie"] }
-serde = { version = "1.0.228", features = ["derive"] }
 tower-http = { version = "0.7.0", features = ["fs", "cors"] }
 business = { path = "../business", package = "matcha-business" }
-regex = "1.12.4"
+userlib = { path = "../userlib" }
+tokio = { workspace = true}
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+serde = { workspace = true }
