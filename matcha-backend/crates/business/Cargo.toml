@@ -10,4 +10,4 @@ thiserror = { workspace = true }
 serde = { workspace = true }
 sea-orm = { workspace = true }
 uuid = { workspace = true}
-generic = { path = "../generic" }
+userlib = { path = "../userlib" }
