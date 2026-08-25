@@ -1,0 +1,13 @@
+[package]
+name = "matcha-business"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+tokio = { workspace = true}
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+serde = { workspace = true }
+sea-orm = { workspace = true }
+uuid = { workspace = true}
+generic = { path = "../generic" }
