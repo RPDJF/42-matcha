@@ -25,15 +25,16 @@ POST /api/v1/auth/login
   "token": "string",
   "sub": "string",
   "data": {
-    "userUUID": "string",
-    "displayName": "string",
+    "uuid": "string",
+    "emailAddress": "string",
     "firstName": "string",
     "lastName": "string",
     "lastAlive": "number",
     "age": "number",
     "avatar": "string",
     "status": "single" | "couple" | "free",
-    "gender": "male" | "female",
+    "gender": "frontend" | "backend" | "fullstack",
+    "interestedIn": [ "frontend" | "backend" | "fullstack" ],
     "city": "string",
     "rating": "number",
     "pictures": [
@@ -41,12 +42,10 @@ POST /api/v1/auth/login
         "id": "string",
         "url": "string"
       }
-    ], // URL des images
+    ],
     "interests": ["string"],
     "biography": "string",
-    "sexuality": "heterosexual" | "homosexual" | "bisexual",
     "role": "user" | "administrator",
-    "emailAddress": "string",
     "location": {
       "lat": "number",
       "lng": "number"

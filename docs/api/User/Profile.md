@@ -12,15 +12,16 @@ GET /api/v1/me/profile
 
 ```json
 {
-  "userUUID": "string",
-  "displayName": "string",
+  "uuid": "string",
+  "emailAddress": "string",
   "firstName": "string",
   "lastName": "string",
   "lastAlive": "number",
   "age": "number",
   "avatar": "string",
   "status": "single" | "couple" | "free",
-  "gender": "male" | "female",
+  "gender": "frontend" | "backend" | "fullstack",
+  "interestedIn": [ "frontend" | "backend" | "fullstack" ],
   "city": "string",
   "rating": "number",
   "pictures": [
@@ -28,12 +29,10 @@ GET /api/v1/me/profile
       "id": "string",
       "url": "string"
     }
-  ], // URL des images
+  ],
   "interests": ["string"],
   "biography": "string",
-  "sexuality": "heterosexual" | "homosexual" | "bisexual",
   "role": "user" | "administrator",
-  "emailAddress": "string",
   "location": {
     "lat": "number",
     "lng": "number"
