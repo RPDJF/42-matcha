@@ -6,24 +6,29 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 16:30:10 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/06/21 16:33:31 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/07/11 01:56:48 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
 use axum::Json;
-use business::Location;
-use serde::Serialize;
+use business::models::business::Location;
 
-#[derive(Serialize)]
-pub struct Succ {
-	cess: String,
-}
+use crate::globals::{AdditionResult, HTTPResponse, ResponseData};
 
-pub async fn login(Json(payload): Json<Location>) -> Json<Succ> {
-	Json(Succ {
-		cess: format!(
-			"what's 9 + 10? {}",
-			business::add(payload.latitude, payload.longitude),
+/// Logs a user in.
+/// Returns a JWT if the login is successful.
+/// Well, at least it should. This is mock code for now.
+pub async fn login(Json(payload): Json<Location>) -> Json<HTTPResponse> {
+	let fuh = AdditionResult {
+		message: format!(
+			"Added {} to {} = {}",
+			payload.latitude,
+			payload.longitude,
+			payload.longitude + payload.latitude
 		),
-	})
+	};
+	Json(HTTPResponse::success(
+		ResponseData::AdditionResult(fuh),
+		"login",
+	))
 }

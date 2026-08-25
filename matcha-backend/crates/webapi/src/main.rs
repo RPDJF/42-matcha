@@ -6,21 +6,22 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 15:55:12 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/06/21 16:03:30 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/07/08 20:28:54 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
+mod globals;
 mod routes;
-mod statics;
 use axum::Router;
 use std::error::Error;
 use tokio::signal;
 
+/// Starts the Matcha backend!
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
 	let app: Router = Router::new()
-		.nest(statics::API_V1, routes::get_routes())
-		.nest(statics::API_V1, routes::post_routes());
+		.nest(globals::API_V1, routes::get_routes())
+		.nest(globals::API_V1, routes::post_routes());
 
 	let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await?;
 

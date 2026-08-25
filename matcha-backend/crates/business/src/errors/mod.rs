@@ -5,9 +5,7 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/21 16:02:08 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/06/21 16:02:49 by fclivaz          ###   LAUSANNE.ch       */
+/*   Created: 2026/08/25 18:32:43 by fclivaz           #+#    #+#             */
+/*   Updated: 2026/08/25 18:32:50 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
-
-pub static API_V1: &str = "/api/v1";

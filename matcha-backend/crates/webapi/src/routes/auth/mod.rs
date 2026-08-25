@@ -6,35 +6,25 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 16:06:06 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/07/08 19:29:18 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/07/08 19:40:39 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
-mod auth;
-mod users;
+pub mod login;
+pub mod register;
 
 use axum::{
 	Router,
 	routing::{delete, get, patch, post, put},
 };
 
-/// Collects every get route and nests it accordingly. Returns a router.
-/// Used only in debug builds.
-#[cfg(debug_assertions)]
+/// Regosters every GET route for /auth.
 pub fn get_routes() -> Router {
 	Router::new()
-		.route("/list", get(users::get_users))
-		.nest("/auth", auth::get_routes())
 }
-
-/// Collects every get route and nests it accordingly. Returns a router.
-/// Used only in release builds.
-#[cfg(not(debug_assertions))]
-pub fn get_routes() -> Router {
-	Router::new().nest("/auth", auth::get_routes())
-}
-
-/// Collects every post route and nests it accordingly. Returns a router.
+/// Regosters every POST route for /auth.
 pub fn post_routes() -> Router {
-	Router::new().nest("/auth", auth::post_routes())
+	Router::new()
+		.route("/register", post(register::register))
+		.route("/login", post(login::login))
 }
