@@ -1,23 +1,13 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   users.rs                                           :+:      :+:    :+:   */
+/*   mod.rs                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/21 16:13:11 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/07/11 01:57:03 by fclivaz          ###   LAUSANNE.ch       */
+/*   Created: 2026/06/21 17:33:44 by fclivaz           #+#    #+#             */
+/*   Updated: 2026/08/25 18:29:33 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
-use crate::globals::{HTTPResponse, ResponseData};
-use axum::Json;
-
-/// Returns a list of users. Used only in debug.
-#[cfg(debug_assertions)]
-pub async fn get_users() -> Json<HTTPResponse> {
-	Json(HTTPResponse::success(
-		ResponseData::UserList(business::list_users()),
-		"list",
-	))
-}
+pub mod business;

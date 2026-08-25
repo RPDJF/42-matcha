@@ -5,9 +5,9 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/21 16:02:08 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/06/21 16:02:49 by fclivaz          ###   LAUSANNE.ch       */
+/*   Created: 2026/06/21 17:33:44 by fclivaz           #+#    #+#             */
+/*   Updated: 2026/08/25 16:17:28 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
-pub static API_V1: &str = "/api/v1";
+pub mod generic;

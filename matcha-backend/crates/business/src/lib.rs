@@ -6,75 +6,84 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 16:48:21 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/06/21 16:48:22 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/08/25 19:33:50 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
-pub fn add(left: f32, right: f32) -> f32 {
-	left + right
-}
-
-use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+pub mod creation;
+pub mod errors;
+pub mod models;
+use crate::models::business::{Genders, Location, MatchaUser, Role};
 
-#[derive(Serialize, Deserialize)]
-pub enum Genders {
-	Frontend,
-	Backend,
-	Fullstack,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct Location {
-	pub longitude: f32,
-	pub latitude: f32,
-}
-
-#[derive(Serialize)]
-pub struct DBUser {
-	name: String,
-	uuid: String,
-	gender: Genders,
-	age: u32,
-	birthday: i32,
-	interests: Vec<String>,
-	location: Location,
-}
-
-pub fn list_users() -> Vec<DBUser> {
+/// Returns a complete list of every MatchaUser.
+/// Used only in debug.
+#[cfg(debug_assertions)]
+pub fn list_users() -> Vec<MatchaUser>
+{
 	vec![
-		DBUser::new(
-			"John Matcha",
-			Genders::Backend,
-			69,
+		MatchaUser::new(
+			Uuid::new_v4(),
+			"John",
+			"Matcha",
 			18239128,
-			vec!["well", "not a whole lot really", "just some games i guess"],
+			69,
+			"insert cool picture link here",
+			Genders::Backend,
+			3,
+			&[Genders::Frontend],
+			12,
+			&[],
+			&["well", "not a whole lot really", "just some games i guess"],
+			"Hello my name is John and this is my Matcha.",
+			Role::Administrator,
+			"BUSSIgny",
 			Location {
 				longitude: 0.25,
 				latitude: 3.21,
 			},
 		),
-		DBUser::new(
-			"Jane Frontend",
-			Genders::Fullstack,
+		MatchaUser::new(
+			Uuid::new_v4(),
+			"Jane",
+			"Frontend",
 			420,
 			12,
-			vec!["c#", "brainf**k", "tadc"],
+			"picture link or whatever",
+			Genders::Fullstack,
+			1919,
+			&[Genders::Backend],
+			5,
+			&[],
+			&["c#", "brainf**k", "tadc"],
+			"I am severely underage apparently but who cares.",
+			Role::User,
+			"in the depths of atlantis",
 			Location {
 				longitude: 129837198230.212983912835,
 				latitude: 3192831283.292813109231,
 			},
 		),
-		DBUser::new(
+		MatchaUser::new(
+			Uuid::new_v4(),
 			"jax",
-			Genders::Frontend,
+			"jax",
 			47,
 			1337,
-			vec![
+			"insert dead picture here",
+			Genders::Frontend,
+			-1,
+			&[Genders::Frontend, Genders::Backend, Genders::Fullstack],
+			-1,
+			&[],
+			&[
 				"jax",
 				"like its just jax",
 				"what else are you expecting bruh",
 			],
+			"dead as fuhhhh",
+			Role::User,
+			"6 feet under",
 			Location {
 				longitude: 5.1283712,
 				latitude: -321111111111.21,
@@ -83,34 +92,11 @@ pub fn list_users() -> Vec<DBUser> {
 	]
 }
 
-impl DBUser {
-	pub fn new(
-		name: &str,
-		gender: Genders,
-		age: u32,
-		birthday: i32,
-		interests: Vec<&str>,
-		geoloc: Location,
-	) -> DBUser {
-		DBUser {
-			name: name.to_string(),
-			uuid: Uuid::new_v4().to_string(),
-			gender: gender,
-			age: age,
-			birthday: birthday,
-			interests: interests.iter().map(|x| x.to_string()).collect(),
-			location: geoloc,
-		}
-	}
-}
-
 #[cfg(test)]
-mod tests {
+mod tests
+{
 	use super::*;
 
 	#[test]
-	fn it_works() {
-		let result = add(2.0, 2.0);
-		assert_eq!(result, 4.0);
-	}
+	fn it_works() {}
 }
