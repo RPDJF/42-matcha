@@ -1,3 +1,7 @@
+# **************************************************************************** #
+#                      Matcha Backend webapi Cargo.toml                        #
+# **************************************************************************** #
+
 [package]
 name = "matcha-webapi"
 version = "0.1.0"
@@ -13,3 +17,6 @@ tokio = { workspace = true}
 anyhow = { workspace = true }
 thiserror = { workspace = true }
 serde = { workspace = true }
+
+[lints]
+workspace = true
