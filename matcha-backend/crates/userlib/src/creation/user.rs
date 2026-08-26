@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 00:08:44 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/08/25 16:36:03 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/08/26 01:46:34 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ pub fn create_user(payload: ApiReqUser) -> Result<ApiRespBasicUser, ErrorDetails
 			)),
 			_ => Err(ErrorDetails::from_details(
 				error.clone(),
-				&format!("{}", error),
+				&format!("{error}"),
 			)),
 		},
 	}

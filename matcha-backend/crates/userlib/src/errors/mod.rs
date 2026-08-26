@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 16:19:57 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/08/25 16:59:45 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/08/26 01:45:50 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,10 @@ pub struct ValidatorErrors
 
 impl ValidatorErrors
 {
-	pub fn new(context: String, details: String) -> ValidatorErrors
+	#[must_use]
+	pub const fn new(context: String, details: String) -> Self
 	{
-		ValidatorErrors {
-			context: context,
-			details: details,
-		}
+		Self { context, details }
 	}
 }
 
@@ -77,25 +75,27 @@ pub struct ErrorDetails
 /// as a way to make sure ErrorDetails can be only one of both.
 impl ErrorDetails
 {
-	pub fn from_details(code: GenericUserErrors, details: &str) -> ErrorDetails
+	#[must_use]
+	pub fn from_details(code: GenericUserErrors, details: &str) -> Self
 	{
-		ErrorDetails {
-			code: code,
+		Self {
+			code,
 			details: Some(details.to_string()),
 			validator: None,
 		}
 	}
 
-	pub fn from_validator(code: GenericUserErrors, validator: Vec<ValidatorErrors>)
-	-> ErrorDetails
+	#[must_use]
+	pub const fn from_validator(code: GenericUserErrors, validator: Vec<ValidatorErrors>) -> Self
 	{
-		ErrorDetails {
-			code: code,
+		Self {
+			code,
 			details: None,
 			validator: Some(validator),
 		}
 	}
 
+	#[must_use]
 	pub fn error_code(&self) -> GenericUserErrors
 	{
 		self.code.clone()
