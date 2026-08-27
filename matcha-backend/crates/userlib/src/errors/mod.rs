@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 16:19:57 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/20 01:02:32 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/20 01:03:45 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ pub enum GenericUserErrors
 	PasswordNoDigit,
 	#[error("Password hashing failed.")]
 	PasswordHashFailed,
+	#[error("Failed to insert item into database.")]
+	DatabaseInsertFailed,
 }
 
 #[derive(Serialize, Clone, Debug)]

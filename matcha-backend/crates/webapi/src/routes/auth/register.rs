@@ -11,7 +11,8 @@
 /* ************************************************************************** */
 
 use crate::globals::HTTPResponse;
-use axum::{Json, http::StatusCode};
+use axum::{Json, extract::State, http::StatusCode};
+use sea_orm::DatabaseConnection;
 use userlib::{
 	creation::user::create_user,
 	errors::GenericUserErrors,
@@ -24,10 +25,11 @@ use userlib::{
 /// Returns 409 Conflict if the email address already exists.
 /// TODO: return 202 with session cookie.
 pub async fn register(
+	State(db): State<DatabaseConnection>,
 	Json(payload): Json<ApiReqUser>,
 ) -> (StatusCode, Json<HTTPResponse<ApiRespBasicUser>>)
 {
-	match create_user(payload) {
+	match create_user(payload, &db).await {
 		Ok(val) => (StatusCode::ACCEPTED, Json(HTTPResponse::new(val, "login"))),
 		Err(error) => match error.error_code() {
 			GenericUserErrors::AddressInUse => {
