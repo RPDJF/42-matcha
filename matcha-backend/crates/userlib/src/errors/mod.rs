@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 16:19:57 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/08/26 01:45:50 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/08/27 04:32:15 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ pub enum GenericUserErrors
 	PasswordNoDigit,
 	#[error("Password hashing failed.")]
 	PasswordHashFailed,
+	#[error("Failed to insert item into database.")]
+	DatabaseInsertFailed,
 }
 
 #[derive(Serialize, Clone, Debug)]
@@ -67,7 +69,9 @@ impl ValidatorErrors
 pub struct ErrorDetails
 {
 	code: GenericUserErrors,
+	#[serde(skip_serializing_if = "Option::is_none")]
 	details: Option<String>,
+	#[serde(skip_serializing_if = "Option::is_none")]
 	validator: Option<Vec<ValidatorErrors>>,
 }
 
