@@ -3,3 +3,5 @@
 
 # Temporary, we will un-ignore it later.
 Cargo.lock
+*.sqlite
+*.db
