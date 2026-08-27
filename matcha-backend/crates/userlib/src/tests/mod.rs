@@ -1,27 +1,33 @@
-#[cfg(test)]
-use sea_orm::{Database, DatabaseConnection, sqlx::Connection};
+use sea_orm::{Database, DatabaseConnection};
 use std::error::Error;
 
-fn boilerplate(
+// static CONNECTION_STRING: &str = "sqlite://./userlib_tests.db?mode=rwc";
+static CONNECTION_STRING: &str = "sqlite::memory:";
+
+async fn boilerplate(
 	email: &str,
 	password: &str,
+	db: &DatabaseConnection,
 ) -> Result<crate::models::generic::ApiRespBasicUser, crate::errors::ErrorDetails>
 {
 	let i = crate::models::generic::ApiReqUser {
 		email_address: String::from(email),
 		password: String::from(password),
 	};
-	crate::creation::user::create_user(i)
+	crate::creation::user::create_user(i, db).await
 }
 
 #[tokio::test]
 async fn successful_user_creation() -> Result<(), Box<dyn Error>>
 {
-	let db: DatabaseConnection = Database::connect("sqlite::memory:").await?;
+	let db: DatabaseConnection = Database::connect(CONNECTION_STRING).await?;
+	let _f = db.get_schema_registry("userlib::models::*").sync(&db).await;
 	let correct_pw = "Str0ngPassword!";
 	let email = "jax@matcha.com";
 
-	let resp = boilerplate(email, correct_pw).expect("User creation failed.");
+	let resp = boilerplate(email, correct_pw, &db)
+		.await
+		.expect("User creation failed.");
 	println!(
 		"Success! Email: {}, UUID: {}",
 		resp.email_address, resp.uuid
@@ -32,17 +38,20 @@ async fn successful_user_creation() -> Result<(), Box<dyn Error>>
 #[tokio::test]
 async fn double_email() -> Result<(), Box<dyn Error>>
 {
-	let db: DatabaseConnection = Database::connect("sqlite::memory:").await?;
+	let db: DatabaseConnection = Database::connect(CONNECTION_STRING).await?;
+	let _f = db.get_schema_registry("userlib::models::*").sync(&db).await;
 	let correct_pw = "Str0ngPassword!";
 	let email = "pomni@matcha.com";
 
-	let resp = boilerplate(email, correct_pw).expect("User creation failed.");
+	let resp = boilerplate(email, correct_pw, &db)
+		.await
+		.expect("User creation failed.");
 	println!(
 		"Success! Email: {}, UUID: {}",
 		resp.email_address, resp.uuid
 	);
 
-	match boilerplate(email, correct_pw) {
+	match boilerplate(email, correct_pw, &db).await {
 		Ok(i) => panic!("Email {} was accepted!", i.email_address),
 		Err(i) => println!("Email {}: {} all good :)", email, i.error_code()),
 	}
@@ -52,7 +61,8 @@ async fn double_email() -> Result<(), Box<dyn Error>>
 #[tokio::test]
 async fn bad_emails() -> Result<(), Box<dyn Error>>
 {
-	let db: DatabaseConnection = Database::connect("sqlite::memory:").await?;
+	let db: DatabaseConnection = Database::connect(CONNECTION_STRING).await?;
+	let _f = db.get_schema_registry("userlib::models::*").sync(&db).await;
 
 	let correct_pw = "Str0ngPassword!";
 	let emails = [
@@ -70,7 +80,7 @@ async fn bad_emails() -> Result<(), Box<dyn Error>>
 	];
 
 	for email in emails {
-		match boilerplate(email, correct_pw) {
+		match boilerplate(email, correct_pw, &db).await {
 			Ok(i) => panic!("Email {} was found to be valid!", i.email_address),
 			Err(i) => println!("Email {}: {} all good :)", email, i.error_code()),
 		}
@@ -81,7 +91,8 @@ async fn bad_emails() -> Result<(), Box<dyn Error>>
 #[tokio::test]
 async fn bad_passwords() -> Result<(), Box<dyn Error>>
 {
-	let db: DatabaseConnection = Database::connect("sqlite::memory:").await?;
+	let db: DatabaseConnection = Database::connect(CONNECTION_STRING).await?;
+	let _f = db.get_schema_registry("userlib::models::*").sync(&db).await;
 
 	let passwords = [
 		"",
@@ -98,8 +109,8 @@ async fn bad_passwords() -> Result<(), Box<dyn Error>>
 
 	for password in passwords {
 		email += "m";
-		match boilerplate(&email, password) {
-			Ok(_) => panic!("Password {} was found to be valid!", password),
+		match boilerplate(&email, password, &db).await {
+			Ok(_) => panic!("Password {password} was found to be valid!"),
 			Err(i) => println!("Password {}: {} all good :)", password, i.error_code()),
 		}
 	}

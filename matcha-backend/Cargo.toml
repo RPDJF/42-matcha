@@ -13,7 +13,7 @@ members = [
 [workspace.dependencies]
 tokio = { version = "1.52.1", features = ["macros", "rt-multi-thread", "signal", "process", "net"] }
 serde = { version = "1.0.228", features = ["derive"] }
-sea-orm = { version = "2.0.2", features = ["runtime-tokio-rustls", "sqlx-mysql", "sqlx-sqlite", "with-json", "with-uuid"] }
+sea-orm = { version = "2.0.2", features = ["runtime-tokio-rustls", "sqlx-mysql", "sqlx-sqlite", "with-json", "with-uuid", "entity-registry", "schema-sync"] }
 uuid = { version = "1.23.3", features = ["v4"] }
 anyhow = "1.0.104"
 thiserror = "2.0.20"

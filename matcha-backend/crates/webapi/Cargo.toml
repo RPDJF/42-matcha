@@ -8,7 +8,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-axum = { version = "0.8.9", features = ["http2", "ws"] }
+axum = { version = "0.8.9", features = ["http2", "ws", "macros"] }
 axum-extra = { version = "0.12.6", features = ["form", "file-stream", "routing", "query", "multipart", "cookie"] }
 tower-http = { version = "0.7.0", features = ["fs", "cors"] }
 business = { path = "../business", package = "matcha-business" }
@@ -17,6 +17,8 @@ tokio = { workspace = true}
 anyhow = { workspace = true }
 thiserror = { workspace = true }
 serde = { workspace = true }
+sea-orm = { workspace = true }
+axum-test = { version = "21.1.0", features = ["ws"] }
 
 [lints]
 workspace = true
