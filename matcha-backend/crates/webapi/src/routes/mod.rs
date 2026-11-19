@@ -21,7 +21,8 @@ use axum::{
 /// Collects every get route and nests it accordingly. Returns a router.
 /// Used only in debug builds.
 #[cfg(debug_assertions)]
-pub fn get_routes() -> Router {
+pub fn get_routes() -> Router
+{
 	Router::new()
 		.route("/list", get(users::get_users))
 		.nest("/auth", auth::get_routes())
@@ -30,11 +31,13 @@ pub fn get_routes() -> Router {
 /// Collects every get route and nests it accordingly. Returns a router.
 /// Used only in release builds.
 #[cfg(not(debug_assertions))]
-pub fn get_routes() -> Router {
+pub fn get_routes() -> Router
+{
 	Router::new().nest("/auth", auth::get_routes())
 }
 
 /// Collects every post route and nests it accordingly. Returns a router.
-pub fn post_routes() -> Router {
+pub fn post_routes() -> Router
+{
 	Router::new().nest("/auth", auth::post_routes())
 }
