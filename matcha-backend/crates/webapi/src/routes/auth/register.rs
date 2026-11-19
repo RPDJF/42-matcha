@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 18:53:59 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/20 00:16:36 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/20 00:38:23 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@ use crate::globals::HTTPResponse;
 use axum::{Json, http::StatusCode};
 use userlib::{
 	creation::user::create_user,
-	errors::{ErrorDetails, GenericUserErrors},
+	errors::GenericUserErrors,
 	models::generic::{ApiReqUser, ApiRespBasicUser},
 };
 
@@ -25,15 +25,12 @@ use userlib::{
 /// TODO: return 202 with session cookie.
 pub async fn register(
 	Json(payload): Json<ApiReqUser>,
-) -> (
-	StatusCode,
-	Json<HTTPResponse<ApiRespBasicUser, ErrorDetails>>,
-)
+) -> (StatusCode, Json<HTTPResponse<ApiRespBasicUser>>)
 {
 	match create_user(payload) {
 		Ok(val) => (StatusCode::ACCEPTED, Json(HTTPResponse::new(val, "login"))),
 		Err(error) => match error.error_code() {
-			GenericUserErrors::AddressInvalid => {
+			GenericUserErrors::AddressInUse => {
 				(StatusCode::CONFLICT, Json(HTTPResponse::err(error)))
 			}
 			_ => (StatusCode::BAD_REQUEST, Json(HTTPResponse::err(error))),
