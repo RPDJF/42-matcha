@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 16:19:57 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/08/25 16:59:45 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/20 00:47:51 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,9 @@ impl ValidatorErrors
 pub struct ErrorDetails
 {
 	code: GenericUserErrors,
+	#[serde(skip_serializing_if = "Option::is_none")]
 	details: Option<String>,
+	#[serde(skip_serializing_if = "Option::is_none")]
 	validator: Option<Vec<ValidatorErrors>>,
 }
 

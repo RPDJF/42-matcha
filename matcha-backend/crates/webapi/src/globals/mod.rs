@@ -6,13 +6,12 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 16:02:08 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/08/25 19:34:08 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/20 00:44:05 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
-use business::models::business::MatchaUser;
 use serde::Serialize;
-use userlib::{errors::ErrorDetails, models::generic::ApiRespBasicUser};
+use userlib::errors::ErrorDetails;
 
 pub static API_V1: &str = "/api/v1";
 
@@ -23,20 +22,14 @@ pub struct AdditionResult
 	pub message: String,
 }
 
-/// Contains every possible data type being sent over in HTTPResponse.
-#[derive(Serialize, Clone)]
-#[serde(untagged)]
-pub enum ResponseData
-{
-	/// Pretty much everything is temporary as of now.
-	AdditionResult(AdditionResult),
-	User(ApiRespBasicUser),
-	UserList(Vec<MatchaUser>),
-}
+/// Create trait ResponseData which requires Clone and Serialize.
+pub trait ResponseData: Clone + Serialize {}
+/// Blanket trait application over that implements Serialize and Clone.
+impl<T: Serialize + Clone> ResponseData for T {}
 
 /// Normalized HTTPResponse struct.
 #[derive(Serialize)]
-pub struct HTTPResponse
+pub struct HTTPResponse<T>
 {
 	/// The origin of the data field. Absent if it's an error.
 	#[serde(skip_serializing_if = "Option::is_none")]
@@ -44,7 +37,7 @@ pub struct HTTPResponse
 
 	/// The data sent from the webapi. Absent if it's an error.
 	#[serde(skip_serializing_if = "Option::is_none")]
-	data: Option<ResponseData>,
+	data: Option<T>,
 
 	/// The Error field in case of an error. Absent if it's valid data.
 	#[serde(skip_serializing_if = "Option::is_none")]
@@ -53,10 +46,10 @@ pub struct HTTPResponse
 
 /// We force instanciation of HTTPResponse only through ok and error
 /// as a way to make sure HTTPResponse can be only one of both.
-impl HTTPResponse
+impl<T: ResponseData> HTTPResponse<T>
 {
 	/// Builds an HTTPResponse form valid data. Sets error to None.
-	pub fn success(data: ResponseData, origin: &str) -> HTTPResponse
+	pub fn new(data: T, origin: &str) -> Self
 	{
 		HTTPResponse {
 			origin: Some(origin.to_string()),
@@ -64,8 +57,9 @@ impl HTTPResponse
 			error: None,
 		}
 	}
+
 	/// Builds an HTTPResponse form an error. Sets origin and data to None.
-	pub fn error(details: ErrorDetails) -> HTTPResponse
+	pub fn err(details: ErrorDetails) -> Self
 	{
 		HTTPResponse {
 			origin: None,
