@@ -12,8 +12,8 @@ use sea_orm::{Database, DatabaseConnection, sea_query::value::prelude::serde_jso
 use std::error::Error;
 use userlib::models::generic::ApiReqUser;
 
-static CONNECTION_STRING: &str = "sqlite://./webapi_tests.db?mode=rwc";
-// static CONNECTION_STRING: &str = "sqlite::memory:";
+// static CONNECTION_STRING: &str = "sqlite://./webapi_tests.db?mode=rwc";
+static CONNECTION_STRING: &str = "sqlite::memory:";
 
 #[tokio::test]
 async fn successful_user_creation() -> Result<(), Box<dyn Error>>

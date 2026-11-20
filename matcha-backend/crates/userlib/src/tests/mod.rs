@@ -52,7 +52,7 @@ async fn double_email() -> Result<(), Box<dyn Error>>
 	);
 
 	match boilerplate(email, correct_pw, &db).await {
-		Ok(i) => panic!("Email {} was accepted!", i.email_address),
+		Ok(i) => return Err(format!("Email {} was accepted!", i.email_address).into()),
 		Err(i) => println!("Email {}: {} all good :)", email, i.error_code()),
 	}
 	Ok(())
@@ -81,7 +81,7 @@ async fn bad_emails() -> Result<(), Box<dyn Error>>
 
 	for email in emails {
 		match boilerplate(email, correct_pw, &db).await {
-			Ok(i) => panic!("Email {} was found to be valid!", i.email_address),
+			Ok(i) => return Err(format!("Email {} was found to be valid!", i.email_address).into()),
 			Err(i) => println!("Email {}: {} all good :)", email, i.error_code()),
 		}
 	}
@@ -110,7 +110,7 @@ async fn bad_passwords() -> Result<(), Box<dyn Error>>
 	for password in passwords {
 		email += "m";
 		match boilerplate(&email, password, &db).await {
-			Ok(_) => panic!("Password {password} was found to be valid!"),
+			Ok(_) => return Err(format!("Password {password} was found to be valid!").into()),
 			Err(i) => println!("Password {}: {} all good :)", password, i.error_code()),
 		}
 	}
