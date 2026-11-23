@@ -8,6 +8,7 @@ members = [
 	"crates/userlib",
 	"crates/business",
 	"crates/webapi",
+	"crates/utils/datacache",
 ]
 
 [workspace.dependencies]
