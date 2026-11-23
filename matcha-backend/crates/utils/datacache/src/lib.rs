@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/23 02:33:34 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/23 03:52:07 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/23 04:25:39 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ struct LookupTable<T>
 	pub exptime: u64,
 }
 
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct DataCache<K, V>
 {
 	data: Arc<RwLock<HashMap<K, LookupTable<V>>>>,
 }
 
-pub struct Seconds(u64);
+pub struct Seconds(pub u64);
 
 // TODO:	Self-deleting items after exptime + 30s have passed.
 //			Change error types to something a little better...
