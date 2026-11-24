@@ -6,6 +6,11 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/25 18:32:43 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/08/25 18:32:50 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/24 20:08:01 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
+
+use serde::Serialize;
+
+#[derive(Serialize)]
+pub enum MatchaError {}

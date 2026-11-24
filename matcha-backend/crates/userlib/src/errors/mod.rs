@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 16:19:57 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/20 00:47:51 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/24 19:47:29 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,27 +79,32 @@ pub struct ErrorDetails
 /// as a way to make sure ErrorDetails can be only one of both.
 impl ErrorDetails
 {
-	pub fn from_details(code: GenericUserErrors, details: &str) -> ErrorDetails
-	{
-		ErrorDetails {
-			code: code,
-			details: Some(details.to_string()),
-			validator: None,
-		}
-	}
-
-	pub fn from_validator(code: GenericUserErrors, validator: Vec<ValidatorErrors>)
-	-> ErrorDetails
-	{
-		ErrorDetails {
-			code: code,
-			details: None,
-			validator: Some(validator),
-		}
-	}
-
 	pub fn error_code(&self) -> GenericUserErrors
 	{
 		self.code.clone()
+	}
+}
+
+impl From<GenericUserErrors> for ErrorDetails
+{
+	fn from(err: GenericUserErrors) -> Self
+	{
+		ErrorDetails {
+			code: err.clone(),
+			details: Some(format!("{err}")),
+			validator: None,
+		}
+	}
+}
+
+impl From<(GenericUserErrors, Vec<ValidatorErrors>)> for ErrorDetails
+{
+	fn from(err: (GenericUserErrors, Vec<ValidatorErrors>)) -> Self
+	{
+		ErrorDetails {
+			code: err.0,
+			details: None,
+			validator: Some(err.1),
+		}
 	}
 }
