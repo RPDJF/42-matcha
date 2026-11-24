@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/23 02:33:34 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/24 23:38:39 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/25 00:07:24 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ pub struct DataCache<K, V>
 
 ///	Newtype for Seconds in order to make sure the user is passing in Seconds,
 ///	in case the Datacache ends up supporting other time frames (Milis, Hours)
-pub struct Seconds(u64);
+pub struct Seconds(pub u64);
 
 // TODO:	Self-deleting items after exptime + 30s have passed.
 

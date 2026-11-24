@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 23:30:01 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/24 23:23:00 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/25 00:26:42 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ pub struct ApiReqUser
 	pub email_address: String,
 	/// The user's encrypted password.
 	pub password: String,
+	/// The user's birth date.
+	birth_date: u64,
 }
 
 /// Represents a user who has been freshly created but stripped of private data.
@@ -51,6 +53,9 @@ pub struct BasicUser
 	email_address: String,
 	/// The user's encrypted password.
 	password: String,
+	/// The user's birth date. Used for checking if they are old enough to
+	/// create an account for the service.
+	birth_date: u64,
 	/// The user's unique identifier.
 	/// Can be used to be cross-referenced with business logic/data in a database.
 	uuid: String,
@@ -68,6 +73,7 @@ impl BasicUser
 		Ok(BasicUser {
 			email_address: api_user.email_address,
 			password: enc_pw,
+			birth_date: api_user.birth_date,
 			uuid: Uuid::new_v4().to_string(),
 		})
 	}
@@ -92,7 +98,7 @@ impl BasicUser
 
 		match argon2.hash_password(&pw.bytes().collect::<Vec<u8>>(), &salt) {
 			Ok(pw) => Ok(pw.to_string()),
-			Err(_) => Err(GenericUserErrors::PasswordHashFailed),
+			Err(_) => Err(GenericUserErrors::InternalError),
 		}
 	}
 
