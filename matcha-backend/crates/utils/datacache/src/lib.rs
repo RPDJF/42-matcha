@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/23 02:33:34 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/24 20:45:58 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/24 23:38:39 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ struct CacheEntry<T>
 ///	The datacache itself, a Hash Map of Key-Value pairs.
 ///	Hidden behind an Atomic Reference Counter for longevity, and
 ///	a ReadWrite Lock for concurrency.
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct DataCache<K, V>
 {
 	data: Arc<RwLock<HashMap<K, CacheEntry<V>>>>,

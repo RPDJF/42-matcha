@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 16:06:06 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/07/08 19:40:39 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/24 23:37:15 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,16 @@ use axum::{
 	Router,
 	routing::{delete, get, patch, post, put},
 };
+use userlib::caches::UserCache;
 
 /// Regosters every GET route for /auth.
-pub fn get_routes() -> Router {
+pub fn get_routes() -> Router<UserCache>
+{
 	Router::new()
 }
 /// Regosters every POST route for /auth.
-pub fn post_routes() -> Router {
+pub fn post_routes() -> Router<UserCache>
+{
 	Router::new()
 		.route("/register", post(register::register))
 		.route("/login", post(login::login))

@@ -6,21 +6,41 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 16:02:08 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/24 20:10:13 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/24 23:34:15 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
 use business::errors::MatchaError;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use userlib::errors::ErrorDetails;
 
 pub static API_V1: &str = "/api/v1";
+pub static SECONDS: u64 = 30 * 1000;
+pub static SESSION_ID: &str = "SessionID";
+pub static SECRET: &str =
+	"SUPER_SECRET_KEY_OMG_PLEASE_DONT_LEAK_ON_GITHUB_OR_ELSE_I_WILL_LOSE_MY_CRYPTO_WALLET";
 
 /// Temporary. Will get deleted later.
-#[derive(Serialize, Clone)]
-pub struct AdditionResult
+#[derive(Deserialize, Serialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct OtpCode
 {
-	pub message: String,
+	pub otp_code: String,
+}
+
+#[derive(Serialize, Deserialize, Clone)]
+pub struct Claims<T: Serialize + Clone>
+{
+	// Expires at
+	pub exp: u64,
+	// Issued at
+	pub iat: u64,
+	// Issued by
+	pub iss: String,
+	// Subject (EG. User ID, whatever the JWT refers to)
+	pub sub: String,
+	// Role of the user
+	pub data: T,
 }
 
 /// Create trait ResponseData which requires Clone and Serialize.

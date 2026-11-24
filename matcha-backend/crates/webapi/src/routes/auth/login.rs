@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 16:30:10 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/24 20:14:36 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/24 23:36:25 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,15 @@ use axum::Json;
 use business::models::business::Location;
 use userlib::errors::ErrorDetails;
 
-use crate::globals::{AdditionResult, HTTPResponse};
+use crate::globals::{HTTPResponse, OtpCode};
 
 /// Logs a user in.
 /// Returns a JWT if the login is successful.
 /// Well, at least it should. This is mock code for now.
-pub async fn login(
-	Json(payload): Json<Location>,
-) -> Json<HTTPResponse<AdditionResult, ErrorDetails>>
+pub async fn login(Json(payload): Json<Location>) -> Json<HTTPResponse<OtpCode, ErrorDetails>>
 {
-	let fuh = AdditionResult {
-		message: format!(
+	let fuh = OtpCode {
+		otp_code: format!(
 			"Added {} to {} = {}",
 			payload.latitude,
 			payload.longitude,

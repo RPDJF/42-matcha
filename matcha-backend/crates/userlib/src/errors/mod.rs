@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 16:19:57 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/24 19:47:29 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/24 23:25:39 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ pub enum GenericUserErrors
 	PasswordHashFailed,
 }
 
-#[derive(Serialize, Clone, Debug)]
+#[derive(Serialize, Clone, Debug, Eq, PartialEq)]
 pub struct ValidatorErrors
 {
 	context: String,
@@ -56,6 +56,7 @@ pub struct ValidatorErrors
 
 impl ValidatorErrors
 {
+	#[must_use]
 	pub fn new(context: String, details: String) -> ValidatorErrors
 	{
 		ValidatorErrors {
@@ -79,6 +80,7 @@ pub struct ErrorDetails
 /// as a way to make sure ErrorDetails can be only one of both.
 impl ErrorDetails
 {
+	#[must_use]
 	pub fn error_code(&self) -> GenericUserErrors
 	{
 		self.code.clone()

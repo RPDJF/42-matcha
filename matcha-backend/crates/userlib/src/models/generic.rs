@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 23:30:01 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/08/25 18:17:56 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/24 23:23:00 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ pub struct ApiRespBasicUser
 }
 
 /// Represents a Basic user.
+#[derive(Clone)]
 pub struct BasicUser
 {
 	/// The user's email address.
