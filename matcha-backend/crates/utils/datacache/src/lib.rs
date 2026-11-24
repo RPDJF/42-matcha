@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/23 02:33:34 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/23 03:52:07 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/24 20:45:58 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,35 @@ use std::{
 	time::{SystemTime, UNIX_EPOCH},
 };
 
-struct LookupTable<T>
+use crate::errors::DatacacheError;
+
+pub mod errors;
+
+///	Item entry in cache.
+struct CacheEntry<T>
 {
+	/// The item itself.
 	pub data: T,
+	///	Commented for now but left in in case it becomes useful.
 	//	pub crttime: u64,
+	///	Pre-computed expiry time.
 	pub exptime: u64,
 }
 
+///	The datacache itself, a Hash Map of Key-Value pairs.
+///	Hidden behind an Atomic Reference Counter for longevity, and
+///	a ReadWrite Lock for concurrency.
 #[derive(Default)]
 pub struct DataCache<K, V>
 {
-	data: Arc<RwLock<HashMap<K, LookupTable<V>>>>,
+	data: Arc<RwLock<HashMap<K, CacheEntry<V>>>>,
 }
 
+///	Newtype for Seconds in order to make sure the user is passing in Seconds,
+///	in case the Datacache ends up supporting other time frames (Milis, Hours)
 pub struct Seconds(u64);
 
 // TODO:	Self-deleting items after exptime + 30s have passed.
-//			Change error types to something a little better...
 
 #[allow(clippy::cast_possible_truncation)]
 #[allow(clippy::arithmetic_side_effects)]
@@ -48,7 +60,8 @@ impl<K: Eq + Hash + Clone, V: Clone> DataCache<K, V>
 		}
 	}
 
-	pub fn get(&self, key: &K) -> Result<V, &'static str>
+	/// Retrieves an item from the datacache.
+	pub fn get(&self, key: &K) -> Result<V, DatacacheError>
 	{
 		let rlock = self.data.read();
 
@@ -61,25 +74,26 @@ impl<K: Eq + Hash + Clone, V: Clone> DataCache<K, V>
 						.as_millis() as u64
 						> result.exptime
 					{
-						return Err("TIME TOO BIG");
+						return Err(DatacacheError::EntryExpired);
 					}
 					return Ok(result.data.to_owned());
 				}
 			}
-			Err(_) => return Err("Error reading map, please retry"),
+			Err(_) => return Err(DatacacheError::LockError),
 		}
 		drop(rlock);
-		Err("Key not found")
+		Err(DatacacheError::EntryNotFound)
 	}
 
-	pub fn insert(&self, key: &K, value: &V, expire_in: &Seconds) -> Result<(), &'static str>
+	/// Inserts an item into the datacache.
+	pub fn insert(&self, key: &K, value: &V, expire_in: &Seconds) -> Result<(), DatacacheError>
 	{
 		let stamp = SystemTime::now()
 			.duration_since(UNIX_EPOCH)
 			.unwrap_or_default()
 			.as_millis() as u64;
 
-		let new_table = LookupTable {
+		let new_table = CacheEntry {
 			data: value.to_owned(),
 			//	crttime: stamp,
 			exptime: stamp + (expire_in.0 * 1000),
@@ -87,7 +101,7 @@ impl<K: Eq + Hash + Clone, V: Clone> DataCache<K, V>
 
 		let wlock = self.data.write();
 
-		wlock.map_or(Err("Error reading map, please retry"), |mut map| {
+		wlock.map_or(Err(DatacacheError::LockError), |mut map| {
 			map.insert(key.to_owned(), new_table);
 			Ok(())
 		})
