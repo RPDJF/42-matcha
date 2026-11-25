@@ -6,12 +6,13 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 16:06:06 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/24 23:37:15 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/25 01:17:21 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
 pub mod login;
 pub mod register;
+pub mod validate;
 
 use axum::{
 	Router,
@@ -29,5 +30,6 @@ pub fn post_routes() -> Router<UserCache>
 {
 	Router::new()
 		.route("/register", post(register::register))
+		.route("/validate", post(validate::validate))
 		.route("/login", post(login::login))
 }

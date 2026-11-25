@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 16:19:57 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/25 02:53:03 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/25 02:59:05 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ impl ValidatorErrors
 		}
 	}
 }
+
+pub type UserLibErrors = ErrorDetails<GenericUserErrors, ValidatorErrors>;
 
 pub trait FromUserlibErrors<T>
 {

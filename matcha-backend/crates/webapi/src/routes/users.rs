@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 16:13:11 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/24 20:15:17 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/25 03:45:25 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,10 @@ use crate::globals::HTTPResponse;
 use axum::Json;
 #[cfg(debug_assertions)]
 use business::models::business::MatchaUser;
-#[cfg(debug_assertions)]
-use userlib::errors::ErrorDetails;
 
 /// Returns a list of users. Used only in debug.
 #[cfg(debug_assertions)]
-pub async fn get_users() -> Json<HTTPResponse<Vec<MatchaUser>, ErrorDetails>>
+pub async fn get_users() -> Json<HTTPResponse<Vec<MatchaUser>>>
 {
 	Json(HTTPResponse::new(business::list_users(), "list"))
 }

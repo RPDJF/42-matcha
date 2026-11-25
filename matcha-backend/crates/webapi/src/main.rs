@@ -6,10 +6,11 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 15:55:12 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/24 23:49:35 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/25 03:29:18 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
+mod errors;
 mod globals;
 mod routes;
 use axum::Router;

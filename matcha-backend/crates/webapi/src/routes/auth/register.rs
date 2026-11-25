@@ -6,11 +6,14 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 18:53:59 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/25 00:36:24 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/25 03:46:44 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
-use crate::globals::{HTTPResponse, OtpCode, SESSION_ID};
+use crate::{
+	errors::ErrorTypes::UserLibErrors,
+	globals::{HTTPResponse, OtpCode, SESSION_ID},
+};
 use axum::{Json, extract::State, http::StatusCode};
 use axum_extra::extract::{
 	CookieJar,
@@ -19,9 +22,7 @@ use axum_extra::extract::{
 use rand::distr::{Alphanumeric, SampleString};
 use time::Duration;
 use userlib::{
-	caches::UserCache,
-	creation::user::generate_new_user,
-	errors::{ErrorDetails, GenericUserErrors},
+	caches::UserCache, creation::user::generate_new_user, errors::GenericUserErrors,
 	models::generic::ApiReqUser,
 };
 
@@ -36,11 +37,7 @@ pub async fn register(
 	State(db): State<UserCache>,
 	jar: CookieJar,
 	Json(payload): Json<ApiReqUser>,
-) -> (
-	StatusCode,
-	CookieJar,
-	Json<HTTPResponse<OtpCode, ErrorDetails>>,
-)
+) -> (StatusCode, CookieJar, Json<HTTPResponse<OtpCode>>)
 {
 	let id = jar
 		.get(SESSION_ID)
@@ -66,13 +63,21 @@ pub async fn register(
 			if error.error_code() == GenericUserErrors::AddressInUse
 				&& error.error_code() == GenericUserErrors::AccountExists =>
 		{
-			(StatusCode::CONFLICT, jar, Json(HTTPResponse::err(error)))
+			(
+				StatusCode::CONFLICT,
+				jar,
+				Json(HTTPResponse::err(UserLibErrors(error))),
+			)
 		}
 		Err(error) if error.error_code() == GenericUserErrors::InternalError => (
 			StatusCode::INTERNAL_SERVER_ERROR,
 			jar,
-			Json(HTTPResponse::err(error)),
+			Json(HTTPResponse::err(UserLibErrors(error))),
 		),
-		Err(error) => (StatusCode::BAD_REQUEST, jar, Json(HTTPResponse::err(error))),
+		Err(error) => (
+			StatusCode::BAD_REQUEST,
+			jar,
+			Json(HTTPResponse::err(UserLibErrors(error))),
+		),
 	}
 }

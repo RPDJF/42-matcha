@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/23 02:33:34 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/25 00:07:24 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/25 01:33:36 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ struct CacheEntry<T>
 
 ///	The datacache itself, a Hash Map of Key-Value pairs.
 ///	Hidden behind an Atomic Reference Counter for longevity, and
-///	a ReadWrite Lock for concurrency.
+///	a `ReadWrite` Lock for concurrency.
 #[derive(Default, Clone)]
 pub struct DataCache<K, V>
 {
@@ -61,6 +61,9 @@ impl<K: Eq + Hash + Clone, V: Clone> DataCache<K, V>
 	}
 
 	/// Retrieves an item from the datacache.
+	/// # Errors
+	/// Returns a `DatacacheError` containing a desctiption of the error that
+	/// occurred.
 	pub fn get(&self, key: &K) -> Result<V, DatacacheError>
 	{
 		let rlock = self.data.read();
@@ -86,6 +89,9 @@ impl<K: Eq + Hash + Clone, V: Clone> DataCache<K, V>
 	}
 
 	/// Inserts an item into the datacache.
+	/// # Errors
+	/// Returns a `DatacacheError` containing a desctiption of the error that
+	/// occurred.
 	pub fn insert(&self, key: &K, value: &V, expire_in: &Seconds) -> Result<(), DatacacheError>
 	{
 		let stamp = SystemTime::now()
