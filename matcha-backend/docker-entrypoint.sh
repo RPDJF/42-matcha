@@ -1,0 +1,3 @@
+#!/bin/sh
+
+./matcha-webapi
