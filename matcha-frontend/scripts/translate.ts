@@ -410,12 +410,33 @@ async function saveTranslations(
 }
 
 /**
+ * Add source keys to their respective language files
+ */
+async function saveSourceKeys(
+  sources: AdditionalI18nSource[],
+  dir = 'src/assets/i18n',
+) {
+  for (const source of sources) {
+    const language = source.sourceLanguage.toLowerCase();
+
+    const entries = Object.fromEntries(
+      source.keys.map((key) => [key, key]),
+    );
+
+    await saveTranslations(language, entries, dir);
+
+    console.log(`Updated source language ${language}.json`);
+  }
+}
+
+/**
  * Main logic
  */
 async function main() {
   console.log('Starting translation tool...');
 
   const additionalSources = await loadAdditionalI18n();
+  await saveSourceKeys(additionalSources);
 
   const dockerStart = startLibreTranslate();
 
