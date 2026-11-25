@@ -1,3 +1,3 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-npm run start:deploy
+exec npm run start:deploy
