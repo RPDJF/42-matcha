@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 00:08:44 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/25 04:05:35 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/25 19:49:59 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@ use crate::{
 	errors::{FromUserlibErrors, GenericUserErrors, ValidatorErrors},
 	models::generic::{ApiReqUser, ApiRespBasicUser, BasicUser},
 };
-use datacache::Seconds;
+use datacache::Minutes;
 use error_details::ErrorDetails;
 use rand::RngExt;
 
@@ -42,7 +42,11 @@ fn insert_into_hashmap(
 
 	// TODO: check pending duplicates
 
-	match datacache.insert(&String::from(session_id), &otp_and_user, &Seconds(5 * 60)) {
+	match datacache.insert(
+		&String::from(session_id),
+		&otp_and_user,
+		(None, Some(Minutes(5)), None),
+	) {
 		Ok(()) => Ok(str),
 		Err(val) => Err(ErrorDetails::from_userlib(val)),
 	}

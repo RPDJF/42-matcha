@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 16:19:57 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/25 02:59:05 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/25 18:36:24 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ pub enum GenericUserErrors
 	PasswordNoDigit,
 	#[error("Validation timed out.")]
 	ValidationTimeout,
-	#[error("Incorrect Password.")]
-	IncorrectPassword,
 	#[error("Incorrect Validation Code.")]
 	IncorrectOTP,
 	#[error("Account not found.")]
