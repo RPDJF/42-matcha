@@ -6,12 +6,12 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 16:19:57 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/25 02:59:05 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/26 01:04:03 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
 use datacache::errors::DatacacheError;
-use error_details::ErrorDetails;
+use error_details::{ErrorDetails, ValidatorError};
 use serde::Serialize;
 use thiserror::Error;
 
@@ -28,7 +28,7 @@ pub enum GenericUserErrors
 	#[error("Incorrect password.")]
 	PasswordIncorrect,
 	#[error("Error validating password.")]
-	PasswordError(Vec<ValidatorErrors>),
+	PasswordError(Vec<ValidatorError>),
 	#[error("Invalid password.")]
 	PasswordInvalid,
 	#[error("Empty password submitted.")]
@@ -59,37 +59,14 @@ pub enum GenericUserErrors
 	InternalError,
 }
 
-/// System to validate multiple errors that happen in a validator, eg a password
-/// validator.
-#[derive(Serialize, Clone, Debug, Eq, PartialEq)]
-pub struct ValidatorErrors
-{
-	/// Where the error happened.
-	context: String,
-	/// Description of the error itself.
-	details: String,
-}
-
-impl ValidatorErrors
-{
-	#[must_use]
-	pub const fn new(context: String, details: String) -> Self
-	{
-		Self {
-			context: context,
-			details: details,
-		}
-	}
-}
-
-pub type UserLibErrors = ErrorDetails<GenericUserErrors, ValidatorErrors>;
+pub type UserLibErrors = ErrorDetails<GenericUserErrors>;
 
 pub trait FromUserlibErrors<T>
 {
 	fn from_userlib(err: T) -> Self;
 }
 
-impl FromUserlibErrors<GenericUserErrors> for ErrorDetails<GenericUserErrors, ValidatorErrors>
+impl FromUserlibErrors<GenericUserErrors> for ErrorDetails<GenericUserErrors>
 {
 	/// Constructs an `ErrorDetails` from a single `GenericUserErrors` enum
 	/// option.
@@ -99,18 +76,17 @@ impl FromUserlibErrors<GenericUserErrors> for ErrorDetails<GenericUserErrors, Va
 	}
 }
 
-impl FromUserlibErrors<(GenericUserErrors, Vec<ValidatorErrors>)>
-	for ErrorDetails<GenericUserErrors, ValidatorErrors>
+impl FromUserlibErrors<(GenericUserErrors, Vec<ValidatorError>)> for ErrorDetails<GenericUserErrors>
 {
 	/// Constructs an `ErrorDetails` from an array of errors coming from a
 	/// Validator.
-	fn from_userlib(err: (GenericUserErrors, Vec<ValidatorErrors>)) -> Self
+	fn from_userlib(err: (GenericUserErrors, Vec<ValidatorError>)) -> Self
 	{
 		Self::new(err.0, None, Some(err.1))
 	}
 }
 
-impl FromUserlibErrors<DatacacheError> for ErrorDetails<GenericUserErrors, ValidatorErrors>
+impl FromUserlibErrors<DatacacheError> for ErrorDetails<GenericUserErrors>
 {
 	/// Constructs an `ErrorDetails` from a `DatacacheError`.
 	fn from_userlib(err: DatacacheError) -> Self

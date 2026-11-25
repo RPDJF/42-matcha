@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/25 03:28:17 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/25 03:59:42 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/26 00:52:43 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ pub enum WebApiErrorTypes
 	NoSessionID,
 }
 
-pub type WebApiErrors = ErrorDetails<WebApiErrorTypes, ()>;
+pub type WebApiErrors = ErrorDetails<WebApiErrorTypes>;
 
 /// Encapsulates every error type that can be thrown in an HTTPResponse struct.
 #[derive(Serialize)]
@@ -40,7 +40,7 @@ pub trait FromWebApiErrors<T>
 	fn from_webapi(err: T) -> Self;
 }
 
-impl FromWebApiErrors<WebApiErrorTypes> for ErrorDetails<WebApiErrorTypes, ()>
+impl FromWebApiErrors<WebApiErrorTypes> for ErrorDetails<WebApiErrorTypes>
 {
 	/// Constructs an `ErrorDetails` from a single `WebApiErrorTypes` enum
 	/// option.

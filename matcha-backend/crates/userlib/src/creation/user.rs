@@ -6,17 +6,17 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 00:08:44 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/25 04:05:35 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/26 01:03:55 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
 use crate::{
 	caches::UserCache,
-	errors::{FromUserlibErrors, GenericUserErrors, ValidatorErrors},
+	errors::{FromUserlibErrors, GenericUserErrors},
 	models::generic::{ApiReqUser, ApiRespBasicUser, BasicUser},
 };
 use datacache::Seconds;
-use error_details::ErrorDetails;
+use error_details::{ErrorDetails, ValidatorError};
 use rand::RngExt;
 
 /// Inserts a validated user into the `DataCache` alongside its validation code in
@@ -30,7 +30,7 @@ fn insert_into_hashmap(
 	new_user: BasicUser,
 	datacache: &UserCache,
 	session_id: &str,
-) -> Result<String, ErrorDetails<GenericUserErrors, ValidatorErrors>>
+) -> Result<String, ErrorDetails<GenericUserErrors>>
 {
 	let mut str = String::with_capacity(6);
 	let mut rng = rand::rng();
@@ -59,7 +59,7 @@ pub fn generate_new_user(
 	payload: ApiReqUser,
 	datacache: &UserCache,
 	session_id: &str,
-) -> Result<String, ErrorDetails<GenericUserErrors, ValidatorErrors>>
+) -> Result<String, ErrorDetails<GenericUserErrors>>
 {
 	match BasicUser::from_api_user(payload) {
 		Ok(val) => Ok(insert_into_hashmap(val, datacache, session_id)?),
@@ -83,7 +83,7 @@ fn get_user_from_hash(
 	otp: &str,
 	id: &str,
 	datacache: &UserCache,
-) -> Result<BasicUser, ErrorDetails<GenericUserErrors, ValidatorErrors>>
+) -> Result<BasicUser, ErrorDetails<GenericUserErrors>>
 {
 	match datacache.get(&String::from(id)) {
 		Ok(val) => {
@@ -106,7 +106,7 @@ pub async fn validate_new_user(
 	otp: String,
 	datacache: &UserCache,
 	session_id: &str,
-) -> Result<ApiRespBasicUser, ErrorDetails<GenericUserErrors, ValidatorErrors>>
+) -> Result<ApiRespBasicUser, ErrorDetails<GenericUserErrors>>
 {
 	match get_user_from_hash(&otp, session_id, datacache) {
 		Ok(val) => Ok(ApiRespBasicUser {

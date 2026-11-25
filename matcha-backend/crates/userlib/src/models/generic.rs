@@ -6,16 +6,17 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 23:30:01 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/25 00:26:42 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/26 00:51:52 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
-use crate::errors::{GenericUserErrors, ValidatorErrors};
+use crate::errors::GenericUserErrors;
 use argon2::{
 	Argon2, PasswordHasher,
 	password_hash::{SaltString, rand_core::OsRng},
 };
 use email_address::EmailAddress;
+use error_details::ValidatorError;
 use regex::regex;
 use serde::{Deserialize, Serialize};
 use std::str::FromStr;
@@ -128,13 +129,13 @@ impl BasicUser
 		let mut dig_ok = false;
 
 		if pw.len() == 0 {
-			resp.push(ValidatorErrors::new(
+			resp.push(ValidatorError::new(
 				CONTEXT.to_string(),
 				format!("{}", GenericUserErrors::PasswordEmpty),
 			));
 			return Err(GenericUserErrors::PasswordError(resp));
 		} else if pw.len() < 8 {
-			resp.push(ValidatorErrors::new(
+			resp.push(ValidatorError::new(
 				CONTEXT.to_string(),
 				format!("{}", GenericUserErrors::PasswordTooShort),
 			));
@@ -153,25 +154,25 @@ impl BasicUser
 		}
 
 		if !low_ok {
-			resp.push(ValidatorErrors::new(
+			resp.push(ValidatorError::new(
 				CONTEXT.to_string(),
 				format!("{}", GenericUserErrors::PasswordNoLower),
 			));
 		}
 		if !hig_ok {
-			resp.push(ValidatorErrors::new(
+			resp.push(ValidatorError::new(
 				CONTEXT.to_string(),
 				format!("{}", GenericUserErrors::PasswordNoUpper),
 			));
 		}
 		if !sym_ok {
-			resp.push(ValidatorErrors::new(
+			resp.push(ValidatorError::new(
 				CONTEXT.to_string(),
 				format!("{}", GenericUserErrors::PasswordNoSymbol),
 			));
 		}
 		if !dig_ok {
-			resp.push(ValidatorErrors::new(
+			resp.push(ValidatorError::new(
 				CONTEXT.to_string(),
 				format!("{}", GenericUserErrors::PasswordNoDigit),
 			));
