@@ -19,6 +19,7 @@ thiserror = { workspace = true }
 sea-orm = { workspace = true }
 rand = { workspace = true }
 datacache = { path = "../utils/datacache" }
+error-details = { path = "../utils/errordetails" }
 
 [lints]
 workspace = true
