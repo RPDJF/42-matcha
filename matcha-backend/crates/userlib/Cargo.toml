@@ -1,3 +1,7 @@
+# **************************************************************************** #
+#                         generic userlib Cargo.toml                           #
+# **************************************************************************** #
+
 [package]
 name = "userlib"
 version = "0.1.0"
@@ -13,3 +17,9 @@ serde = { workspace = true }
 anyhow = { workspace = true }
 thiserror = { workspace = true }
 sea-orm = { workspace = true }
+rand = { workspace = true }
+datacache = { path = "../utils/datacache" }
+error-details = { path = "../utils/errordetails" }
+
+[lints]
+workspace = true

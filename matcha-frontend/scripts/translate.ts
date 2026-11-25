@@ -1,5 +1,6 @@
+
 import { exec } from 'child_process';
-import { readdir, readFile } from 'fs/promises';
+import { mkdir, readdir, readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
 
 const supportedLanguages = new Map(
@@ -53,11 +54,80 @@ const supportedLanguages = new Map(
     vietnamese: 'vi',
   }),
 );
+
 const sourceLanguage = supportedLanguages.get('french')!;
 const LIBRETRANSLATE_URL = 'http://localhost:5000';
 const CONCURRENCY_LIMIT = 20;
 
 let dockerCmd = 'docker';
+
+type AdditionalI18nSource = {
+  sourceLanguage: string;
+  keys: string[];
+};
+
+/**
+ * Get CLI argument
+ */
+function getCliArgument(name: string): string | undefined {
+  const args = process.argv.slice(2);
+  const prefix = `--${name}=`;
+
+  const inline = args.find((arg) => arg.startsWith(prefix));
+  if (inline) return inline.slice(prefix.length);
+
+  const index = args.indexOf(`--${name}`);
+  if (index !== -1) return args[index + 1];
+
+  return undefined;
+}
+
+/**
+ * Load additional i18n sources
+ */
+async function loadAdditionalI18n(): Promise<AdditionalI18nSource[]> {
+  const inline = getCliArgument('additional-i18n');
+  const file = getCliArgument('additional-i18n-file');
+
+  if (inline && file) {
+    throw new Error(
+      'Use either --additional-i18n or --additional-i18n-file, not both.',
+    );
+  }
+
+  if (!inline && !file) return [];
+
+  const content = file
+    ? await readFile(file, 'utf-8')
+    : inline!;
+
+  const sources: AdditionalI18nSource[] = JSON.parse(content);
+
+  if (!Array.isArray(sources)) {
+    throw new Error('Additional i18n must be a JSON array.');
+  }
+
+  for (const source of sources) {
+    if (
+      !source ||
+      typeof source.sourceLanguage !== 'string' ||
+      !Array.isArray(source.keys) ||
+      !source.keys.every((key: unknown) => typeof key === 'string')
+    ) {
+      throw new Error(
+        'Each additional i18n source must contain sourceLanguage and string[] keys.',
+      );
+    }
+
+    if (!supportedLanguages.has(source.sourceLanguage.toLowerCase())) {
+      throw new Error(
+        `Unsupported source language: ${source.sourceLanguage}`,
+      );
+    }
+  }
+
+  return sources;
+}
 
 /**
  * Run a shell command
@@ -134,21 +204,24 @@ async function waitForLibreTranslate() {
 /**
  * Mask tags as HTML spans so the engine translates the inner text
  */
-function maskPlaceholders(text: string): { maskedText: string; placeholders: Map<string, string> } {
+function maskPlaceholders(text: string): {
+  maskedText: string;
+  placeholders: Map<string, string>;
+} {
   const placeholders = new Map<string, string>();
   let index = 0;
 
   const blockRegex = /\{#(\w+)\}([\s\S]*?)\{\/\1\}/g;
 
   let maskedText = text.replace(blockRegex, (match, tagName, content) => {
-    const placeholderId = `b${index++}`; // b pour bloc
+    const placeholderId = `b${index++}`;
     placeholders.set(placeholderId, match);
     return `<span id="${placeholderId}">${content}</span>`;
   });
 
   const varRegex = /\{([^\/#].*?)\}/g;
   maskedText = maskedText.replace(varRegex, (match) => {
-    const placeholderId = `v${index++}`; // v pour variable
+    const placeholderId = `v${index++}`;
     placeholders.set(placeholderId, match);
     return `<span id="${placeholderId}" translate="no"></span>`;
   });
@@ -159,15 +232,23 @@ function maskPlaceholders(text: string): { maskedText: string; placeholders: Map
 /**
  * Restore tags from the translated HTML
  */
-function restorePlaceholders(translatedHtml: string, placeholders: Map<string, string>): string {
+function restorePlaceholders(
+  translatedHtml: string,
+  placeholders: Map<string, string>,
+): string {
   let result = translatedHtml;
 
-  const sortedIds = Array.from(placeholders.keys()).sort((a, b) => b.length - a.length);
+  const sortedIds = Array.from(placeholders.keys()).sort(
+    (a, b) => b.length - a.length,
+  );
 
   for (const id of sortedIds) {
     const originalTag = placeholders.get(id)!;
 
-    const spanRegex = new RegExp(`<span id=["']${id}["'][^>]*>([\\s\\S]*?)</span>`, 'g');
+    const spanRegex = new RegExp(
+      `<span id=["']${id}["'][^>]*>([\\s\\S]*?)</span>`,
+      'g',
+    );
 
     if (id.startsWith('b')) {
       const tagMatch = originalTag.match(/^\{#(\w+)\}/);
@@ -187,9 +268,13 @@ function restorePlaceholders(translatedHtml: string, placeholders: Map<string, s
 }
 
 /**
- * Updated Translation Call
+ * Translation Call
  */
-async function translate(text: string, target: string) {
+async function translate(
+  text: string,
+  target: string,
+  source = sourceLanguage,
+) {
   const { maskedText, placeholders } = maskPlaceholders(text);
 
   const res = await fetch(`${LIBRETRANSLATE_URL}/translate`, {
@@ -197,7 +282,7 @@ async function translate(text: string, target: string) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       q: maskedText,
-      source: sourceLanguage,
+      source,
       target: supportedLanguages.get(target),
       format: 'html',
     }),
@@ -246,6 +331,7 @@ async function findKeys(dir = 'src') {
       }
     }
   }
+
   return keys;
 }
 
@@ -273,16 +359,20 @@ async function loadTranslations(dir = 'src/assets/i18n') {
         translations.get(language)!.push(key);
       }
     } else if (file.name.endsWith('.json')) {
+      const language = file.name.replace(/\.json$/, '');
+
+      if (!translations.has(language)) continue;
+
       content = await readFile(fullPath, 'utf-8');
+
       for (const match of content.matchAll(regex)) {
         translations.get(language)!.push(match[1]);
       }
     }
   }
+
   return translations;
 }
-
-import { mkdir, writeFile } from 'fs/promises';
 
 /**
  * Merges new translations into existing files or creates new ones
@@ -320,13 +410,40 @@ async function saveTranslations(
 }
 
 /**
+ * Add source keys to their respective language files
+ */
+async function saveSourceKeys(
+  sources: AdditionalI18nSource[],
+  dir = 'src/assets/i18n',
+) {
+  for (const source of sources) {
+    const language = source.sourceLanguage.toLowerCase();
+
+    const entries = Object.fromEntries(
+      source.keys.map((key) => [key, key]),
+    );
+
+    await saveTranslations(language, entries, dir);
+
+    console.log(`Updated source language ${language}.json`);
+  }
+}
+
+/**
  * Main logic
  */
 async function main() {
   console.log('Starting translation tool...');
 
+  const additionalSources = await loadAdditionalI18n();
+  await saveSourceKeys(additionalSources);
+
   const dockerStart = startLibreTranslate();
-  const [translations, keys] = await Promise.all([loadTranslations(), findKeys()]);
+
+  const [translations, keys] = await Promise.all([
+    loadTranslations(),
+    findKeys(),
+  ]);
 
   await dockerStart;
   await waitForLibreTranslate();
@@ -336,22 +453,68 @@ async function main() {
   const results = new Map<string, Record<string, string>>();
   supportedLanguages.forEach((_, lang) => results.set(lang, {}));
 
-  const tasks: Array<{ key: string; language: string }> = [];
-  for (const key of keys) {
-    for (const [language, languageKeys] of translations) {
-      if (!languageKeys.includes(key)) {
-        tasks.push({ key, language });
+  const tasks: Array<{
+    key: string;
+    language: string;
+    sourceLanguage: string;
+  }> = [];
+
+  const taskSet = new Set<string>();
+
+  function addTasks(keys: Iterable<string>, source: string) {
+    for (const key of keys) {
+      for (const [language, languageKeys] of translations) {
+        if (
+          supportedLanguages.get(language) ===
+          supportedLanguages.get(source)
+        ) {
+          continue;
+        }
+
+        if (languageKeys.includes(key)) continue;
+
+        const taskId = `${source}:${language}:${key}`;
+        if (taskSet.has(taskId)) continue;
+
+        taskSet.add(taskId);
+
+        tasks.push({
+          key,
+          language,
+          sourceLanguage: source,
+        });
       }
     }
   }
 
-  const executeTask = async (task: { key: string; language: string }) => {
+  // Existing project keys: French source.
+  addTasks(keys, 'french');
+
+  // Additional keys: use their respective source languages.
+  for (const source of additionalSources) {
+    addTasks(source.keys, source.sourceLanguage.toLowerCase());
+  }
+
+  console.log(`Found ${tasks.length} missing translations.`);
+
+  const executeTask = async (task: (typeof tasks)[number]) => {
     try {
-      const translated = await translate(task.key, task.language);
-      console.log(`[${task.language}] ${task.key} → ${translated}`);
+      const translated = await translate(
+        task.key,
+        task.language,
+        supportedLanguages.get(task.sourceLanguage)!,
+      );
+
+      console.log(
+        `[${task.sourceLanguage} → ${task.language}] ${task.key} → ${translated}`,
+      );
+
       results.get(task.language)![task.key] = translated;
     } catch (err) {
-      console.error(`Failed to translate "${task.key}" to ${task.language}:`, err);
+      console.error(
+        `Failed to translate "${task.key}" from ${task.sourceLanguage} to ${task.language}:`,
+        err,
+      );
     }
   };
 
@@ -361,6 +524,7 @@ async function main() {
   }
 
   console.log('\nSaving translations to files...');
+
   for (const [language, newEntries] of results) {
     if (Object.keys(newEntries).length > 0) {
       await saveTranslations(language, newEntries);

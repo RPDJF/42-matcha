@@ -1,4 +1,3 @@
-#[cfg(test)]
 use sea_orm::{Database, DatabaseConnection, sqlx::Connection};
 use std::error::Error;
 

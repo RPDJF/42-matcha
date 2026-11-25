@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve --configuration production",
     "start:dev": "ng serve --configuration=development",
+    "start:deploy": "ng serve --configuration production --host 0.0.0.0 --port 4200",
     "build": "ng build",
     "build:translations": "node scripts/translate.ts",
     "build:icons": "node scripts/buildIcons.ts",
