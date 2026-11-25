@@ -1,4 +1,5 @@
 import {
+  afterNextRender,
   AfterViewInit,
   ComponentRef,
   Directive,
@@ -31,8 +32,6 @@ export class ButtonIconDirective extends AbstractButtonDirective implements Afte
     'rounded-full',
     'p-2',
     'size-fit',
-    'transition-all',
-    'duration-150',
   ];
 
   override readonly disabledClasses: string[] = [
@@ -44,8 +43,6 @@ export class ButtonIconDirective extends AbstractButtonDirective implements Afte
     'rounded-full',
     'p-2',
     'size-fit',
-    'transition-all',
-    'duration-150',
     'opacity-70',
   ];
 
@@ -58,8 +55,6 @@ export class ButtonIconDirective extends AbstractButtonDirective implements Afte
     'rounded-full',
     'p-2',
     'size-fit',
-    'transition-all',
-    'duration-150',
     'opacity-70',
     'flex',
     'justify-center',
@@ -75,13 +70,23 @@ export class ButtonIconDirective extends AbstractButtonDirective implements Afte
 
       this.#iconRef.setInput('name', this.icon());
     });
+
+    afterNextRender(() =>
+      requestAnimationFrame(() => {
+        const nativeElement = this.#iconRef?.location.nativeElement;
+
+        if (!this.nativeElement) return;
+
+        nativeElement.className += ' transition-all duration-150';
+      }),
+    );
   }
   override ngAfterViewInit(): void {
     super.ngAfterViewInit();
 
     this.#iconRef = this.#vcr.createComponent(IconComponent);
     this.#iconRef.setInput('name', this.icon());
-    this.#iconRef.location.nativeElement.className = 'transition-all duration-200 size-6';
+    this.#iconRef.location.nativeElement.className = 'size-6';
     this.addNativeElement(this.#iconRef.location.nativeElement);
   }
 

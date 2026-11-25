@@ -12,8 +12,6 @@ export class ButtonLinkDirective extends AbstractButtonDirective {
     'hover:shadow-latte-pink',
     'cursor-pointer',
     'text-linear-to-br',
-    'transition-all',
-    'duration-150',
   ];
 
   override readonly disabledClasses: string[] = [
@@ -22,8 +20,6 @@ export class ButtonLinkDirective extends AbstractButtonDirective {
     'from-latte-maroon',
     'cursor-not-allowed',
     'text-linear-to-br',
-    'transition-all',
-    'duration-150',
     'opacity-70',
   ];
 
@@ -33,8 +29,6 @@ export class ButtonLinkDirective extends AbstractButtonDirective {
     'from-latte-maroon',
     'cursor-not-allowed',
     'text-linear-to-br',
-    'transition-all',
-    'duration-150',
     'opacity-70',
     'flex',
     'justify-center',

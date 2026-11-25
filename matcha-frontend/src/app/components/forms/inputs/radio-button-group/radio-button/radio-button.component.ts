@@ -1,4 +1,4 @@
-import { Component, computed, input, model, output } from '@angular/core';
+import { afterNextRender, Component, computed, input, model, output, signal } from '@angular/core';
 
 @Component({
   selector: 'app-radio-button',
@@ -15,16 +15,9 @@ export class RadioButtonComponent {
     this.#baseClasses.concat(this.selected() ? this.#activeClasses : this.#inactiveClasses),
   );
 
-  readonly #baseClasses = [
-    'block',
-    'rounded-full',
-    'py-2',
-    'px-4',
-    'transition-all',
-    'duration-200',
-    'cursor-pointer',
-    'shadow-lg',
-  ];
+  readonly animationReady = signal(false);
+
+  readonly #baseClasses = ['block', 'rounded-full', 'py-2', 'px-4', 'cursor-pointer', 'shadow-lg'];
 
   readonly #activeClasses = [
     'to-latte-pink',
@@ -35,6 +28,14 @@ export class RadioButtonComponent {
   ];
 
   readonly #inactiveClasses = ['bg-white', 'text-black'];
+
+  constructor() {
+    afterNextRender(() =>
+      requestAnimationFrame(() => {
+        this.animationReady.set(true);
+      }),
+    );
+  }
 
   onClick(event: Event) {
     event.preventDefault();

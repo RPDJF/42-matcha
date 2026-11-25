@@ -1,4 +1,12 @@
-import { AfterViewInit, Directive, effect, inject, input, ViewContainerRef } from '@angular/core';
+import {
+  afterNextRender,
+  AfterViewInit,
+  Directive,
+  effect,
+  inject,
+  input,
+  ViewContainerRef,
+} from '@angular/core';
 import { IconComponent } from '../../components/icon/icon.component';
 import { IconType } from '../../components/icon/icon.generated.types';
 import { AbstractButtonDirective } from './AbstractButtonDirective';
@@ -26,8 +34,6 @@ export class ButtonIconSecondaryDirective extends AbstractButtonDirective implem
     'p-3',
     'size-fit',
     'shadow-lg',
-    'transition-all',
-    'duration-150',
     'text-white',
     'border-2',
   ];
@@ -44,8 +50,6 @@ export class ButtonIconSecondaryDirective extends AbstractButtonDirective implem
     'p-3',
     'size-fit',
     'shadow-lg',
-    'transition-all',
-    'duration-150',
     'opacity-70',
     'text-white',
     'border',
@@ -63,8 +67,6 @@ export class ButtonIconSecondaryDirective extends AbstractButtonDirective implem
     'p-3',
     'size-fit',
     'shadow-lg',
-    'transition-all',
-    'duration-150',
     'opacity-70',
     'flex',
     'justify-center',
@@ -82,6 +84,16 @@ export class ButtonIconSecondaryDirective extends AbstractButtonDirective implem
 
       this.#iconRef.setInput('name', this.icon());
     });
+
+    afterNextRender(() =>
+      requestAnimationFrame(() => {
+        const nativeElement = this.#iconRef?.location.nativeElement;
+
+        if (!this.nativeElement) return;
+
+        nativeElement.className += ' transition-all duration-150';
+      }),
+    );
   }
 
   override ngAfterViewInit(): void {
@@ -89,8 +101,7 @@ export class ButtonIconSecondaryDirective extends AbstractButtonDirective implem
 
     this.#iconRef = this.#vcr.createComponent(IconComponent);
     this.#iconRef.setInput('name', this.icon());
-    this.#iconRef.location.nativeElement.className =
-      'transition-all duration-200 size-9 md:size-11';
+    this.#iconRef.location.nativeElement.className = 'size-9 md:size-11';
     this.addNativeElement(this.#iconRef.location.nativeElement);
   }
 
