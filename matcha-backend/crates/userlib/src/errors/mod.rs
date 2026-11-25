@@ -6,19 +6,19 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 16:19:57 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/24 19:47:29 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/25 02:59:05 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
+use datacache::errors::DatacacheError;
+use error_details::ErrorDetails;
 use serde::Serialize;
 use thiserror::Error;
 
-// I ain't gonna lie chief, I want to write more documentation about this but
-// I'm fairly certain I'm going to give this part a huge rework down the line.
-// So I kind of don't want to waste time writing doc for a system that might
-// get completely scrapped and re-written.
-
-#[derive(Serialize, Error, Clone, Debug)]
+/// Contains every possible error that can happen during Generic User handling.
+/// Derives from thiserror in order to have pre-formatted messages and avoid
+/// having to manually implement message formatting.
+#[derive(Serialize, Error, Clone, Debug, Eq, PartialEq)]
 pub enum GenericUserErrors
 {
 	#[error("Invalid email address format.")]
@@ -43,68 +43,85 @@ pub enum GenericUserErrors
 	PasswordNoSymbol,
 	#[error("Password must contain at least one digit.")]
 	PasswordNoDigit,
-	#[error("Password hashing failed.")]
-	PasswordHashFailed,
+	#[error("Validation timed out.")]
+	ValidationTimeout,
+	#[error("Incorrect Password.")]
+	IncorrectPassword,
+	#[error("Incorrect Validation Code.")]
+	IncorrectOTP,
+	#[error("Account not found.")]
+	AccountNotFound,
+	#[error("Account already exists.")]
+	AccountExists,
+	#[error("Too many Attempts.")]
+	TooManyAttempts,
+	#[error("Internal Server Error.")]
+	InternalError,
 }
 
-#[derive(Serialize, Clone, Debug)]
+/// System to validate multiple errors that happen in a validator, eg a password
+/// validator.
+#[derive(Serialize, Clone, Debug, Eq, PartialEq)]
 pub struct ValidatorErrors
 {
+	/// Where the error happened.
 	context: String,
+	/// Description of the error itself.
 	details: String,
 }
 
 impl ValidatorErrors
 {
-	pub fn new(context: String, details: String) -> ValidatorErrors
+	#[must_use]
+	pub const fn new(context: String, details: String) -> Self
 	{
-		ValidatorErrors {
+		Self {
 			context: context,
 			details: details,
 		}
 	}
 }
 
-#[derive(Serialize, Debug)]
-pub struct ErrorDetails
+pub type UserLibErrors = ErrorDetails<GenericUserErrors, ValidatorErrors>;
+
+pub trait FromUserlibErrors<T>
 {
-	code: GenericUserErrors,
-	#[serde(skip_serializing_if = "Option::is_none")]
-	details: Option<String>,
-	#[serde(skip_serializing_if = "Option::is_none")]
-	validator: Option<Vec<ValidatorErrors>>,
+	fn from_userlib(err: T) -> Self;
 }
 
-/// We force instanciation of ErrorDetails only through from_details and from_validator
-/// as a way to make sure ErrorDetails can be only one of both.
-impl ErrorDetails
+impl FromUserlibErrors<GenericUserErrors> for ErrorDetails<GenericUserErrors, ValidatorErrors>
 {
-	pub fn error_code(&self) -> GenericUserErrors
+	/// Constructs an `ErrorDetails` from a single `GenericUserErrors` enum
+	/// option.
+	fn from_userlib(err: GenericUserErrors) -> Self
 	{
-		self.code.clone()
+		Self::new(err.clone(), Some(format!("{err}")), None)
 	}
 }
 
-impl From<GenericUserErrors> for ErrorDetails
+impl FromUserlibErrors<(GenericUserErrors, Vec<ValidatorErrors>)>
+	for ErrorDetails<GenericUserErrors, ValidatorErrors>
 {
-	fn from(err: GenericUserErrors) -> Self
+	/// Constructs an `ErrorDetails` from an array of errors coming from a
+	/// Validator.
+	fn from_userlib(err: (GenericUserErrors, Vec<ValidatorErrors>)) -> Self
 	{
-		ErrorDetails {
-			code: err.clone(),
-			details: Some(format!("{err}")),
-			validator: None,
-		}
+		Self::new(err.0, None, Some(err.1))
 	}
 }
 
-impl From<(GenericUserErrors, Vec<ValidatorErrors>)> for ErrorDetails
+impl FromUserlibErrors<DatacacheError> for ErrorDetails<GenericUserErrors, ValidatorErrors>
 {
-	fn from(err: (GenericUserErrors, Vec<ValidatorErrors>)) -> Self
+	/// Constructs an `ErrorDetails` from a `DatacacheError`.
+	fn from_userlib(err: DatacacheError) -> Self
 	{
-		ErrorDetails {
-			code: err.0,
-			details: None,
-			validator: Some(err.1),
-		}
+		let code = match err {
+			DatacacheError::EntryExpired => GenericUserErrors::ValidationTimeout,
+			DatacacheError::LockError => GenericUserErrors::InternalError,
+			DatacacheError::EntryNotFound => GenericUserErrors::AccountNotFound,
+			DatacacheError::EntryExists => GenericUserErrors::AccountExists,
+			DatacacheError::TooManyEntries => GenericUserErrors::TooManyAttempts,
+		};
+		Self::new(code.clone(), Some(format!("{code}")), None)
 	}
 }
