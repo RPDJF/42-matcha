@@ -13,6 +13,14 @@ describe('DiscoverComponent', () => {
     return Object.assign(new Event('animationend'), { animationName });
   }
 
+  function pointerEvent(type: 'pointerdown' | 'pointermove' | 'pointerup', clientX: number): Event {
+    return new MouseEvent(type, { clientX });
+  }
+
+  function transitionEndEvent(propertyName: string): Event {
+    return Object.assign(new Event('transitionend'), { propertyName });
+  }
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [DiscoverComponent],
@@ -71,7 +79,7 @@ describe('DiscoverComponent', () => {
     expect(component.cardAnimationClass()).toBeNull();
   });
 
-  it('should cycle back to the first user after the deck is emptied', () => {
+  it('should cycle back to the first mock user after the last one', () => {
     const firstUser = component.currentUser();
     const userCount = component.users().length;
     const userCard = fixture.debugElement.query(By.css('app-user-card'));
@@ -83,5 +91,74 @@ describe('DiscoverComponent', () => {
     }
 
     expect(component.currentUser()).toBe(firstUser);
+  });
+
+  it('should not drag the card before the pointer moves enough', () => {
+    const userCard = fixture.debugElement.query(By.css('app-user-card'));
+
+    userCard.nativeElement.dispatchEvent(pointerEvent('pointerdown', 200));
+    userCard.nativeElement.dispatchEvent(pointerEvent('pointermove', 204));
+
+    expect(component.cardDragX()).toBeNull();
+  });
+
+  it('should follow the pointer while dragging the card', () => {
+    const userCard = fixture.debugElement.query(By.css('app-user-card'));
+
+    userCard.nativeElement.dispatchEvent(pointerEvent('pointerdown', 200));
+    userCard.nativeElement.dispatchEvent(pointerEvent('pointermove', 170));
+
+    expect(component.cardDragX()).toBe(-30);
+    expect(component.cardTransformStyle()).toContain('translateX(-30px)');
+  });
+
+  it('should snap the card back when released below the exit threshold', () => {
+    const userCard = fixture.debugElement.query(By.css('app-user-card'));
+
+    userCard.nativeElement.dispatchEvent(pointerEvent('pointerdown', 200));
+    userCard.nativeElement.dispatchEvent(pointerEvent('pointermove', 230));
+    userCard.nativeElement.dispatchEvent(pointerEvent('pointerup', 230));
+
+    expect(component.cardDragX()).toBeNull();
+    expect(component.cardAnimationClass()).toBeNull();
+    expect(component.cardTransitionStyle()).toContain('transform');
+
+    userCard.nativeElement.dispatchEvent(transitionEndEvent('transform'));
+
+    expect(component.cardTransitionStyle()).toBeNull();
+  });
+
+  it('should pass when the card is dragged beyond the left threshold', () => {
+    const firstUser = component.currentUser();
+    const userCard = fixture.debugElement.query(By.css('app-user-card'));
+
+    userCard.nativeElement.dispatchEvent(pointerEvent('pointerdown', 200));
+    userCard.nativeElement.dispatchEvent(pointerEvent('pointermove', 60));
+    userCard.nativeElement.dispatchEvent(pointerEvent('pointerup', 60));
+    fixture.detectChanges();
+
+    expect(component.cardAnimationClass()).toBe('animate-card-exit-left');
+    expect(userCard.nativeElement.style.getPropertyValue('--card-exit-from')).toBe('-140px');
+
+    userCard.nativeElement.dispatchEvent(animationEndEvent('card-exit-left'));
+
+    expect(component.currentUser()).not.toBe(firstUser);
+    expect(component.cardAnimationClass()).toBe('animate-card-enter');
+  });
+
+  it('should smash when the card is dragged beyond the right threshold', () => {
+    const firstUser = component.currentUser();
+    const userCard = fixture.debugElement.query(By.css('app-user-card'));
+
+    userCard.nativeElement.dispatchEvent(pointerEvent('pointerdown', 200));
+    userCard.nativeElement.dispatchEvent(pointerEvent('pointermove', 340));
+    userCard.nativeElement.dispatchEvent(pointerEvent('pointerup', 340));
+
+    expect(component.cardAnimationClass()).toBe('animate-card-exit-right');
+
+    userCard.nativeElement.dispatchEvent(animationEndEvent('card-exit-right'));
+
+    expect(component.currentUser()).not.toBe(firstUser);
+    expect(component.cardAnimationClass()).toBe('animate-card-enter');
   });
 });

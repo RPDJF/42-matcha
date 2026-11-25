@@ -91,12 +91,20 @@
   <div class="flex h-full flex-col items-center justify-center gap-8 overflow-hidden p-8 md:p-12">
     <app-user-card
       [user]="currentUser()"
-      class="h-fit"
+      class="h-fit cursor-grab touch-pan-y select-none"
       [class]="cardAnimationClass()"
+      [style.transform]="cardTransformStyle()"
+      [style.transition]="cardTransitionStyle()"
       [style.--card-exit-from]="cardExitFrom()?.x"
       [style.--card-exit-rotate-from]="cardExitFrom()?.rotate"
       (clickDetails)="onDetailsClick($event)"
       (animationend)="onCardAnimationEnd($event)"
+      (transitionend)="onCardTransitionEnd($event)"
+      (pointerdown)="onCardPointerDown($event)"
+      (pointermove)="onCardPointerMove($event)"
+      (pointerup)="onCardDragFinish()"
+      (pointercancel)="onCardDragFinish()"
+      (pointerleave)="onCardDragFinish()"
     />
     <div class="flex w-fit items-center gap-8">
       <button

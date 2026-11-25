@@ -23,6 +23,11 @@ type UserStatusFilter = 'all' | 'online' | 'new';
 type CardExitAnimationClass = 'animate-card-exit-left' | 'animate-card-exit-right';
 type CardAnimationClass = CardExitAnimationClass | 'animate-card-enter';
 
+const CARD_DRAG_ACTIVATION_THRESHOLD = 8;
+const CARD_DRAG_EXIT_THRESHOLD = 100;
+const CARD_DRAG_ROTATION_FACTOR = 0.08;
+const CARD_SNAP_BACK_TRANSITION = 'transform 250ms ease-out';
+
 @Component({
   selector: 'app-discover',
   imports: [
@@ -56,7 +61,16 @@ export class DiscoverComponent {
   readonly currentUser = computed(() => this.users()[0]);
 
   readonly cardAnimationClass = signal<CardAnimationClass | null>(null);
+  readonly cardDragX = signal<number | null>(null);
+  readonly cardPointerStartX = signal<number | null>(null);
   readonly cardExitFrom = signal<{ x: string; rotate: string } | null>(null);
+
+  readonly cardTransformStyle = computed(() => {
+    const dragX = this.cardDragX();
+    if (dragX === null) return null;
+    return `translateX(${dragX}px) rotate(${dragX * CARD_DRAG_ROTATION_FACTOR}deg)`;
+  });
+  readonly cardTransitionStyle = signal<string | null>(null);
 
   // TODO: Make formControls take relative default value from user age, ~3 years
   readonly filtersFormGroup = new FormGroup({
@@ -110,6 +124,34 @@ export class DiscoverComponent {
     this.#animateCardOut('animate-card-exit-right');
   }
 
+  onCardPointerDown(event: PointerEvent): void {
+    if (this.cardDragX() !== null || this.cardAnimationClass() !== null) return;
+    this.cardPointerStartX.set(event.clientX);
+    this.cardTransitionStyle.set(null);
+  }
+
+  onCardPointerMove(event: PointerEvent): void {
+    const pointerStartX = this.cardPointerStartX();
+    if (pointerStartX === null) return;
+    const deltaX = event.clientX - pointerStartX;
+    if (this.cardDragX() === null && Math.abs(deltaX) < CARD_DRAG_ACTIVATION_THRESHOLD) return;
+    this.cardDragX.set(deltaX);
+  }
+
+  onCardDragFinish(): void {
+    this.cardPointerStartX.set(null);
+    const dragX = this.cardDragX();
+    if (dragX === null) return;
+
+    const exitClass = this.#exitAnimationClass(dragX);
+    if (exitClass === null) {
+      this.cardTransitionStyle.set(CARD_SNAP_BACK_TRANSITION);
+      this.cardDragX.set(null);
+      return;
+    }
+    this.#animateCardOut(exitClass, `${dragX}px`, `${dragX * CARD_DRAG_ROTATION_FACTOR}deg`);
+  }
+
   onCardAnimationEnd(event: AnimationEvent): void {
     if (event.animationName === 'card-exit-left' || event.animationName === 'card-exit-right') {
       this.#popCurrentUser();
@@ -122,6 +164,12 @@ export class DiscoverComponent {
     }
   }
 
+  onCardTransitionEnd(event: TransitionEvent): void {
+    if (this.cardTransitionStyle() === null) return;
+    if (event.propertyName !== 'transform') return;
+    this.cardTransitionStyle.set(null);
+  }
+
   #popCurrentUser(): void {
     this.users.update((users) => {
       const [currentUser, ...nextUsers] = users;
@@ -130,8 +178,15 @@ export class DiscoverComponent {
     });
   }
 
+  #exitAnimationClass(dragX: number): CardExitAnimationClass | null {
+    if (dragX <= -CARD_DRAG_EXIT_THRESHOLD) return 'animate-card-exit-left';
+    if (dragX >= CARD_DRAG_EXIT_THRESHOLD) return 'animate-card-exit-right';
+    return null;
+  }
+
   #animateCardOut(animationClass: CardExitAnimationClass, fromX = '0%', fromRotate = '0deg'): void {
     if (this.cardAnimationClass() !== null) return;
+    this.cardDragX.set(null);
     this.cardExitFrom.set({ x: fromX, rotate: fromRotate });
     this.cardAnimationClass.set(animationClass);
   }
