@@ -1,0 +1,89 @@
+services:
+  matcha-backend:
+    build: ./matcha-backend
+    container_name: matcha-backend
+    environment:
+      - TZ=Europe/Zurich
+    restart: always
+
+    labels:
+      - "traefik.enable=true"
+      # HTTP router
+      - "traefik.http.routers.matcha-backend.rule=PathPrefix(`/api`)"
+      - "traefik.http.routers.matcha-backend.priority=100"
+      - "traefik.http.routers.matcha-backend.entrypoints=websecure"
+      - "traefik.http.routers.matcha-backend.tls=true"
+
+  matcha-frontend:
+    build: ./matcha-frontend
+    container_name: matcha-frontend
+    environment:
+      - TZ=Europe/Zurich
+    restart: always
+
+    labels:
+      - "traefik.enable=true"
+      # HTTP router
+      - "traefik.http.routers.matcha-frontend.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.matcha-frontend.priority=1"
+      - "traefik.http.routers.matcha-frontend.entrypoints=websecure"
+      - "traefik.http.routers.matcha-frontend.tls=true"
+
+
+  traefik-cert-gen:
+    image: alpine:latest
+    container_name: traefik-cert-gen
+    volumes:
+      - certs:/certs
+    entrypoint: >
+      sh -c "
+      apk add --no-cache openssl &&
+      if [ ! -f /certs/selfsigned.crt ]; then
+        openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes \
+          -keyout /certs/selfsigned.key \
+          -out /certs/selfsigned.crt \
+          -subj '/CN=traefik.local.lan' &&
+        cat /certs/selfsigned.crt /certs/selfsigned.key > /certs/tls.pem;
+      fi
+      "
+    restart: "no"
+
+  matcha:
+    container_name: matcha
+    image: traefik:latest
+
+    depends_on:
+      - traefik-cert-gen
+    
+    command:
+      - --log.level=INFO
+      - --accesslog=true
+
+      # Docker provider
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+
+      # HTTP + HTTPS entrypoints
+      - --entryPoints.web.address=:80
+      - --entryPoints.websecure.address=:443
+
+      # redirect HTTP → HTTPS
+      - --entryPoints.web.http.redirections.entryPoint.to=websecure
+      - --entryPoints.web.http.redirections.entryPoint.scheme=https
+      - --entryPoints.web.http.redirections.entryPoint.permanent=true
+
+      # FILE provider (no external config file needed, just mounted certs)
+      - --providers.file.directory=/certs
+
+    ports:
+      - "80:80"
+      - "443:443"
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - certs:/certs:ro
+
+    restart: always
+
+volumes:
+  certs:
