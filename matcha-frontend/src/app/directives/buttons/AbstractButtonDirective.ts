@@ -1,4 +1,5 @@
 import {
+  afterNextRender,
   AfterViewInit,
   ApplicationRef,
   ComponentRef,
@@ -49,6 +50,16 @@ export abstract class AbstractButtonDirective implements AfterViewInit {
         this.nativeElement.disabled = false;
       }
     });
+
+    afterNextRender(() =>
+      requestAnimationFrame(() => {
+        const nativeElement = this.nativeElement;
+
+        if (!this.nativeElement) return;
+
+        nativeElement.className += ' transition-all duration-150';
+      }),
+    );
   }
 
   ngAfterViewInit(): void {

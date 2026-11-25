@@ -1,1 +1,8 @@
-<button (click)="onClick($event)" [class]="this.classes()"><ng-content /></button>
+<button
+  (click)="onClick($event)"
+  [class]="this.classes()"
+  [class.transition-all]="animationReady()"
+  [class.duration-200]="animationReady()"
+>
+  <ng-content />
+</button>

@@ -1,4 +1,14 @@
-import { AfterViewInit, Directive, effect, inject, input, ViewContainerRef } from '@angular/core';
+import {
+  afterNextRender,
+  AfterViewInit,
+  ComponentRef,
+  Directive,
+  effect,
+  inject,
+  input,
+  signal,
+  ViewContainerRef,
+} from '@angular/core';
 import { IconComponent } from '../../components/icon/icon.component';
 import { IconType } from '../../components/icon/icon.generated.types';
 import { AbstractButtonDirective } from './AbstractButtonDirective';
@@ -11,7 +21,9 @@ export class ButtonIconPrimaryDirective extends AbstractButtonDirective implemen
 
   readonly icon = input.required<IconType>();
 
-  #iconRef?: any;
+  readonly animationReady = signal(false);
+
+  #iconRef?: ComponentRef<IconComponent>;
 
   override readonly classes: string[] = [
     'flex',
@@ -29,8 +41,6 @@ export class ButtonIconPrimaryDirective extends AbstractButtonDirective implemen
     'p-5',
     'size-fit',
     'shadow-lg',
-    'transition-all',
-    'duration-150',
     'text-white',
   ];
 
@@ -48,8 +58,6 @@ export class ButtonIconPrimaryDirective extends AbstractButtonDirective implemen
     'p-5',
     'size-fit',
     'shadow-lg',
-    'transition-all',
-    'duration-150',
     'opacity-70',
     'text-white',
   ];
@@ -68,8 +76,6 @@ export class ButtonIconPrimaryDirective extends AbstractButtonDirective implemen
     'p-5',
     'size-fit',
     'shadow-lg',
-    'transition-all',
-    'duration-150',
     'opacity-70',
     'flex',
     'justify-center',
@@ -86,6 +92,16 @@ export class ButtonIconPrimaryDirective extends AbstractButtonDirective implemen
 
       this.#iconRef.setInput('name', this.icon());
     });
+
+    afterNextRender(() =>
+      requestAnimationFrame(() => {
+        const nativeElement = this.#iconRef?.location.nativeElement;
+
+        if (!this.nativeElement) return;
+
+        nativeElement.className += ' transition-all duration-150';
+      }),
+    );
   }
 
   override ngAfterViewInit(): void {
@@ -93,8 +109,7 @@ export class ButtonIconPrimaryDirective extends AbstractButtonDirective implemen
 
     this.#iconRef = this.#vcr.createComponent(IconComponent);
     this.#iconRef.setInput('name', this.icon());
-    this.#iconRef.location.nativeElement.className =
-      'transition-all duration-200 size-10 md:size-12';
+    this.#iconRef.location.nativeElement.className = 'size-10 md:size-12';
     this.addNativeElement(this.#iconRef.location.nativeElement);
   }
 
