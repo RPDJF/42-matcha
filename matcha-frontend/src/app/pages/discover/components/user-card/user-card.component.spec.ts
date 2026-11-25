@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 import { PublicUser } from '../../../../core/stores/user/user.state.types';
 import { UserCardComponent } from './user-card.component';
@@ -41,5 +42,18 @@ describe('UserCardComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should update the interest chips when the user changes', async () => {
+    const nextUser: PublicUser = { ...mockUser, interests: ['Cooking', 'Climbing', 'Chess'] };
+    fixture.componentRef.setInput('user', nextUser);
+    await fixture.whenStable();
+
+    const chips = fixture.debugElement.queryAll(By.css('div.flex-wrap p'));
+    expect(chips.map((chip) => chip.nativeElement.textContent.trim())).toEqual([
+      'Cooking',
+      'Climbing',
+      'Chess',
+    ]);
   });
 });

@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RadioButtonGroupComponent } from '../../components/forms/inputs/radio-button-group/radio-button-group.component';
@@ -15,6 +15,7 @@ import { ButtonPrimaryDirective } from '../../directives/buttons/button-primary.
 import { ButtonSecondaryDirective } from '../../directives/buttons/button-secondary.directive';
 import { appFormBase } from '../../directives/forms/form-base.directive';
 import { publicUsersMock } from '../../helpers/mocks/users.mock';
+import { PublicUser } from '../../core/stores/user/user.state.types';
 import { UserCardComponent } from './components/user-card/user-card.component';
 
 type UserStatusFilter = 'all' | 'online' | 'new';
@@ -45,6 +46,11 @@ type UserStatusFilter = 'all' | 'online' | 'new';
 export class DiscoverComponent {
   readonly showFilters = signal<boolean>(false);
   readonly researchFiltersLimits = RESEARCH_FILTERS_LIMITS;
+
+  // TODO: remove mock and use real values
+  readonly #mockUserDeck = publicUsersMock.sort(() => Math.random() - 0.5);
+  readonly users = signal<PublicUser[]>(this.#mockUserDeck);
+  readonly currentUser = computed(() => this.users()[0]);
 
   // TODO: Make formControls take relative default value from user age, ~3 years
   readonly filtersFormGroup = new FormGroup({
@@ -91,13 +97,18 @@ export class DiscoverComponent {
   }
 
   onPassClick(event: Event) {
-    // TODO: implement pass click
+    this.#popCurrentUser();
   }
 
   onSmashClick(event: Event) {
-    // TODO: implement smash click
+    this.#popCurrentUser();
   }
 
-  // TODO: remove mock and use real values
-  readonly mockUsers = publicUsersMock.sort(() => Math.random() - 0.5);
+  #popCurrentUser(): void {
+    this.users.update((users) => {
+      const [currentUser, ...nextUsers] = users;
+      if (nextUsers.length > 0) return nextUsers;
+      return [...this.#mockUserDeck.filter((user) => user !== currentUser), currentUser];
+    });
+  }
 }

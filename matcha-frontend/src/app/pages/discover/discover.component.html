@@ -89,7 +89,11 @@
   </app-layout-header>
 
   <div class="flex h-full flex-col items-center justify-center gap-8 p-8 md:p-12">
-    <app-user-card [user]="mockUsers[0]" class="h-fit" (clickDetails)="onDetailsClick($event)" />
+    <app-user-card
+      [user]="currentUser()"
+      class="h-fit"
+      (clickDetails)="onDetailsClick($event)"
+    />
     <div class="flex w-fit items-center gap-8">
       <button
         appButtonIconSecondary

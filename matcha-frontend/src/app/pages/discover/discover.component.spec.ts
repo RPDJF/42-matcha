@@ -22,4 +22,31 @@ describe('DiscoverComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should show the next user when pass is clicked', () => {
+    const firstUser = component.currentUser();
+
+    component.onPassClick(new Event('click'));
+
+    expect(component.currentUser()).not.toBe(firstUser);
+  });
+
+  it('should show the next user when smash is clicked', () => {
+    const firstUser = component.currentUser();
+
+    component.onSmashClick(new Event('click'));
+
+    expect(component.currentUser()).not.toBe(firstUser);
+  });
+
+  it('should cycle back to the first user after the deck is emptied', () => {
+    const firstUser = component.currentUser();
+    const userCount = component.users().length;
+
+    for (let i = 0; i < userCount; i++) {
+      component.onPassClick(new Event('click'));
+    }
+
+    expect(component.currentUser()).toBe(firstUser);
+  });
 });
