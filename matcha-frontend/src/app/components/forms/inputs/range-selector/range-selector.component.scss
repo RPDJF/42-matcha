@@ -1,6 +1,22 @@
 :host {
+  input[type='range'] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+  }
+
+  input[type='range']::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 0.375rem;
+    background: transparent;
+  }
+
   input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
     pointer-events: auto;
+    margin-top: -5px;
     height: 16px;
     width: 16px;
     border-radius: 9999px;
@@ -10,6 +26,10 @@
     cursor: pointer;
     box-shadow: 0 2px 5px #ea76cb;
     overflow: visible;
+  }
+
+  input[type='range']::-moz-range-track {
+    background: transparent;
   }
 
   input[type='range']::-moz-range-thumb {
