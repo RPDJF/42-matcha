@@ -20,6 +20,9 @@ import { UserCardComponent } from './components/user-card/user-card.component';
 
 type UserStatusFilter = 'all' | 'online' | 'new';
 
+type CardExitAnimationClass = 'animate-card-exit-left' | 'animate-card-exit-right';
+type CardAnimationClass = CardExitAnimationClass | 'animate-card-enter';
+
 @Component({
   selector: 'app-discover',
   imports: [
@@ -51,6 +54,9 @@ export class DiscoverComponent {
   readonly #mockUserDeck = publicUsersMock.sort(() => Math.random() - 0.5);
   readonly users = signal<PublicUser[]>(this.#mockUserDeck);
   readonly currentUser = computed(() => this.users()[0]);
+
+  readonly cardAnimationClass = signal<CardAnimationClass | null>(null);
+  readonly cardExitFrom = signal<{ x: string; rotate: string } | null>(null);
 
   // TODO: Make formControls take relative default value from user age, ~3 years
   readonly filtersFormGroup = new FormGroup({
@@ -97,11 +103,23 @@ export class DiscoverComponent {
   }
 
   onPassClick(event: Event) {
-    this.#popCurrentUser();
+    this.#animateCardOut('animate-card-exit-left');
   }
 
   onSmashClick(event: Event) {
-    this.#popCurrentUser();
+    this.#animateCardOut('animate-card-exit-right');
+  }
+
+  onCardAnimationEnd(event: AnimationEvent): void {
+    if (event.animationName === 'card-exit-left' || event.animationName === 'card-exit-right') {
+      this.#popCurrentUser();
+      this.cardExitFrom.set(null);
+      this.cardAnimationClass.set('animate-card-enter');
+      return;
+    }
+    if (event.animationName === 'card-enter') {
+      this.cardAnimationClass.set(null);
+    }
   }
 
   #popCurrentUser(): void {
@@ -110,5 +128,11 @@ export class DiscoverComponent {
       if (nextUsers.length > 0) return nextUsers;
       return [...this.#mockUserDeck.filter((user) => user !== currentUser), currentUser];
     });
+  }
+
+  #animateCardOut(animationClass: CardExitAnimationClass, fromX = '0%', fromRotate = '0deg'): void {
+    if (this.cardAnimationClass() !== null) return;
+    this.cardExitFrom.set({ x: fromX, rotate: fromRotate });
+    this.cardAnimationClass.set(animationClass);
   }
 }
