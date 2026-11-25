@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 00:08:44 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/25 02:53:00 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/25 04:05:35 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,12 @@ pub fn generate_new_user(
 	}
 }
 
+/// Retrieves a user from the `DataCache`.
+/// # Result
+/// Returns: The user when found and with a matching `otp`.
+/// # Errors
+/// Returns an `ErrorDetails` containing the details of the error that has
+/// occurred.
 fn get_user_from_hash(
 	otp: &str,
 	id: &str,
@@ -90,13 +96,19 @@ fn get_user_from_hash(
 	}
 }
 
+/// Validates a new user with its `session_id` and `otp`.
+/// # Result
+/// Returns: The user when found and with a matching `otp`.
+/// # Errors
+/// Returns an `ErrorDetails` containing the details of the error that has
+/// occurred.
 pub async fn validate_new_user(
-	payload: String,
+	otp: String,
 	datacache: &UserCache,
 	session_id: &str,
 ) -> Result<ApiRespBasicUser, ErrorDetails<GenericUserErrors, ValidatorErrors>>
 {
-	match get_user_from_hash(&payload, session_id, datacache) {
+	match get_user_from_hash(&otp, session_id, datacache) {
 		Ok(val) => Ok(ApiRespBasicUser {
 			email_address: val.get_email().clone(),
 			uuid: val.get_uuid().to_string(),
