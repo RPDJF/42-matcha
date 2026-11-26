@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 16:19:57 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/26 01:04:03 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/26 01:29:13 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ pub enum GenericUserErrors
 	#[error("The address is already in use.")]
 	AddressInUse,
 	#[error("Incorrect password.")]
-	PasswordIncorrect,
+	IncorrectPassword,
 	#[error("Error validating password.")]
 	PasswordError(Vec<ValidatorError>),
 	#[error("Invalid password.")]
@@ -45,8 +45,6 @@ pub enum GenericUserErrors
 	PasswordNoDigit,
 	#[error("Validation timed out.")]
 	ValidationTimeout,
-	#[error("Incorrect Password.")]
-	IncorrectPassword,
 	#[error("Incorrect Validation Code.")]
 	IncorrectOTP,
 	#[error("Account not found.")]
