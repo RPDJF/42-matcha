@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/25 01:16:54 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/26 14:43:30 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/26 16:22:06 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,11 @@ pub fn create_token(user: ApiRespBasicUser) -> Result<Claims<String>, WebApiErro
 		data: user,
 	};
 
-	let token = encode(
-		&Header::default(),
-		&token_data,
-		&EncodingKey::from_secret(SECRET.as_ref()),
-	)
-	.map_err(|_e| WebApiErrorTypes::InternalError)?;
+	let ekey =
+		EncodingKey::from_secret(SECRET.as_ref()).map_err(|_e| WebApiErrorTypes::InternalError)?;
+
+	let token = encode(&Header::default(), &token_data, &ekey)
+		.map_err(|_e| WebApiErrorTypes::InternalError)?;
 
 	Ok(Claims {
 		exp: timestamp + SECONDS,

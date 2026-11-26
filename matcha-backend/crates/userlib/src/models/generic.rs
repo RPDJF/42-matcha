@@ -6,15 +6,12 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 23:30:01 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/26 15:33:43 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/26 16:19:40 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
 use crate::errors::GenericUserErrors;
-use argon2::{
-	Argon2, PasswordHasher,
-	password_hash::{SaltString, rand_core::OsRng},
-};
+use argon2::{Argon2, PasswordHasher};
 use email_address::EmailAddress;
 use error_details::ValidatorError;
 use regex::regex;
@@ -106,11 +103,10 @@ impl BasicUser
 	/// Returns a `GenericUserErrors` enum defining what went wrong.
 	fn encrypt_password(pw: &str) -> Result<String, GenericUserErrors>
 	{
-		let salt = SaltString::generate(&mut OsRng);
 		let argon2 = Argon2::default();
 
 		argon2
-			.hash_password(&pw.bytes().collect::<Vec<u8>>(), &salt)
+			.hash_password(&pw.bytes().collect::<Vec<u8>>())
 			.map_or(Err(GenericUserErrors::InternalError), |pw| {
 				Ok(pw.to_string())
 			})
