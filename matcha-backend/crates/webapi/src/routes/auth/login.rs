@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 16:30:10 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/25 03:46:59 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/26 14:22:01 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ use crate::globals::{HTTPResponse, OtpCode};
 /// Logs a user in.
 /// Returns a JWT if the login is successful.
 /// Well, at least it should. This is mock code for now.
-pub async fn login(Json(payload): Json<Location>) -> Json<HTTPResponse<OtpCode>>
+pub async fn login(Json(payload): Json<Location>) -> Json<HTTPResponse<'static, OtpCode>>
 {
 	let fuh = OtpCode {
 		otp_code: format!(

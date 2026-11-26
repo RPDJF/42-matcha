@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 00:08:44 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/26 01:03:55 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/26 15:30:26 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,16 +102,17 @@ fn get_user_from_hash(
 /// # Errors
 /// Returns an `ErrorDetails` containing the details of the error that has
 /// occurred.
-pub async fn validate_new_user(
-	otp: String,
+//pub async fn validate_new_user(
+pub fn validate_new_user(
+	otp: &str,
 	datacache: &UserCache,
 	session_id: &str,
 ) -> Result<ApiRespBasicUser, ErrorDetails<GenericUserErrors>>
 {
-	match get_user_from_hash(&otp, session_id, datacache) {
+	match get_user_from_hash(otp, session_id, datacache) {
 		Ok(val) => Ok(ApiRespBasicUser {
 			email_address: val.get_email().clone(),
-			uuid: val.get_uuid().to_string(),
+			uuid: val.get_uuid().clone(),
 		}),
 		Err(e) => Err(e),
 	}

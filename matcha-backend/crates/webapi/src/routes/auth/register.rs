@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 18:53:59 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/25 03:46:44 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/26 14:26:54 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ use userlib::{
 /// Registers a new user.
 /// Returns:
 /// - 202 Accepted with the OTP Code used for validation as a result.
-/// - - Also sends a SessionID HTTP-only cookie used for validation.
+/// - - Also sends a `SessionID` HTTP-only cookie used for validation.
 /// - 400 Bad Request on a wrong password or email.
 /// - 409 Conflict if the email address already exists.
 /// - 500 Internal Server Error if something goes horribly wrong in the API.
@@ -37,12 +37,12 @@ pub async fn register(
 	State(db): State<UserCache>,
 	jar: CookieJar,
 	Json(payload): Json<ApiReqUser>,
-) -> (StatusCode, CookieJar, Json<HTTPResponse<OtpCode>>)
+) -> (StatusCode, CookieJar, Json<HTTPResponse<'static, OtpCode>>)
 {
-	let id = jar
-		.get(SESSION_ID)
-		.map(|cookie| cookie.value().to_owned())
-		.unwrap_or_else(|| Alphanumeric.sample_string(&mut rand::rng(), 32));
+	let id = jar.get(SESSION_ID).map_or_else(
+		|| Alphanumeric.sample_string(&mut rand::rng(), 32),
+		|cookie| cookie.value().to_owned(),
+	);
 
 	match generate_new_user(payload, &db, &id) {
 		Ok(val) => {

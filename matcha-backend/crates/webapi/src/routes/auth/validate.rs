@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/25 01:16:54 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/25 03:58:21 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/26 14:43:30 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@ use crate::{
 	errors::{
 		ErrorTypes::{UserLibErrors, WebApiErrors},
 		FromWebApiErrors,
-		WebApiErrorTypes::NoSessionID,
+		WebApiErrorTypes::{self, InternalError, NoSessionID},
 	},
 	globals::{Claims, HTTPResponse, OtpCode, SECONDS, SECRET, SESSION_ID},
 };
@@ -29,7 +29,10 @@ use userlib::{
 };
 
 /// Creates a JWT to return to the user.
-pub fn create_token(user: ApiRespBasicUser) -> Claims<String>
+#[allow(clippy::cast_possible_truncation)]
+#[allow(clippy::arithmetic_side_effects)]
+#[allow(clippy::as_conversions)]
+pub fn create_token(user: ApiRespBasicUser) -> Result<Claims<String>, WebApiErrorTypes>
 {
 	let timestamp = SystemTime::now()
 		.duration_since(UNIX_EPOCH)
@@ -51,36 +54,44 @@ pub fn create_token(user: ApiRespBasicUser) -> Claims<String>
 		&token_data,
 		&EncodingKey::from_secret(SECRET.as_ref()),
 	)
-	.unwrap();
+	.map_err(|_e| WebApiErrorTypes::InternalError)?;
 
-	Claims {
+	Ok(Claims {
 		exp: timestamp + SECONDS,
 		iat: timestamp,
 		iss: String::from("user_validation"),
 		sub: uuid,
 		data: token,
-	}
+	})
 }
 
 /// Validates a user that's currently attempting to create an account.
 /// Headers: Requires the same `SessionID` that was given in /register.
 /// Body: requires an `otpCode` value in the body to match with the `DataCache`.
 /// Returns:
-/// - 201 Created if OTP and SessionID match. Creates the user.
+/// - 201 Created if OTP and `SessionID` match. Creates the user.
 /// - 400 If the OTP or `SessionID` are wrong or missing.
 /// - 409 Conflict if the user already exists in the database.
 pub async fn validate(
 	State(db): State<UserCache>,
 	jar: CookieJar,
 	Json(otp_code): Json<OtpCode>,
-) -> (StatusCode, Json<HTTPResponse<Claims<String>>>)
+) -> (StatusCode, Json<HTTPResponse<'static, Claims<String>>>)
 {
 	if let Some(id) = jar.get(SESSION_ID).map(|cookie| cookie.value().to_owned()) {
-		match validate_new_user(otp_code.otp_code, &db, &id).await {
+		match validate_new_user(&otp_code.otp_code, &db, &id) {
 			Ok(val) => {
+				if let Ok(token) = create_token(val) {
+					return (
+						StatusCode::CREATED,
+						Json(HTTPResponse::new(token, "validate")),
+					);
+				}
 				return (
-					StatusCode::CREATED,
-					Json(HTTPResponse::new(create_token(val), "validate")),
+					StatusCode::INTERNAL_SERVER_ERROR,
+					Json(HTTPResponse::err(WebApiErrors(ErrorDetails::from_webapi(
+						InternalError,
+					)))),
 				);
 			}
 			Err(error)
@@ -100,10 +111,10 @@ pub async fn validate(
 			}
 		}
 	}
-	return (
+	(
 		StatusCode::BAD_REQUEST,
 		Json(HTTPResponse::err(WebApiErrors(ErrorDetails::from_webapi(
 			NoSessionID,
 		)))),
-	);
+	)
 }

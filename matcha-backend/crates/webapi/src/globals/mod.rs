@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 16:02:08 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/25 03:29:52 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/26 14:22:39 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ pub struct OtpCode
 }
 
 #[derive(Serialize, Deserialize, Clone)]
-pub struct Claims<T: Serialize + Clone>
+pub struct Claims<T: Clone>
 {
 	// Expires at
 	pub exp: u64,
@@ -42,18 +42,18 @@ pub struct Claims<T: Serialize + Clone>
 	pub data: T,
 }
 
-/// Create trait ResponseData which requires Clone and Serialize.
+/// Create trait `ResponseData` which requires Clone and Serialize.
 pub trait ResponseData: Clone + Serialize {}
 /// Blanket trait application over that implements Serialize and Clone.
 impl<T: Serialize + Clone> ResponseData for T {}
 
-/// Normalized HTTPResponse struct.
+/// Normalized `HTTPResponse` struct.
 #[derive(Serialize)]
-pub struct HTTPResponse<T>
+pub struct HTTPResponse<'a, T>
 {
 	/// The origin of the data field. Absent if it's an error.
 	#[serde(skip_serializing_if = "Option::is_none")]
-	origin: Option<String>,
+	origin: Option<&'a str>,
 
 	/// The data sent from the webapi. Absent if it's an error.
 	#[serde(skip_serializing_if = "Option::is_none")]
@@ -64,24 +64,24 @@ pub struct HTTPResponse<T>
 	error: Option<ErrorTypes>,
 }
 
-/// We force instanciation of HTTPResponse only through ok and error
-/// as a way to make sure HTTPResponse can be only one of both.
-impl<T: ResponseData> HTTPResponse<T>
+/// We force instanciation of `HTTPResponse` only through ok and error
+/// as a way to make sure `HTTPResponse` can be only one of both.
+impl<'a, T: ResponseData> HTTPResponse<'a, T>
 {
-	/// Builds an HTTPResponse form valid data. Sets error to None.
-	pub fn new(data: T, origin: &str) -> Self
+	/// Builds an `HTTPResponse` form valid data. Sets error to None.
+	pub const fn new(data: T, origin: &'a str) -> Self
 	{
-		HTTPResponse {
-			origin: Some(origin.to_string()),
-			data: Some(data.clone()),
+		Self {
+			origin: Some(origin),
+			data: Some(data),
 			error: None,
 		}
 	}
 
-	/// Builds an HTTPResponse form an error. Sets origin and data to None.
-	pub fn err(details: ErrorTypes) -> Self
+	/// Builds an `HTTPResponse` form an error. Sets origin and data to None.
+	pub const fn err(details: ErrorTypes) -> Self
 	{
-		HTTPResponse {
+		Self {
 			origin: None,
 			data: None,
 			error: Some(details),

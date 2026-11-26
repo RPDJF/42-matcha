@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 16:48:21 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/08/25 19:33:50 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/26 14:44:12 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,11 @@ pub mod errors;
 pub mod models;
 use crate::models::business::{Genders, Location, MatchaUser, Role};
 
-/// Returns a complete list of every MatchaUser.
+/// Returns a complete list of every `MatchaUser`.
 /// Used only in debug.
 #[cfg(debug_assertions)]
+#[must_use]
+#[allow(clippy::lossy_float_literal)]
 pub fn list_users() -> Vec<MatchaUser>
 {
 	vec![
@@ -26,7 +28,7 @@ pub fn list_users() -> Vec<MatchaUser>
 			Uuid::new_v4(),
 			"John",
 			"Matcha",
-			18239128,
+			18_239_128,
 			69,
 			"insert cool picture link here",
 			Genders::Backend,
@@ -60,8 +62,8 @@ pub fn list_users() -> Vec<MatchaUser>
 			Role::User,
 			"in the depths of atlantis",
 			Location {
-				longitude: 129837198230.212983912835,
-				latitude: 3192831283.292813109231,
+				longitude: 129_837_198_230.212_983_912_835,
+				latitude: 3_192_831_283.292_813_109_231,
 			},
 		),
 		MatchaUser::new(
@@ -85,8 +87,8 @@ pub fn list_users() -> Vec<MatchaUser>
 			Role::User,
 			"6 feet under",
 			Location {
-				longitude: 5.1283712,
-				latitude: -321111111111.21,
+				longitude: 5.128_371_2,
+				latitude: -321_111_111_111.21,
 			},
 		),
 	]
