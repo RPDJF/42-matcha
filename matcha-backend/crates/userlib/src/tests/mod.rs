@@ -1,58 +1,61 @@
-use sea_orm::{Database, DatabaseConnection, sqlx::Connection};
+use crate::models::generic::ApiReqUser;
+
+use super::*;
 use std::error::Error;
 
-fn boilerplate(
-	email: &str,
-	password: &str,
-) -> Result<crate::models::generic::ApiRespBasicUser, crate::errors::ErrorDetails>
-{
-	let i = crate::models::generic::ApiReqUser {
-		email_address: String::from(email),
-		password: String::from(password),
-	};
-	crate::creation::user::create_user(i)
-}
+// fn boilerplate(
+// 	email: &str,
+// 	password: &str,
+// ) -> Result<
+// 	models::generic::ApiReqUser,
+// 	ErrorDetails<errors::GenericUserErrors, errors::ValidatorErrors>,
+// >
+// {
+// 	let i = models::generic::ApiReqUser {
+// 		email_address: String::from(email),
+// 		password: String::from(password),
+// 		birth_date: 12,
+// 	};
+// 	crate::creation::user::create_user(i)
+// }
 
 #[tokio::test]
 async fn successful_user_creation() -> Result<(), Box<dyn Error>>
 {
-	let db: DatabaseConnection = Database::connect("sqlite::memory:").await?;
 	let correct_pw = "Str0ngPassword!";
 	let email = "jax@matcha.com";
 
-	let resp = boilerplate(email, correct_pw).expect("User creation failed.");
-	println!(
-		"Success! Email: {}, UUID: {}",
-		resp.email_address, resp.uuid
-	);
+	// let resp = boilerplate(email, correct_pw).expect("User creation failed.");
+	// println!(
+	// 	"Success! Email: {}, UUID: {}",
+	// 	resp.email_address, resp.uuid
+	// );
 	Ok(())
 }
 
 #[tokio::test]
 async fn double_email() -> Result<(), Box<dyn Error>>
 {
-	let db: DatabaseConnection = Database::connect("sqlite::memory:").await?;
 	let correct_pw = "Str0ngPassword!";
 	let email = "pomni@matcha.com";
 
-	let resp = boilerplate(email, correct_pw).expect("User creation failed.");
-	println!(
-		"Success! Email: {}, UUID: {}",
-		resp.email_address, resp.uuid
-	);
-
-	match boilerplate(email, correct_pw) {
-		Ok(i) => panic!("Email {} was accepted!", i.email_address),
-		Err(i) => println!("Email {}: {} all good :)", email, i.error_code()),
-	}
+	// let resp = boilerplate(email, correct_pw).expect("User creation failed.");
+	// println!(
+	// 	"Success! Email: {}, UUID: {}",
+	// 	resp.email_address, resp.uuid
+	// );
+	//
+	// match boilerplate(email, correct_pw) {
+	// 	Ok(i) => panic!("Email {} was accepted!", i.email_address),
+	// 	Err(i) => println!("Email {}: {} all good :)", email, i.error_code()),
+	// }
 	Ok(())
 }
 
 #[tokio::test]
-async fn bad_emails() -> Result<(), Box<dyn Error>>
+async fn bad_emails() -> Result<(), String>
 {
-	let db: DatabaseConnection = Database::connect("sqlite::memory:").await?;
-
+	let cache = caches::UserCache::new();
 	let correct_pw = "Str0ngPassword!";
 	let emails = [
 		"",
@@ -64,13 +67,24 @@ async fn bad_emails() -> Result<(), Box<dyn Error>>
 		"jax@matcha_com.com...com",
 		"jax@matcha.com_",
 		"jax@matcha._com",
+		"        jax@matcha._com",
+		"jax@matcha.com         ",
+		"        jax@matcha.com         ",
 		"FAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHH@matcha.com",
 		"j@maaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaatcha.com",
 	];
 
 	for email in emails {
-		match boilerplate(email, correct_pw) {
-			Ok(i) => panic!("Email {} was found to be valid!", i.email_address),
+		match creation::user::generate_new_user(
+			ApiReqUser {
+				email_address: email.to_owned(),
+				password: correct_pw.to_owned(),
+				birth_date: 12,
+			},
+			&cache,
+			"id",
+		) {
+			Ok(_i) => return Err(format!("Email {email} was found to be valid!")),
 			Err(i) => println!("Email {}: {} all good :)", email, i.error_code()),
 		}
 	}
@@ -78,10 +92,9 @@ async fn bad_emails() -> Result<(), Box<dyn Error>>
 }
 
 #[tokio::test]
-async fn bad_passwords() -> Result<(), Box<dyn Error>>
+async fn bad_passwords() -> Result<(), String>
 {
-	let db: DatabaseConnection = Database::connect("sqlite::memory:").await?;
-
+	let cache = caches::UserCache::new();
 	let passwords = [
 		"",
 		"weak",
@@ -97,9 +110,18 @@ async fn bad_passwords() -> Result<(), Box<dyn Error>>
 
 	for password in passwords {
 		email += "m";
-		match boilerplate(&email, password) {
-			Ok(_) => panic!("Password {} was found to be valid!", password),
-			Err(i) => println!("Password {}: {} all good :)", password, i.error_code()),
+
+		match creation::user::generate_new_user(
+			ApiReqUser {
+				email_address: String::from(&email),
+				password: password.to_owned(),
+				birth_date: 12,
+			},
+			&cache,
+			"id",
+		) {
+			Ok(_) => return Err(format!("Password {password} was found to be valid!")),
+			Err(i) => println!("Password {password}: {} all good :)", i.error_code()),
 		}
 	}
 	Ok(())

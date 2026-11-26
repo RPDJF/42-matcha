@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 23:30:01 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/26 15:31:00 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/26 15:33:43 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ pub struct ApiReqUser
 	/// The user's encrypted password.
 	pub password: String,
 	/// The user's birth date.
-	birth_date: u64,
+	pub birth_date: u64,
 }
 
 /// Represents a user who has been freshly created but stripped of private data.
