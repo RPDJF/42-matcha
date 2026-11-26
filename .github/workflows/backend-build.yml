@@ -1,0 +1,27 @@
+name: Build Backend
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "matcha-backend/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: matcha-backend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Nightly Rust
+        uses: dtolnay/rust-toolchain@nightly
+
+      - name: Run Build
+        run: cargo build --release
+
