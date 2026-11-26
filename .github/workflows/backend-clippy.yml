@@ -3,7 +3,7 @@ name: Backend Clippy (Lint)
 on:
   push:
     branches:
-      - "*backend-*"
+      - "*"
     paths:
       - "matcha-backend/**"
   pull_request:

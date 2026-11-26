@@ -3,7 +3,7 @@ name: Backend Test Suite
 on:
   push:
     branches:
-      - "*backend-*"
+      - "*"
     paths:
       - "matcha-backend/**"
   pull_request:

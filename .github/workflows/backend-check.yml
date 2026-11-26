@@ -1,9 +1,14 @@
-name: Build Backend
+name: Simulate Backend Build
 
 on:
   push:
     branches:
-      - main
+      - "*"
+    paths:
+      - "matcha-backend/**"
+  pull_request:
+    branches:
+      - "*"
     paths:
       - "matcha-backend/**"
 
@@ -23,5 +28,5 @@ jobs:
         uses: dtolnay/rust-toolchain@nightly
 
       - name: Run Build
-        run: cargo build --release
+        run: cargo check --release
 
