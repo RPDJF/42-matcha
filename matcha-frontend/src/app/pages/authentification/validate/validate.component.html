@@ -1,0 +1,62 @@
+<div
+  class="to-latte-mauve via-latte-pink from-latte-maroon fixed top-0 right-0 bottom-0 left-0 -z-1 min-h-screen bg-linear-to-br"
+></div>
+<div class="mt-16 flex w-full justify-center text-gray-200">
+  <div class="flex w-96 flex-col items-center gap-8">
+    <div class="bg-latte-pink aspect-square size-20 rounded-full p-5">
+      <app-icon name="icon-heart-full" class="h-full w-full text-white" />
+    </div>
+    <div class="text-center">
+      <h1 class="text-3xl text-white">{{ ('Adopte ton Dev' | i18n)() }}</h1>
+      <p>{{ ('Trouve ton dev parfait' | i18n)() }}</p>
+    </div>
+    <div class="flex w-full flex-col items-center gap-4">
+      <form class="w-full" appFormPrimary (submit)="onSubmit($event)" [disabled]="isLoading()">
+        <div class="bg-frappe-pink mx-auto aspect-square size-14 rounded-2xl p-3">
+          <app-icon name="icon-shield-secured" class="text-latte-maroon size-full" />
+        </div>
+        <h2 class="mx-auto text-xl font-bold text-gray-600">Enter your code</h2>
+        <p class="mx-auto text-center text-sm text-gray-600">
+          The code expires shortly. Enter it below to activate your account.
+        </p>
+        <div class="flex flex-col gap-2">
+          <div class="flex h-14 gap-2">
+            @for (i of indices; track i) {
+              <input
+                #test
+                readonly
+                class="h-full w-full text-center text-xl font-bold"
+                appInputPrimary
+                type="text"
+                required
+                maxlength="1"
+                (focus)="onFocus()"
+                (input)="onFocus()"
+                (keydown)="onKeydown($event, i)"
+                (paste)="onPaste($event)"
+              />
+            }
+          </div>
+        </div>
+        <
+        <button appButtonPrimary class="w-full" [loading]="isLoading()">
+          {{ ('Créer un compte' | i18n)() }}
+        </button>
+      </form>
+
+      <p>{{ ('Ou continuer avec' | i18n)() }}</p>
+      <button appButtonSecondary class="w-full">
+        {{ ('Continuer avec Github' | i18n)() }}
+      </button>
+      <p
+        [appMarkupReplacer]="
+          ('Vous avez déjà un compte ? {#linkref}Se connecter{/linkref}' | i18n)()
+        "
+      >
+        <ng-template appMarkupReplacerTemplate="linkref" let-content>
+          <a class="text-white underline" routerLink="register">{{ content }}</a>
+        </ng-template>
+      </p>
+    </div>
+  </div>
+</div>

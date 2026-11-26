@@ -17,6 +17,7 @@ export type IconType =
   | 'icon-reply'
   | 'icon-search'
   | 'icon-settings'
+  | 'icon-shield-secured'
   | 'icon-spinner'
   | 'icon-star'
   | 'icon-star-full'

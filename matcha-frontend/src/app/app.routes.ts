@@ -4,6 +4,7 @@ import { RegisterComponent } from './pages/authentification/register/register.co
 import { ChatsComponent } from './pages/chats/chats.component';
 import { DiscoverComponent } from './pages/discover/discover.component';
 import { NotificationsComponent } from './pages/notifications/notifications.component';
+import { ValidateComponent } from './pages/authentification/validate/validate.component';
 
 export const routes: Routes = [
   {
@@ -18,6 +19,10 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+  },
+  {
+    path: 'validate',
+    component: ValidateComponent,
   },
   {
     path: 'discover',

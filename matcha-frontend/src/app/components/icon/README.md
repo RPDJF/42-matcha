@@ -19,6 +19,7 @@
 | ![](../../../assets/images/icons/icon-reply.svg) | `icon-reply` |
 | ![](../../../assets/images/icons/icon-search.svg) | `icon-search` |
 | ![](../../../assets/images/icons/icon-settings.svg) | `icon-settings` |
+| ![](../../../assets/images/icons/icon-shield-secured.svg) | `icon-shield-secured` |
 | ![](../../../assets/images/icons/icon-spinner.svg) | `icon-spinner` |
 | ![](../../../assets/images/icons/icon-star.svg) | `icon-star` |
 | ![](../../../assets/images/icons/icon-star-full.svg) | `icon-star-full` |
