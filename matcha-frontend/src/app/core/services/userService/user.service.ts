@@ -48,11 +48,10 @@ export class UserService extends HydratableService {
       .pipe(catchError(() => of(undefined)));
   }
 
-  updateUserProfile({ email, password, displayname }: UpdateUserProfileProp) {
+  updateUserProfile({ emailAddress, password }: UpdateUserProfileProp) {
     const formData = new FormData();
 
-    if (email) formData.set('EmailAddress', email);
-    if (displayname) formData.set('DisplayName', displayname);
+    if (emailAddress) formData.set('EmailAddress', emailAddress);
     if (password) formData.set('Password', password);
 
     return this.#httpClient.put<FullUser>(`${environment.CORE_ENDPOINT}/users/update`, formData, {

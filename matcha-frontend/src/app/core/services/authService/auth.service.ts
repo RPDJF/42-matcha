@@ -10,7 +10,6 @@ import {
   AuthServiceLoginApiPayload,
   AuthServiceLoginProp,
   AuthServiceOauth2LoginUrlResponse,
-  AuthServiceRegisterApiPayload,
   AuthServiceRegisterProp,
 } from './auth.service.types';
 
@@ -48,17 +47,10 @@ export class AuthService {
     );
   }
 
-  register({ email, password, displayname }: AuthServiceRegisterProp) {
-    const registerBody: AuthServiceRegisterApiPayload = {
-      ClientId: this.#userService.getClientId(),
-      DisplayName: displayname,
-      Password: password,
-      EmailAddress: email,
-    };
-
+  register(props: AuthServiceRegisterProp) {
     return this.#httpClient.post<AuthServiceJwtToken>(
-      `${environment.CORE_ENDPOINT}/users/register`,
-      registerBody,
+      `${environment.CORE_ENDPOINT}/v1/auth/register`,
+      props,
     );
   }
 

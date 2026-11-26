@@ -59,7 +59,8 @@
               "buildTarget": "matcha-frontend:build:production"
             },
             "development": {
-              "buildTarget": "matcha-frontend:build:development"
+              "buildTarget": "matcha-frontend:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

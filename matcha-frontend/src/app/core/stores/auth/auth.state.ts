@@ -151,7 +151,7 @@ export class AuthState {
     });
 
     const register$ = this.#authService.register(payload).pipe(
-      tap((value) => {
+      tap(() => {
         ctx.patchState({
           registerApiStatus: {
             status: 'success',
