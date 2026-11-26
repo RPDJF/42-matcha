@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/23 02:33:34 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/25 01:33:36 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/25 19:45:47 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ pub struct DataCache<K, V>
 ///	Newtype for Seconds in order to make sure the user is passing in Seconds,
 ///	in case the Datacache ends up supporting other time frames (Milis, Hours)
 pub struct Seconds(pub u64);
+pub struct Minutes(pub u64);
+pub struct Hours(pub u64);
 
 // TODO:	Self-deleting items after exptime + 30s have passed.
 
@@ -92,17 +94,34 @@ impl<K: Eq + Hash + Clone, V: Clone> DataCache<K, V>
 	/// # Errors
 	/// Returns a `DatacacheError` containing a desctiption of the error that
 	/// occurred.
-	pub fn insert(&self, key: &K, value: &V, expire_in: &Seconds) -> Result<(), DatacacheError>
+	pub fn insert(
+		&self,
+		key: &K,
+		value: &V,
+		expire_in: (Option<Hours>, Option<Minutes>, Option<Seconds>),
+	) -> Result<(), DatacacheError>
 	{
 		let stamp = SystemTime::now()
 			.duration_since(UNIX_EPOCH)
 			.unwrap_or_default()
 			.as_millis() as u64;
 
+		let mut time_as_secs = 0;
+
+		if let Some(secs) = expire_in.2 {
+			time_as_secs += secs.0;
+		}
+		if let Some(mins) = expire_in.1 {
+			time_as_secs += mins.0 * 60;
+		}
+		if let Some(hours) = expire_in.0 {
+			time_as_secs += hours.0 * 60 * 60;
+		}
+
 		let new_table = CacheEntry {
 			data: value.to_owned(),
 			//	crttime: stamp,
-			exptime: stamp + (expire_in.0 * 1000),
+			exptime: stamp + (time_as_secs * 1000),
 		};
 
 		let wlock = self.data.write();

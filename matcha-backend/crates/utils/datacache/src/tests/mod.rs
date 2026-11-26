@@ -18,7 +18,9 @@ fn insert_in_map()
 		age: 69,
 	};
 	let key = String::from("Hi");
-	cache.insert(&key, &user, &Seconds(10)).unwrap();
+	cache
+		.insert(&key, &user, (None, None, Some(Seconds(10))))
+		.unwrap();
 
 	let ret = cache.get(&key).unwrap();
 
@@ -37,7 +39,9 @@ fn get_with_wrong_key() -> Result<(), String>
 	let key = String::from("Hi");
 	let wrkey = String::from("Ho");
 
-	cache.insert(&key, &user, &Seconds(10)).unwrap();
+	cache
+		.insert(&key, &user, (None, None, Some(Seconds(10))))
+		.unwrap();
 
 	let ret = cache.get(&wrkey);
 	match ret {
@@ -57,7 +61,9 @@ fn your_taking_too_long() -> Result<(), String>
 	};
 	let key = String::from("Hi");
 
-	cache.insert(&key, &user, &Seconds(0)).unwrap();
+	cache
+		.insert(&key, &user, (None, None, Some(Seconds(0))))
+		.unwrap();
 
 	let duration = Duration::new(1, 0);
 	sleep(duration);
