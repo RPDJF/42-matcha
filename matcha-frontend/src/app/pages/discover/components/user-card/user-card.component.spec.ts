@@ -37,17 +37,17 @@ describe('UserCardComponent', () => {
     fixture = TestBed.createComponent(UserCardComponent);
     component = fixture.componentInstance;
     fixture.componentRef.setInput('user', mockUser);
-    await fixture.whenStable();
+    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should update the interest chips when the user changes', async () => {
+  it('should update the interest chips when the user changes', () => {
     const nextUser: PublicUser = { ...mockUser, interests: ['Cooking', 'Climbing', 'Chess'] };
     fixture.componentRef.setInput('user', nextUser);
-    await fixture.whenStable();
+    fixture.detectChanges();
 
     const chips = fixture.debugElement.queryAll(By.css('div.flex-wrap p'));
     expect(chips.map((chip) => chip.nativeElement.textContent.trim())).toEqual([
