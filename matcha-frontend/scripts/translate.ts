@@ -1,4 +1,3 @@
-
 import { exec } from 'child_process';
 import { mkdir, readdir, readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
@@ -55,7 +54,8 @@ const supportedLanguages = new Map(
   }),
 );
 
-const sourceLanguage = supportedLanguages.get('french')!;
+const sourceLanguageFull = 'french';
+const sourceLanguage = supportedLanguages.get(sourceLanguageFull)!;
 const LIBRETRANSLATE_URL = 'http://localhost:5000';
 const CONCURRENCY_LIMIT = 20;
 
@@ -90,16 +90,12 @@ async function loadAdditionalI18n(): Promise<AdditionalI18nSource[]> {
   const file = getCliArgument('additional-i18n-file');
 
   if (inline && file) {
-    throw new Error(
-      'Use either --additional-i18n or --additional-i18n-file, not both.',
-    );
+    throw new Error('Use either --additional-i18n or --additional-i18n-file, not both.');
   }
 
   if (!inline && !file) return [];
 
-  const content = file
-    ? await readFile(file, 'utf-8')
-    : inline!;
+  const content = file ? await readFile(file, 'utf-8') : inline!;
 
   const sources: AdditionalI18nSource[] = JSON.parse(content);
 
@@ -114,15 +110,11 @@ async function loadAdditionalI18n(): Promise<AdditionalI18nSource[]> {
       !Array.isArray(source.keys) ||
       !source.keys.every((key: unknown) => typeof key === 'string')
     ) {
-      throw new Error(
-        'Each additional i18n source must contain sourceLanguage and string[] keys.',
-      );
+      throw new Error('Each additional i18n source must contain sourceLanguage and string[] keys.');
     }
 
     if (!supportedLanguages.has(source.sourceLanguage.toLowerCase())) {
-      throw new Error(
-        `Unsupported source language: ${source.sourceLanguage}`,
-      );
+      throw new Error(`Unsupported source language: ${source.sourceLanguage}`);
     }
   }
 
@@ -232,23 +224,15 @@ function maskPlaceholders(text: string): {
 /**
  * Restore tags from the translated HTML
  */
-function restorePlaceholders(
-  translatedHtml: string,
-  placeholders: Map<string, string>,
-): string {
+function restorePlaceholders(translatedHtml: string, placeholders: Map<string, string>): string {
   let result = translatedHtml;
 
-  const sortedIds = Array.from(placeholders.keys()).sort(
-    (a, b) => b.length - a.length,
-  );
+  const sortedIds = Array.from(placeholders.keys()).sort((a, b) => b.length - a.length);
 
   for (const id of sortedIds) {
     const originalTag = placeholders.get(id)!;
 
-    const spanRegex = new RegExp(
-      `<span id=["']${id}["'][^>]*>([\\s\\S]*?)</span>`,
-      'g',
-    );
+    const spanRegex = new RegExp(`<span id=["']${id}["'][^>]*>([\\s\\S]*?)</span>`, 'g');
 
     if (id.startsWith('b')) {
       const tagMatch = originalTag.match(/^\{#(\w+)\}/);
@@ -270,11 +254,7 @@ function restorePlaceholders(
 /**
  * Translation Call
  */
-async function translate(
-  text: string,
-  target: string,
-  source = sourceLanguage,
-) {
+async function translate(text: string, target: string, source = sourceLanguage) {
   const { maskedText, placeholders } = maskPlaceholders(text);
 
   const res = await fetch(`${LIBRETRANSLATE_URL}/translate`, {
@@ -412,16 +392,11 @@ async function saveTranslations(
 /**
  * Add source keys to their respective language files
  */
-async function saveSourceKeys(
-  sources: AdditionalI18nSource[],
-  dir = 'src/assets/i18n',
-) {
+async function saveSourceKeys(sources: AdditionalI18nSource[], dir = 'src/assets/i18n') {
   for (const source of sources) {
     const language = source.sourceLanguage.toLowerCase();
 
-    const entries = Object.fromEntries(
-      source.keys.map((key) => [key, key]),
-    );
+    const entries = Object.fromEntries(source.keys.map((key) => [key, key]));
 
     await saveTranslations(language, entries, dir);
 
@@ -440,10 +415,11 @@ async function main() {
 
   const dockerStart = startLibreTranslate();
 
-  const [translations, keys] = await Promise.all([
-    loadTranslations(),
-    findKeys(),
-  ]);
+  const [translations, keys] = await Promise.all([loadTranslations(), findKeys()]);
+
+  if (additionalSources.length <= 0) {
+    saveSourceKeys([{ sourceLanguage: sourceLanguageFull, keys: Array.from(keys) }]);
+  }
 
   await dockerStart;
   await waitForLibreTranslate();
@@ -464,10 +440,7 @@ async function main() {
   function addTasks(keys: Iterable<string>, source: string) {
     for (const key of keys) {
       for (const [language, languageKeys] of translations) {
-        if (
-          supportedLanguages.get(language) ===
-          supportedLanguages.get(source)
-        ) {
+        if (supportedLanguages.get(language) === supportedLanguages.get(source)) {
           continue;
         }
 
@@ -505,9 +478,7 @@ async function main() {
         supportedLanguages.get(task.sourceLanguage)!,
       );
 
-      console.log(
-        `[${task.sourceLanguage} → ${task.language}] ${task.key} → ${translated}`,
-      );
+      console.log(`[${task.sourceLanguage} → ${task.language}] ${task.key} → ${translated}`);
 
       results.get(task.language)![task.key] = translated;
     } catch (err) {

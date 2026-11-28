@@ -4,14 +4,13 @@ import { environment } from '../../../../../environments/environment';
 import { NormalizedHttpResponse } from '../../interfaces/http.interfaces';
 import { UserService } from '../userService/user.service';
 import {
-  AuthServiceEnforce2faApiPayload,
   AuthServiceEnforce2faProp,
   AuthServiceJwtToken,
   AuthServiceLoginApiPayload,
   AuthServiceLoginProp,
   AuthServiceOauth2LoginUrlResponse,
-  AuthServiceRegisterApiPayload,
   AuthServiceRegisterProp,
+  AuthServiceEnforce2faApiPayload as AuthServiceValidateApiPayload,
 } from './auth.service.types';
 
 @Injectable({
@@ -23,7 +22,8 @@ export class AuthService {
 
   constructor() {}
 
-  login(prop: AuthServiceLoginProp) {
+  // TODO: implement login once backend is ready
+  postAuthLogin(prop: AuthServiceLoginProp) {
     const loginBody: AuthServiceLoginApiPayload = {
       EmailAddress: prop.email,
       Password: prop.password,
@@ -36,32 +36,22 @@ export class AuthService {
     );
   }
 
-  enforce2fa({ code }: AuthServiceEnforce2faProp) {
-    const enforce2faBody: AuthServiceEnforce2faApiPayload = {
-      ClientId: this.#userService.getClientId(),
-      Code: code,
+  postAuthValidate({ code }: AuthServiceEnforce2faProp) {
+    const authValidateBody: AuthServiceValidateApiPayload = {
+      otpCode: code,
     };
 
     return this.#httpClient.post<AuthServiceJwtToken>(
-      `${environment.CORE_ENDPOINT}/users/2fa`,
-      enforce2faBody,
+      `${environment.CORE_ENDPOINT}/v1/auth/validate`,
+      authValidateBody,
     );
   }
 
-  register({ email, password, displayname }: AuthServiceRegisterProp) {
-    const registerBody: AuthServiceRegisterApiPayload = {
-      ClientId: this.#userService.getClientId(),
-      DisplayName: displayname,
-      Password: password,
-      EmailAddress: email,
-    };
-
-    return this.#httpClient.post<AuthServiceJwtToken>(
-      `${environment.CORE_ENDPOINT}/users/register`,
-      registerBody,
-    );
+  postAuthRegister(props: AuthServiceRegisterProp) {
+    return this.#httpClient.post<void>(`${environment.CORE_ENDPOINT}/v1/auth/register`, props);
   }
 
+  // TODO: implement oauth2 login once backend is ready
   fetchOauth2LoginUrl() {
     return this.#httpClient.get<AuthServiceOauth2LoginUrlResponse>(
       `${environment.CORE_ENDPOINT}/oauth2/login?client_id=${this.#userService.getClientId()}`,

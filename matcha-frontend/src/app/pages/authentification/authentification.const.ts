@@ -1,0 +1,4 @@
+export const AUTHENTIFICATION_VALIDATORS = {
+  MAX_PASSWORD_LENGTH: 128 as const,
+  MIN_PASSWORD_LENGTH: 8 as const,
+};

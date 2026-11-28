@@ -1,8 +1,10 @@
 import { Routes } from '@angular/router';
-import { AuthentificationComponent } from './pages/authentification/authentification.component';
+import { LoginComponent } from './pages/authentification/login/login.component';
+import { RegisterComponent } from './pages/authentification/register/register.component';
 import { ChatsComponent } from './pages/chats/chats.component';
 import { DiscoverComponent } from './pages/discover/discover.component';
 import { NotificationsComponent } from './pages/notifications/notifications.component';
+import { ValidateComponent } from './pages/authentification/validate/validate.component';
 
 export const routes: Routes = [
   {
@@ -12,12 +14,15 @@ export const routes: Routes = [
   },
   {
     path: 'register',
-    pathMatch: 'full',
-    redirectTo: 'login',
+    component: RegisterComponent,
   },
   {
     path: 'login',
-    component: AuthentificationComponent,
+    component: LoginComponent,
+  },
+  {
+    path: 'validate',
+    component: ValidateComponent,
   },
   {
     path: 'discover',

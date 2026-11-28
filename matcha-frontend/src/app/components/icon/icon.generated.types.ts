@@ -2,6 +2,7 @@
 export type IconType =
   | 'icon-arrow-left'
   | 'icon-bell'
+  | 'icon-calendar'
   | 'icon-close'
   | 'icon-email'
   | 'icon-filters'
@@ -16,6 +17,7 @@ export type IconType =
   | 'icon-reply'
   | 'icon-search'
   | 'icon-settings'
+  | 'icon-shield-secured'
   | 'icon-spinner'
   | 'icon-star'
   | 'icon-star-full'

@@ -1,0 +1,171 @@
+<div
+  class="to-latte-mauve via-latte-pink from-latte-maroon fixed top-0 right-0 bottom-0 left-0 -z-1 min-h-screen bg-linear-to-br"
+></div>
+<div class="mt-16 flex w-full justify-center text-gray-200">
+  <div class="flex w-96 flex-col items-center gap-8">
+    <div class="bg-latte-pink aspect-square size-20 rounded-full p-5">
+      <app-icon name="icon-heart-full" class="h-full w-full text-white" />
+    </div>
+    <div class="text-center">
+      <h1 class="text-3xl text-white">{{ ('Adopte ton Dev' | i18n)() }}</h1>
+      <p>{{ ('Trouve ton dev parfait' | i18n)() }}</p>
+    </div>
+    <div class="flex w-full flex-col items-center gap-4">
+      <form class="w-full" appFormPrimary (submit)="onSubmit($event)" [disabled]="isLoading()">
+        <div class="flex flex-col gap-2">
+          <label class="text-sm text-gray-600">{{ ('Email' | i18n)() }}</label>
+          <input
+            class="w-full"
+            appInputPrimary
+            [placeholder]="('ton@email.com' | i18n)()"
+            [formControl]="authForm.controls.emailAddress"
+            icon="icon-email"
+            type="email"
+            required
+          />
+
+          @if (authForm.controls.emailAddress; as emailAddressControl) {
+            @if (emailAddressControl.touched && emailAddressControl.invalid) {
+              @if (emailAddressControl.hasError('email')) {
+                <span class="-mt-1.5 text-xs text-red-400">{{
+                  ("L'email n'est pas valide." | i18n)()
+                }}</span>
+              }
+            }
+          }
+        </div>
+        <div class="flex flex-col gap-2">
+          <label class="text-sm text-gray-600">{{ ('Mot de passe' | i18n)() }}</label>
+          <input
+            class="w-full"
+            appInputPrimary
+            placeholder="••••••••"
+            [formControl]="authForm.controls.password"
+            icon="icon-locker-locked"
+            type="password"
+            required
+          />
+
+          @if (authForm.controls.password; as passwordControl) {
+            @if (passwordControl.touched && passwordControl.invalid) {
+              @if (passwordControl.hasError('minlength')) {
+                <span class="-mt-1.5 text-xs text-red-400">{{
+                  (
+                    'Doit faire au moins {minLength} caractères'
+                    | i18n: { minLength: authentificationValidators.MIN_PASSWORD_LENGTH }
+                  )()
+                }}</span>
+              }
+              @if (passwordControl.hasError('maxlength')) {
+                <span class="-mt-1.5 text-xs text-red-400">{{
+                  (
+                    'Doit faire moins que {maxLength} caractères'
+                    | i18n: { maxLength: authentificationValidators.MAX_PASSWORD_LENGTH }
+                  )()
+                }}</span>
+              }
+              @if (passwordControl.hasError('missingUppercase')) {
+                <span class="-mt-1.5 text-xs text-red-400">{{
+                  ('Doit contenir au moins une majuscule' | i18n)()
+                }}</span>
+              }
+              @if (passwordControl.hasError('missingLowercase')) {
+                <span class="-mt-1.5 text-xs text-red-400">{{
+                  ('Doit contenir au moins une minuscule' | i18n)()
+                }}</span>
+              }
+              @if (passwordControl.hasError('missingSymbol')) {
+                <span class="-mt-1.5 text-xs text-red-400">{{
+                  ('Doit contenir au moins un symbole.' | i18n)()
+                }}</span>
+              }
+              @if (passwordControl.hasError('missingDigit')) {
+                <span class="-mt-1.5 text-xs text-red-400">{{
+                  ('Doit contenir au moins un chiffre.' | i18n)()
+                }}</span>
+              }
+              @if (passwordControl.hasError('backendErrors')) {
+                @for (error of passwordControl.getError('backendErrors'); track error) {
+                  <span class="-mt-1.5 text-xs text-red-400">{{ (error | i18n)() }}</span>
+                }
+              }
+            }
+          }
+        </div>
+        <div class="flex flex-col gap-2">
+          <label class="text-sm text-gray-600">{{ ('Confirmer le mot de passe' | i18n)() }}</label>
+          <input
+            class="w-full"
+            appInputPrimary
+            placeholder="••••••••"
+            [formControl]="authForm.controls.confirmPassword"
+            icon="icon-locker-locked"
+            type="password"
+            required
+          />
+
+          @if (authForm.controls.confirmPassword; as confirmPasswordControl) {
+            @if (confirmPasswordControl.touched && confirmPasswordControl.invalid) {
+              @if (confirmPasswordControl.hasError('notEqual')) {
+                <span class="-mt-1.5 text-xs text-red-400">{{
+                  ('Les mots de passe ne correspondent pas' | i18n)()
+                }}</span>
+              }
+            }
+          }
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label class="text-sm text-gray-600">{{ ('Date de naissance' | i18n)() }}</label>
+          <input
+            class="w-full"
+            appInputPrimary
+            [formControl]="authForm.controls.birthDate"
+            icon="icon-calendar"
+            type="date"
+            required
+          />
+
+          @if (authForm.controls.birthDate; as birthDateControl) {
+            @if (birthDateControl.touched && birthDateControl.invalid) {
+              @if (birthDateControl.hasError('tooYoung')) {
+                <span class="-mt-1.5 text-xs text-red-400">
+                  {{ ('Vous devez avoir au moins 18 ans' | i18n)() }}
+                </span>
+              } @else if (birthDateControl.hasError('tooOld')) {
+                <span class="-mt-1.5 text-xs text-red-400">
+                  {{ ('Vous devez avoir 50 ans ou moins' | i18n)() }}
+                </span>
+              } @else if (birthDateControl.hasError('invalidDate')) {
+                <span class="-mt-1.5 text-xs text-red-400">
+                  {{ ('Date de naissance invalide' | i18n)() }}
+                </span>
+              }
+            }
+          }
+
+          <label class="text-xs text-gray-500">{{
+            ('Vous devez avoir 18 ans ou plus' | i18n)()
+          }}</label>
+        </div>
+        <button appButtonPrimary class="w-full" [loading]="isLoading()">
+          {{ ('Créer un compte' | i18n)() }}
+        </button>
+      </form>
+
+      <p>{{ ('Ou continuer avec' | i18n)() }}</p>
+      <button appButtonSecondary class="w-full">
+        {{ ('Continuer avec Github' | i18n)() }}
+      </button>
+      <p
+        [appMarkupReplacer]="
+          ('Vous avez déjà un compte ? {#linkref}Se connecter{/linkref}' | i18n)()
+        "
+      >
+        <ng-template appMarkupReplacerTemplate="linkref" let-content>
+          <a class="text-white underline" routerLink="register">{{ content }}</a>
+        </ng-template>
+      </p>
+    </div>
+  </div>
+</div>

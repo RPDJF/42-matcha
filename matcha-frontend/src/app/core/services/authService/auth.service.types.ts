@@ -13,8 +13,7 @@ export interface AuthServiceLoginProp {
 }
 
 export interface AuthServiceEnforce2faApiPayload {
-  ClientId: string;
-  Code: string;
+  otpCode: string;
 }
 
 export interface AuthServiceEnforce2faProp {
@@ -22,17 +21,12 @@ export interface AuthServiceEnforce2faProp {
 }
 
 export interface AuthServiceRegisterApiPayload {
-  ClientId: string;
-  DisplayName?: string;
-  EmailAddress?: string;
-  Password: string;
+  emailAddress: string;
+  password: string;
+  birthDate: number;
 }
 
-export interface AuthServiceRegisterProp {
-  email: string;
-  displayname: string;
-  password: string;
-}
+export type AuthServiceRegisterProp = AuthServiceRegisterApiPayload;
 
 export interface AuthServiceOauth2LoginUrlResponse {
   url: string;

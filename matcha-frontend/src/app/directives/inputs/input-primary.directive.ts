@@ -12,6 +12,7 @@ export class InputPrimaryDirective implements OnInit {
 
   readonly #classes = [
     'focus:ring-latte-pink',
+    'outline-none',
     'rounded-2xl',
     'border-0',
     'bg-white',
