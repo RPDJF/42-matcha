@@ -6,15 +6,12 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 23:30:01 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/11/26 00:51:52 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/26 16:19:40 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
 use crate::errors::GenericUserErrors;
-use argon2::{
-	Argon2, PasswordHasher,
-	password_hash::{SaltString, rand_core::OsRng},
-};
+use argon2::{Argon2, PasswordHasher};
 use email_address::EmailAddress;
 use error_details::ValidatorError;
 use regex::regex;
@@ -32,7 +29,7 @@ pub struct ApiReqUser
 	/// The user's encrypted password.
 	pub password: String,
 	/// The user's birth date.
-	birth_date: u64,
+	pub birth_date: u64,
 }
 
 /// Represents a user who has been freshly created but stripped of private data.
@@ -64,14 +61,19 @@ pub struct BasicUser
 
 impl BasicUser
 {
-	/// Create a new user from email_address and password. Generates a UUID for said user.
-	pub fn from_api_user(api_user: ApiReqUser) -> Result<BasicUser, GenericUserErrors>
+	/// Create a new user from `email_address` and password. Generates a UUID for said user.
+	/// # Returns
+	/// A `BasicUser` struct with a newly generated `uuid`, hashed `password` and
+	/// validated email.
+	/// # Errors
+	/// Returns a `GenericUserErrors` enum defining what went wrong.
+	pub fn from_api_user(api_user: ApiReqUser) -> Result<Self, GenericUserErrors>
 	{
-		BasicUser::valid_email(&api_user.email_address)?;
-		let pw: &String = BasicUser::valid_password(&api_user.password)?;
-		let enc_pw: String = BasicUser::encrypt_password(pw)?;
+		Self::valid_email(&api_user.email_address)?;
+		let pw: &String = Self::valid_password(&api_user.password)?;
+		let enc_pw: String = Self::encrypt_password(pw)?;
 
-		Ok(BasicUser {
+		Ok(Self {
 			email_address: api_user.email_address,
 			password: enc_pw,
 			birth_date: api_user.birth_date,
@@ -79,10 +81,14 @@ impl BasicUser
 		})
 	}
 
-	/// Validates the email address. Returns an error if invalid, () if it is.
-	fn valid_email(email: &String) -> Result<(), GenericUserErrors>
+	/// Validates the email address.
+	/// # Returns
+	/// Nothing.
+	/// # Errors
+	/// Returns a `GenericUserErrors` enum defining what went wrong.
+	fn valid_email(email: &str) -> Result<(), GenericUserErrors>
 	{
-		let _ = EmailAddress::from_str(&email).map_err(|_| GenericUserErrors::AddressInvalid)?;
+		let _ = EmailAddress::from_str(email).map_err(|_e| GenericUserErrors::AddressInvalid)?;
 		if regex!(r"^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9]+$").is_match(email) {
 			Ok(())
 		} else {
@@ -91,23 +97,30 @@ impl BasicUser
 	}
 
 	/// Encrypts the passwords passed as parameter and updates the user object.
-	/// Returns the passowrd if the encryption was successful, or a GenericUserErrors if it was not.
-	fn encrypt_password(pw: &String) -> Result<String, GenericUserErrors>
+	/// # Returns
+	/// The passowrd if the encryption was successful.
+	/// # Errors
+	/// Returns a `GenericUserErrors` enum defining what went wrong.
+	fn encrypt_password(pw: &str) -> Result<String, GenericUserErrors>
 	{
-		let salt = SaltString::generate(&mut OsRng);
 		let argon2 = Argon2::default();
 
-		match argon2.hash_password(&pw.bytes().collect::<Vec<u8>>(), &salt) {
-			Ok(pw) => Ok(pw.to_string()),
-			Err(_) => Err(GenericUserErrors::InternalError),
-		}
+		argon2
+			.hash_password(&pw.bytes().collect::<Vec<u8>>())
+			.map_or(Err(GenericUserErrors::InternalError), |pw| {
+				Ok(pw.to_string())
+			})
 	}
 
 	/// Encrypts and changes the user's password.
+	/// # Returns
+	/// Nothing.
+	/// # Errors
+	/// Returns a `GenericUserErrors` enum defining what went wrong.
 	pub fn change_password(&mut self, new_password: &String) -> Result<(), GenericUserErrors>
 	{
-		let valid_pw: &String = BasicUser::valid_password(new_password)?;
-		self.password = BasicUser::encrypt_password(&valid_pw)?;
+		let valid_pw: &String = Self::valid_password(new_password)?;
+		self.password = Self::encrypt_password(valid_pw)?;
 		Ok(())
 	}
 
@@ -117,8 +130,10 @@ impl BasicUser
 	/// - At least 1 Lowercase letter.
 	/// - At least 1 Symbol (non-alphanumeric character).
 	/// - At least 1 Digit.
-	/// Returns a clone of the user's password if it's valid.
-	/// Returns a Vector of every error in ValidatorErrors format if it isn't.
+	/// # Returns
+	/// A clone of the user's password if it's valid.
+	/// # Errors
+	/// Returns a Vector of every error in `ValidatorErrors` format if it isn't.
 	fn valid_password(pw: &String) -> Result<&String, GenericUserErrors>
 	{
 		static CONTEXT: &str = "password";
@@ -128,7 +143,7 @@ impl BasicUser
 		let mut sym_ok = false;
 		let mut dig_ok = false;
 
-		if pw.len() == 0 {
+		if pw.is_empty() {
 			resp.push(ValidatorError::new(
 				CONTEXT.to_string(),
 				format!("{}", GenericUserErrors::PasswordEmpty),
@@ -178,36 +193,42 @@ impl BasicUser
 			));
 		}
 
-		if resp.len() == 0 {
+		if resp.is_empty() {
 			Ok(pw)
 		} else {
 			Err(GenericUserErrors::PasswordError(resp))
 		}
 	}
 
-	/// Validates and changes the user's email. Returns an error if it isn't,
-	/// and does not update it.
-	pub fn change_email(&mut self, new_email: &String) -> Result<(), GenericUserErrors>
+	/// Validates and changes the user's email.
+	/// # Returns
+	/// Nothing.
+	/// # Errors
+	/// Returns a `GenericUserErrors` enum defining what went wrong and does not update the address.
+	pub fn change_email(&mut self, new_email: &str) -> Result<(), GenericUserErrors>
 	{
-		BasicUser::valid_email(&new_email)?;
-		self.email_address = new_email.clone();
+		Self::valid_email(new_email)?;
+		new_email.clone_into(&mut self.email_address);
 		Ok(())
 	}
 
 	/// Returns a borrow of the user's password.
-	pub fn get_password(&self) -> &String
+	#[must_use]
+	pub const fn get_password(&self) -> &String
 	{
 		&self.password
 	}
 
 	/// Returns a borrow of the user's email.
-	pub fn get_email(&self) -> &String
+	#[must_use]
+	pub const fn get_email(&self) -> &String
 	{
 		&self.email_address
 	}
 
 	/// Returns a borrow of the user's uuid.
-	pub fn get_uuid(&self) -> &String
+	#[must_use]
+	pub const fn get_uuid(&self) -> &String
 	{
 		&self.uuid
 	}

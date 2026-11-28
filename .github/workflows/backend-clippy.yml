@@ -1,0 +1,33 @@
+name: Backend Clippy (Lint)
+
+on:
+  push:
+    branches:
+      - "*"
+    paths:
+      - "matcha-backend/**"
+  pull_request:
+    branches:
+      - "*"
+    paths:
+      - "matcha-backend/**"
+
+jobs:
+  clippy:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: matcha-backend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Nightly Rust
+        uses: dtolnay/rust-toolchain@nightly
+        with:
+          components: clippy
+
+      - name: Run Linter check
+        run: cargo clippy

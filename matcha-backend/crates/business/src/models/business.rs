@@ -6,7 +6,7 @@
 /*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 17:34:34 by fclivaz           #+#    #+#             */
-/*   Updated: 2026/08/25 18:41:17 by fclivaz          ###   LAUSANNE.ch       */
+/*   Updated: 2026/11/26 14:15:16 by fclivaz          ###   LAUSANNE.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ pub struct Picture
 	pub url: String,
 }
 
-/// Matcha MatchaUser. Cross-referenced with User.
+/// Matcha `MatchaUser`. Cross-referenced with User.
 #[derive(Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct MatchaUser
@@ -91,6 +91,7 @@ pub struct MatchaUser
 
 impl MatchaUser
 {
+	#[must_use]
 	pub fn new(
 		uuid: Uuid,
 		first_name: &str,
@@ -108,25 +109,25 @@ impl MatchaUser
 		role: Role,
 		city: &str,
 		location: Location,
-	) -> MatchaUser
+	) -> Self
 	{
-		MatchaUser {
-			uuid: uuid.clone(),
+		Self {
+			uuid,
 			first_name: first_name.to_string(),
 			last_name: last_name.to_string(),
-			birthday: birthday,
-			age: age,
+			birthday,
+			age,
 			avatar: avatar.to_string(),
-			gender: gender,
-			last_alive: last_alive,
+			gender,
+			last_alive,
 			interested_in: interested_in.to_vec(),
-			rating: rating,
+			rating,
 			pictures: pictures.to_vec(),
-			hobbies: hobbies.iter().map(|x| x.to_string()).collect(),
+			hobbies: hobbies.iter().map(ToString::to_string).collect(),
 			biography: biography.to_string(),
-			role: role,
+			role,
 			city: city.to_string(),
-			location: location,
+			location,
 		}
 	}
 }
