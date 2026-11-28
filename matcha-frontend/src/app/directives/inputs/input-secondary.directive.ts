@@ -14,6 +14,7 @@ export class InputSecondaryDirective implements OnInit {
 
   readonly #classes = [
     'focus:ring-latte-pink',
+    'outline-none',
     'rounded-2xl',
     'bg-gray-100',
     'p-3',

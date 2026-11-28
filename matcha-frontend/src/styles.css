@@ -5,3 +5,42 @@
 @import 'leaflet/dist/leaflet.css';
 @import 'leaflet-geosearch/dist/geosearch.css';
 @config '../tailwind.config.js';
+
+@theme {
+  --animate-card-exit-left: card-exit-left 400ms ease-in forwards;
+  --animate-card-exit-right: card-exit-right 400ms ease-in forwards;
+  --animate-card-enter: card-enter 250ms ease-out forwards;
+
+  @keyframes card-exit-left {
+    from {
+      opacity: 1;
+      transform: translateX(var(--card-exit-from, 0%)) rotate(var(--card-exit-rotate-from, 0deg));
+    }
+    to {
+      opacity: 0;
+      transform: translateX(-150%) rotate(-12deg);
+    }
+  }
+
+  @keyframes card-exit-right {
+    from {
+      opacity: 1;
+      transform: translateX(var(--card-exit-from, 0%)) rotate(var(--card-exit-rotate-from, 0deg));
+    }
+    to {
+      opacity: 0;
+      transform: translateX(150%) rotate(12deg);
+    }
+  }
+
+  @keyframes card-enter {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}

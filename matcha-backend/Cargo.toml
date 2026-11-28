@@ -1,0 +1,66 @@
+# **************************************************************************** #
+#                    Matcha Backend Workspace Cargo.toml                       #
+# **************************************************************************** #
+
+[workspace]
+resolver = "2"
+members = [
+	"crates/userlib",
+	"crates/business",
+	"crates/webapi",
+	"crates/utils/datacache",
+	"crates/utils/errordetails",
+]
+
+[workspace.dependencies]
+tokio = { version = "1.52.1", features = ["macros", "rt-multi-thread", "signal", "process", "net"] }
+serde = { version = "1.0.228", features = ["derive"] }
+sea-orm = { version = "2.0.2", features = ["runtime-tokio-rustls", "sqlx-mysql", "sqlx-sqlite", "with-json", "with-uuid", "entity-registry", "schema-sync"] }
+uuid = { version = "1.23.3", features = ["v4"] }
+rand = { version = "0.10.4", features = ["simd_support", "serde"] }
+anyhow = "1.0.104"
+thiserror = "2.0.20"
+
+[workspace.package]
+edition = "2024"
+
+[profile.release]
+debug = false
+opt-level = 3
+lto = true
+
+[profile.dev]
+debug = "line-tables-only"
+
+[workspace.lints.clippy]
+pedantic = { level = "deny", priority = -1 }
+nursery = { level = "deny", priority = -1 }
+unwrap_used = "deny"
+expect_used = "deny"
+indexing_slicing = "deny"
+arithmetic_side_effects = "deny"
+unreachable = "deny"
+unimplemented = "deny"
+unchecked_time_subtraction = "deny"
+todo = "deny"
+string_slice = "deny"
+panic_in_result_fn = "deny"
+panic = "deny"
+exit = "deny"
+as_conversions = "deny"
+let_underscore_future = "deny"
+let_underscore_must_use = "deny"
+unused_result_ok = "deny"
+map_err_ignore = "deny"
+assertions_on_result_states = "deny"
+float_cmp = "deny"
+float_cmp_const = "deny"
+lossy_float_literal = "deny"
+cast_sign_loss = "deny"
+invalid_upcast_comparisons = "deny"
+rc_mutex = "deny"
+debug_assert_with_mut_call = "deny"
+iter_not_returning_iterator = "deny"
+expl_impl_clone_on_copy = "deny"
+infallible_try_from = "deny"
+dbg_macro = "deny"

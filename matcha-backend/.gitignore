@@ -1,0 +1,7 @@
+/target
+**/target
+*.sqlite
+*.db
+
+# Temporary, we will un-ignore it later.
+Cargo.lock

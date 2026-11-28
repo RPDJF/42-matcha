@@ -16,8 +16,6 @@ export class ButtonPrimaryDirective extends AbstractButtonDirective {
     'py-3',
     'px-5',
     'shadow-lg',
-    'transition-all',
-    'duration-150',
     'text-white',
   ];
 
@@ -31,8 +29,6 @@ export class ButtonPrimaryDirective extends AbstractButtonDirective {
     'py-3',
     'px-5',
     'shadow-lg',
-    'transition-all',
-    'duration-150',
     'opacity-70',
     'text-white',
   ];
@@ -47,8 +43,6 @@ export class ButtonPrimaryDirective extends AbstractButtonDirective {
     'py-3',
     'px-5',
     'shadow-lg',
-    'transition-all',
-    'duration-150',
     'opacity-70',
     'flex',
     'justify-center',

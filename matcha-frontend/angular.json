@@ -59,7 +59,8 @@
               "buildTarget": "matcha-frontend:build:production"
             },
             "development": {
-              "buildTarget": "matcha-frontend:build:development"
+              "buildTarget": "matcha-frontend:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
@@ -67,7 +68,8 @@
         "test": {
           "builder": "@angular-devkit/build-angular:jest",
           "options": {
-            "tsConfig": "tsconfig.spec.json"
+            "tsConfig": "tsconfig.spec.json",
+            "polyfills": ["zone.js", "zone.js/testing", "@angular/compiler"]
           }
         }
       }

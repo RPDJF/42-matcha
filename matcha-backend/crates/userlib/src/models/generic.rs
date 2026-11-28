@@ -1,0 +1,235 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   generic.rs                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fclivaz <fclivaz@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/21 23:30:01 by fclivaz           #+#    #+#             */
+/*   Updated: 2026/11/26 16:19:40 by fclivaz          ###   LAUSANNE.ch       */
+/*                                                                            */
+/* ************************************************************************** */
+
+use crate::errors::GenericUserErrors;
+use argon2::{Argon2, PasswordHasher};
+use email_address::EmailAddress;
+use error_details::ValidatorError;
+use regex::regex;
+use serde::{Deserialize, Serialize};
+use std::str::FromStr;
+use uuid::Uuid;
+
+/// Represents a basic, freshly recieved user.
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ApiReqUser
+{
+	/// The user's email address.
+	pub email_address: String,
+	/// The user's encrypted password.
+	pub password: String,
+	/// The user's birth date.
+	pub birth_date: u64,
+}
+
+/// Represents a user who has been freshly created but stripped of private data.
+#[derive(Serialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct ApiRespBasicUser
+{
+	/// The user's email address.
+	pub email_address: String,
+	/// The user's unique identifier.
+	pub uuid: String,
+}
+
+/// Represents a Basic user.
+#[derive(Clone)]
+pub struct BasicUser
+{
+	/// The user's email address.
+	email_address: String,
+	/// The user's encrypted password.
+	password: String,
+	/// The user's birth date. Used for checking if they are old enough to
+	/// create an account for the service.
+	birth_date: u64,
+	/// The user's unique identifier.
+	/// Can be used to be cross-referenced with business logic/data in a database.
+	uuid: String,
+}
+
+impl BasicUser
+{
+	/// Create a new user from `email_address` and password. Generates a UUID for said user.
+	/// # Returns
+	/// A `BasicUser` struct with a newly generated `uuid`, hashed `password` and
+	/// validated email.
+	/// # Errors
+	/// Returns a `GenericUserErrors` enum defining what went wrong.
+	pub fn from_api_user(api_user: ApiReqUser) -> Result<Self, GenericUserErrors>
+	{
+		Self::valid_email(&api_user.email_address)?;
+		let pw: &String = Self::valid_password(&api_user.password)?;
+		let enc_pw: String = Self::encrypt_password(pw)?;
+
+		Ok(Self {
+			email_address: api_user.email_address,
+			password: enc_pw,
+			birth_date: api_user.birth_date,
+			uuid: Uuid::new_v4().to_string(),
+		})
+	}
+
+	/// Validates the email address.
+	/// # Returns
+	/// Nothing.
+	/// # Errors
+	/// Returns a `GenericUserErrors` enum defining what went wrong.
+	fn valid_email(email: &str) -> Result<(), GenericUserErrors>
+	{
+		let _ = EmailAddress::from_str(email).map_err(|_e| GenericUserErrors::AddressInvalid)?;
+		if regex!(r"^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9]+$").is_match(email) {
+			Ok(())
+		} else {
+			Err(GenericUserErrors::AddressInvalid)
+		}
+	}
+
+	/// Encrypts the passwords passed as parameter and updates the user object.
+	/// # Returns
+	/// The passowrd if the encryption was successful.
+	/// # Errors
+	/// Returns a `GenericUserErrors` enum defining what went wrong.
+	fn encrypt_password(pw: &str) -> Result<String, GenericUserErrors>
+	{
+		let argon2 = Argon2::default();
+
+		argon2
+			.hash_password(&pw.bytes().collect::<Vec<u8>>())
+			.map_or(Err(GenericUserErrors::InternalError), |pw| {
+				Ok(pw.to_string())
+			})
+	}
+
+	/// Encrypts and changes the user's password.
+	/// # Returns
+	/// Nothing.
+	/// # Errors
+	/// Returns a `GenericUserErrors` enum defining what went wrong.
+	pub fn change_password(&mut self, new_password: &String) -> Result<(), GenericUserErrors>
+	{
+		let valid_pw: &String = Self::valid_password(new_password)?;
+		self.password = Self::encrypt_password(valid_pw)?;
+		Ok(())
+	}
+
+	/// Checks if the users password is valid. The conditions are the following:
+	/// - At least 8 characters long
+	/// - At least 1 Uppercase letter.
+	/// - At least 1 Lowercase letter.
+	/// - At least 1 Symbol (non-alphanumeric character).
+	/// - At least 1 Digit.
+	/// # Returns
+	/// A clone of the user's password if it's valid.
+	/// # Errors
+	/// Returns a Vector of every error in `ValidatorErrors` format if it isn't.
+	fn valid_password(pw: &String) -> Result<&String, GenericUserErrors>
+	{
+		static CONTEXT: &str = "password";
+		let mut resp = Vec::new();
+		let mut low_ok = false;
+		let mut hig_ok = false;
+		let mut sym_ok = false;
+		let mut dig_ok = false;
+
+		if pw.is_empty() {
+			resp.push(ValidatorError::new(
+				CONTEXT.to_string(),
+				format!("{}", GenericUserErrors::PasswordEmpty),
+			));
+			return Err(GenericUserErrors::PasswordError(resp));
+		} else if pw.len() < 8 {
+			resp.push(ValidatorError::new(
+				CONTEXT.to_string(),
+				format!("{}", GenericUserErrors::PasswordTooShort),
+			));
+		}
+
+		for c in pw.chars() {
+			if c.is_ascii_lowercase() {
+				low_ok = true;
+			} else if c.is_ascii_uppercase() {
+				hig_ok = true;
+			} else if c.is_ascii_digit() {
+				dig_ok = true;
+			} else if !c.is_alphanumeric() {
+				sym_ok = true;
+			}
+		}
+
+		if !low_ok {
+			resp.push(ValidatorError::new(
+				CONTEXT.to_string(),
+				format!("{}", GenericUserErrors::PasswordNoLower),
+			));
+		}
+		if !hig_ok {
+			resp.push(ValidatorError::new(
+				CONTEXT.to_string(),
+				format!("{}", GenericUserErrors::PasswordNoUpper),
+			));
+		}
+		if !sym_ok {
+			resp.push(ValidatorError::new(
+				CONTEXT.to_string(),
+				format!("{}", GenericUserErrors::PasswordNoSymbol),
+			));
+		}
+		if !dig_ok {
+			resp.push(ValidatorError::new(
+				CONTEXT.to_string(),
+				format!("{}", GenericUserErrors::PasswordNoDigit),
+			));
+		}
+
+		if resp.is_empty() {
+			Ok(pw)
+		} else {
+			Err(GenericUserErrors::PasswordError(resp))
+		}
+	}
+
+	/// Validates and changes the user's email.
+	/// # Returns
+	/// Nothing.
+	/// # Errors
+	/// Returns a `GenericUserErrors` enum defining what went wrong and does not update the address.
+	pub fn change_email(&mut self, new_email: &str) -> Result<(), GenericUserErrors>
+	{
+		Self::valid_email(new_email)?;
+		new_email.clone_into(&mut self.email_address);
+		Ok(())
+	}
+
+	/// Returns a borrow of the user's password.
+	#[must_use]
+	pub const fn get_password(&self) -> &String
+	{
+		&self.password
+	}
+
+	/// Returns a borrow of the user's email.
+	#[must_use]
+	pub const fn get_email(&self) -> &String
+	{
+		&self.email_address
+	}
+
+	/// Returns a borrow of the user's uuid.
+	#[must_use]
+	pub const fn get_uuid(&self) -> &String
+	{
+		&self.uuid
+	}
+}

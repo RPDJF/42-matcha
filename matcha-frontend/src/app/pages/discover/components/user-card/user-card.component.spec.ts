@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 import { PublicUser } from '../../../../core/stores/user/user.state.types';
 import { UserCardComponent } from './user-card.component';
@@ -11,10 +12,11 @@ describe('UserCardComponent', () => {
     biography: "Caine's bio",
     city: 'Charrat',
     displayName: 'Caine',
+    firstName: 'Caine',
     distance: 69,
     gender: 'male',
     interests: ['interest'],
-    isAdmin: false,
+    role: 'user',
     lastAlive: 90000,
     pictures: ['image'],
     rating: 4,
@@ -36,10 +38,23 @@ describe('UserCardComponent', () => {
     fixture = TestBed.createComponent(UserCardComponent);
     component = fixture.componentInstance;
     fixture.componentRef.setInput('user', mockUser);
-    await fixture.whenStable();
+    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should update the interest chips when the user changes', () => {
+    const nextUser: PublicUser = { ...mockUser, interests: ['Cooking', 'Climbing', 'Chess'] };
+    fixture.componentRef.setInput('user', nextUser);
+    fixture.detectChanges();
+
+    const chips = fixture.debugElement.queryAll(By.css('div.flex-wrap p'));
+    expect(chips.map((chip) => chip.nativeElement.textContent.trim())).toEqual([
+      'Cooking',
+      'Climbing',
+      'Chess',
+    ]);
   });
 });
