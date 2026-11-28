@@ -1,6 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngxs/store';
@@ -77,14 +76,10 @@ export class RegisterComponent {
   }
 
   constructor() {
-    this.authForm.controls.password.valueChanges
-      .pipe(takeUntilDestroyed())
-      .subscribe((password) => {
-        this.authForm.controls.confirmPassword.setValidators([
-          Validators.required,
-          CustomValidators.equals(password || ''),
-        ]);
-      });
+    this.authForm.controls.confirmPassword.setValidators([
+      Validators.required,
+      CustomValidators.equalsForm(this.authForm.controls.password),
+    ]);
   }
 
   onSubmit(event: Event) {

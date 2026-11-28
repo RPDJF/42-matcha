@@ -1,5 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+} from '@angular/forms';
 
 type BackendValidatorEntry = {
   context: string;
@@ -105,6 +111,17 @@ export class CustomValidators {
     return (control: AbstractControl<string | null>): ValidationErrors | null => {
       if (val !== control.value) {
         return { notEqual: { expected: val, value: control.value } };
+      }
+      return null;
+    };
+  }
+
+  static equalsForm(formControl: FormControl): ValidatorFn {
+    return (control: AbstractControl<string | null>): ValidationErrors | null => {
+      const formValue = formControl.value;
+
+      if (formValue !== control.value) {
+        return { notEqual: { expected: formValue, value: control.value } };
       }
       return null;
     };
