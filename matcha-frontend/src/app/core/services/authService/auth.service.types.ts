@@ -13,8 +13,7 @@ export interface AuthServiceLoginProp {
 }
 
 export interface AuthServiceEnforce2faApiPayload {
-  ClientId: string;
-  Code: string;
+  otpCode: string;
 }
 
 export interface AuthServiceEnforce2faProp {

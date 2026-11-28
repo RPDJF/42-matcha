@@ -3,7 +3,7 @@ import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { catchError, tap, throwError } from 'rxjs';
 import { ServiceApiStatus } from '../../interfaces/http.interfaces';
 import { AuthService } from '../../services/authService/auth.service';
-import { AuthEnforce2fa, AuthFetchOauth2LoginUrl, AuthLogin, AuthRegister } from './auth.actions';
+import { AuthFetchOauth2LoginUrl, AuthLogin, AuthRegister, AuthValidate } from './auth.actions';
 
 export interface AuthStateModel {
   loginApiStatus: ServiceApiStatus;
@@ -81,7 +81,7 @@ export class AuthState {
       },
     });
 
-    const login$ = this.#authService.login(payload).pipe(
+    const login$ = this.#authService.postAuthLogin(payload).pipe(
       tap((value) => {
         ctx.patchState({
           loginApiStatus: {
@@ -106,8 +106,8 @@ export class AuthState {
     return login$;
   }
 
-  @Action(AuthEnforce2fa)
-  authEnforce2fa(ctx: StateContext<AuthStateModel>, { payload }: AuthEnforce2fa) {
+  @Action(AuthValidate)
+  AuthValidate(ctx: StateContext<AuthStateModel>, { payload }: AuthValidate) {
     const stateModel = ctx.getState();
     if (stateModel.enforce2faApiStatus.status === 'loading') return;
     ctx.patchState({
@@ -116,8 +116,9 @@ export class AuthState {
       },
     });
 
-    const enforce2fa$ = this.#authService.enforce2fa(payload).pipe(
+    const postAuthValidate$ = this.#authService.postAuthValidate(payload).pipe(
       tap((value) => {
+        // TODO: hydrate user state from JWT data
         ctx.patchState({
           enforce2faApiStatus: {
             status: 'success',
@@ -137,7 +138,7 @@ export class AuthState {
         return throwError(() => error);
       }),
     );
-    return enforce2fa$;
+    return postAuthValidate$;
   }
 
   @Action(AuthRegister)
@@ -150,7 +151,7 @@ export class AuthState {
       },
     });
 
-    const register$ = this.#authService.register(payload).pipe(
+    const postAuthRegister$ = this.#authService.postAuthRegister(payload).pipe(
       tap(() => {
         ctx.patchState({
           registerApiStatus: {
@@ -171,7 +172,7 @@ export class AuthState {
         return throwError(() => error);
       }),
     );
-    return register$;
+    return postAuthRegister$;
   }
 
   @Action(AuthFetchOauth2LoginUrl)

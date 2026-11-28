@@ -24,6 +24,7 @@
             @for (i of indices; track i) {
               <input
                 #test
+                [name]="'otp-' + i"
                 readonly
                 class="h-full w-full text-center text-xl font-bold"
                 appInputPrimary
@@ -37,26 +38,21 @@
               />
             }
           </div>
+          @if (authForm.controls.otp; as otpControl) {
+            @if (otpControl.invalid) {
+              @if (otpControl.hasError('backendErrors')) {
+                @for (error of otpControl.getError('backendErrors'); track error) {
+                  <span class="-mt-1.5 text-xs text-red-400">{{ (error | i18n)() }}</span>
+                }
+              }
+            }
+          }
         </div>
-        <
+        <hr />
         <button appButtonPrimary class="w-full" [loading]="isLoading()">
           {{ ('Créer un compte' | i18n)() }}
         </button>
       </form>
-
-      <p>{{ ('Ou continuer avec' | i18n)() }}</p>
-      <button appButtonSecondary class="w-full">
-        {{ ('Continuer avec Github' | i18n)() }}
-      </button>
-      <p
-        [appMarkupReplacer]="
-          ('Vous avez déjà un compte ? {#linkref}Se connecter{/linkref}' | i18n)()
-        "
-      >
-        <ng-template appMarkupReplacerTemplate="linkref" let-content>
-          <a class="text-white underline" routerLink="register">{{ content }}</a>
-        </ng-template>
-      </p>
     </div>
   </div>
 </div>

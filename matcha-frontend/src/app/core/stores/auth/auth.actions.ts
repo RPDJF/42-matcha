@@ -9,7 +9,7 @@ export class AuthLogin {
   constructor(readonly payload: AuthServiceLoginProp) {}
 }
 
-export class AuthEnforce2fa {
+export class AuthValidate {
   static readonly type = '[Auth] Enforce2fa';
   constructor(readonly payload: AuthServiceEnforce2faProp) {}
 }

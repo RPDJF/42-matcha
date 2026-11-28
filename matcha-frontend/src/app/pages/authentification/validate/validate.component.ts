@@ -1,15 +1,18 @@
-import { Component, ElementRef, signal, viewChildren } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, ElementRef, inject, signal, viewChildren } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
+import { Store } from '@ngxs/store';
+import { finalize } from 'rxjs';
 import { IconComponent } from '../../../components/icon/icon.component';
 import { I18nPipe } from '../../../core/pipes/i18n/i18n.pipe';
+import { AuthValidate } from '../../../core/stores/auth/auth.actions';
 import { ButtonPrimaryDirective } from '../../../directives/buttons/button-primary.directive';
-import { ButtonSecondaryDirective } from '../../../directives/buttons/button-secondary.directive';
 import { appFormPrimary } from '../../../directives/forms/form-primary.directive';
 import { InputPrimaryDirective } from '../../../directives/inputs/input-primary.directive';
-import { MarkupReplacerDirective } from '../../../directives/markupReplacer/markupReplacer.directive';
-import { MarkupReplacerTemplate } from '../../../directives/markupReplacer/markupReplacerTemplate.directive';
+import { HttpErrorHandler } from '../../../helpers/httpErrorHandler.helper';
+import { handleBackendValidators } from '../../../helpers/validators/validators.helper';
 import { AUTHENTIFICATION_VALIDATORS } from '../authentification.const';
 
 @Component({
@@ -17,11 +20,7 @@ import { AUTHENTIFICATION_VALIDATORS } from '../authentification.const';
   imports: [
     I18nPipe,
     ButtonPrimaryDirective,
-    ButtonSecondaryDirective,
     InputPrimaryDirective,
-    MarkupReplacerDirective,
-    MarkupReplacerTemplate,
-    RouterLink,
     ReactiveFormsModule,
     appFormPrimary,
     IconComponent,
@@ -30,10 +29,13 @@ import { AUTHENTIFICATION_VALIDATORS } from '../authentification.const';
   standalone: true,
 })
 export class ValidateComponent {
+  readonly #store = inject(Store);
+  readonly #router = inject(Router);
+
   readonly isLoading = signal(false);
 
   readonly authForm = new FormGroup({
-    otp: new FormControl('', [Validators.required]),
+    otp: new FormControl('', [Validators.required, Validators.minLength(6)]),
   });
   readonly authentificationValidators = AUTHENTIFICATION_VALIDATORS;
 
@@ -45,8 +47,34 @@ export class ValidateComponent {
 
   onSubmit(event: Event) {
     event.preventDefault();
-    if (this.authForm.valid) {
-    }
+    if (!this.authForm.valid || this.isLoading()) return;
+
+    this.isLoading.set(true);
+    this.#store
+      .dispatch(new AuthValidate({ code: this.authForm.controls.otp.value ?? '' }))
+      .pipe(finalize(() => this.isLoading.set(false)))
+      .subscribe({
+        complete: () => /** TODO: handle success */ alert('super'),
+        error: (error) => {
+          if (!(error instanceof HttpErrorResponse)) undefined; // TODO: handle unexpected error
+          switch (HttpErrorHandler.retrieveErrorCode(error)) {
+            case 'NoSessionID':
+              // TODO: handle notification error -> no active session
+              this.#router.navigate(['/']); // TODO: / should redirect to auth process
+              break;
+            case 'IncorrectOTP':
+              this.authForm.controls.otp.setErrors({
+                ...this.authForm.controls.otp.errors,
+                backendErrors: [HttpErrorHandler.retrieveErrorDetails(error)],
+              });
+              console.log(this.authForm.controls.otp.errors);
+              break;
+            default:
+              handleBackendValidators(this.authForm, error);
+              break;
+          }
+        },
+      });
   }
 
   constructor() {
