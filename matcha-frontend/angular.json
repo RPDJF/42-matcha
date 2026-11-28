@@ -53,6 +53,9 @@
           "defaultConfiguration": "production"
         },
         "serve": {
+          "options": {
+            "allowedHosts": ["adopte-ton-dev.ruinfo.dev"]
+          },
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
