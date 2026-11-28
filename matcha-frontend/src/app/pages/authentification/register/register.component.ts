@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { IconComponent } from '../../../components/icon/icon.component';
 import { RESEARCH_FILTERS_LIMITS } from '../../../core/consts/researchFiltersLimits.consts';
@@ -40,6 +40,7 @@ import { AUTHENTIFICATION_VALIDATORS } from '../authentification.const';
 })
 export class RegisterComponent {
   readonly #store = inject(Store);
+  readonly #router = inject(Router);
 
   readonly isLoading = signal(false);
 
@@ -93,6 +94,10 @@ export class RegisterComponent {
       this.#store
         .dispatch(new AuthRegister(this.registerPayload as AuthServiceRegisterProp))
         .subscribe({
+          next: () => {
+            console.log('next');
+            this.#router.navigate(['validate']);
+          },
           complete: () => this.isLoading.set(false),
           error: (error) => {
             this.isLoading.set(false); // TODO: error message handling
