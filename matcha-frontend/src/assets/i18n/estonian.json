@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "Sa pead olema vähemalt 18-aastane.",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "Kas sul kontot ei ole? {#linkref}Register{/linkref}",
   "Voyage": "Reisi",
+  "exemple@email.com": "example@email.com",
+  "exemple{domain}": "näide{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "tekstikeskus (\"Vali vähemalt 3 huvi)",
   "ton@email.com": "ton@email.com",
   "{displayName} a liké votre profil": "{displayName} Sulle meeldis su profiil",

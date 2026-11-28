@@ -18,7 +18,7 @@
             class="w-full"
             appInputPrimary
             [allowPasswordManager]="true"
-            [placeholder]="('ton@email.com' | i18n)()"
+            [placeholder]="('exemple{domain}' | i18n: { domain: '@email.com' })()"
             [formControl]="authForm.controls.email"
             icon="icon-email"
             type="email"

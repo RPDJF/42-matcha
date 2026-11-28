@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "Musíš mať aspoň 18 rokov.",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "Nemáš účet? {#linkref}Register{/linkref}",
   "Voyage": "Cestovanie",
+  "exemple@email.com": "example@email.com",
+  "exemple{domain}": "príklad{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "textové centrum\"> {{ (\"Vybrať aspoň 3 podiely\")",
   "ton@email.com": "ton@ email. com",
   "{displayName} a liké votre profil": "{displayName} Páčilo sa mi váš profil",

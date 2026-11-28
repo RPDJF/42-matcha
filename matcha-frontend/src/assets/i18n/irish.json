@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "Ní mór duit a bheith 18 mbliana d'aois ar a laghad.",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "Ná bhfuil cuntas agat? {#linkref}Clár na dToghthóirí{/linkref}",
   "Voyage": "Taisteal agus Taisteal",
+  "exemple@email.com": "Cuardaigh le haghaidh:",
+  "exemple{domain}": "sampla{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "ionad téacs - { (\"Roghnaigh 3 leas ar a laghad",
   "ton@email.com": "ton@email.com",
   "{displayName} a liké votre profil": "{displayName} Cosúil le do phróifíl",

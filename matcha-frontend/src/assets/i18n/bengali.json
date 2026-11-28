@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "তোমার বয়স অন্তত ১৮ বছর।",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "তোমার কোন অ্যাকাউন্ট নেই? {#linkref}Western (পশ্চিমি{/linkref}",
   "Voyage": "ভ্রমণ",
+  "exemple@email.com": "উদাহরণ দিন",
+  "exemple{domain}": "উদাহরণ{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "টেক্সট লেখার কেন্দ্র\" <{1> ( অন্তত ৩টি আগ্রহ বেছে নিন)",
   "ton@email.com": "apt.com থেকে প্রাপ্ত",
   "{displayName} a liké votre profil": "{displayName} আপনার প্রোফাইল পছন্দ হয়েছে",

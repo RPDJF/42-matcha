@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "Πρέπει να είσαι τουλάχιστον 18 χρονών.",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "Δεν έχεις λογαριασμό; {#linkref}Μητρώο{/linkref}",
   "Voyage": "Ταξίδι",
+  "exemple@email.com": "παράδειγμα@email.com",
+  "exemple{domain}": "παράδειγμα{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "κέντρο κειμένου\"> {{SelectΕπιλέξτε τουλάχιστον 3 ενδιαφέροντα",
   "ton@email.com": "Τον@email.com",
   "{displayName} a liké votre profil": "{displayName} Μου άρεσε το προφίλ σου.",

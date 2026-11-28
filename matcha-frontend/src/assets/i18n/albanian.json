@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "Duhet të jesh të paktën 18 vjeç.",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "Nuk ke llogari? {#linkref}I regjistruar{/linkref}",
   "Voyage": "Udhëtime",
+  "exemple@email.com": "shembull@email.com",
+  "exemple{domain}": "shembull{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "Qendra e tekstit (\" Zgjidh të paktën 3 interesa",
   "ton@email.com": "ton@email.com",
   "{displayName} a liké votre profil": "{displayName} E pëlqeu profilin tënd",

@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "Vi devas esti almenaŭ 18-jaraĝa.",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "Ĉu vi ne havas konton? {#linkref}Registrita Registro{/linkref}",
   "Voyage": "Vojaĝado",
+  "exemple@email.com": "Ekzemple@email.com",
+  "exemple{domain}": "Ekzemplo{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "tekstocentro Selektu almenaŭ 3 interesojn",
   "ton@email.com": "@email.com",
   "{displayName} a liké votre profil": "{displayName} Kiel via profilo",

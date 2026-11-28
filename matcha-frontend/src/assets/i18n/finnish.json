@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "Olet varmaan 18-vuotias.",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "Eikö sinulla ole tiliä? {#linkref}Rekisteri{/linkref}",
   "Voyage": "Matkailu",
+  "exemple@email.com": "esimerkki@email.com",
+  "exemple{domain}": "esimerkki{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "tekstikeskus\">{{{ (Valitkaa vähintään kolme intressiä",
   "ton@email.com": "ton@email.com",
   "{displayName} a liké votre profil": "{displayName} Pidin profiilistasi.",

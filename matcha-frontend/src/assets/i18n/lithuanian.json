@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "Tau turbūt bent 18 metų.",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "Ar neturi sąskaitos? {#linkref}Registras{/linkref}",
   "Voyage": "Kelionėse",
+  "exemple@email.com": "email.com",
+  "exemple{domain}": "pavyzdys{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "teksto centras \"> {{} (\" Pasirinkite bent 3 dalis",
   "ton@email.com": "ton @ email.com",
   "{displayName} a liké votre profil": "{displayName} Patiko tavo profilį",

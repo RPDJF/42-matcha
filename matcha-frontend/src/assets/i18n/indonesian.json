@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "Anda harus setidaknya 18 tahun.",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "Apa kau tidak punya rekening? {#linkref}Register{/linkref}",
   "Voyage": "Perjalanan",
+  "exemple@email.com": "contoh @ email.com",
+  "exemple{domain}": "contoh{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "text centre \"> {{{(\" Pilih setidaknya 3 kepentingan",
   "ton@email.com": "ton @ email.com",
   "{displayName} a liké votre profil": "{displayName} Suka profil Anda",

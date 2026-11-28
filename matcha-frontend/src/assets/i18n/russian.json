@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "Вам должно быть не менее 18 лет.",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "У тебя нет счета? {#linkref}регистрировать{/linkref}",
   "Voyage": "Путешествие",
+  "exemple@email.com": "example@email.com",
+  "exemple{domain}": "пример{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "текстовый центр>{{ (\"Выбрать не менее 3-х интересов\"",
   "ton@email.com": "ton@email.com",
   "{displayName} a liké votre profil": "{displayName} Понравился Ваш профиль",

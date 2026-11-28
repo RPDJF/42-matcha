@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "אתה חייב להיות בן 18 לפחות.",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "אין לך חשבון? {#linkref}רשום{/linkref}",
   "Voyage": "נסיעות נסיעות",
+  "exemple@email.com": "כתובת: mail.com",
+  "exemple{domain}": "דוגמה{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "מרכז טקסט » \"בחר לפחות 3 אינטרסים\"",
   "ton@email.com": "תגית: mail.com",
   "{displayName} a liké votre profil": "{displayName} אהבתי את הפרופיל שלך",

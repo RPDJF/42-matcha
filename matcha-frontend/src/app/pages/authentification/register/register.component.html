@@ -17,7 +17,7 @@
           <input
             class="w-full"
             appInputPrimary
-            [placeholder]="('ton@email.com' | i18n)()"
+            [placeholder]="('exemple{domain}' | i18n: { domain: '@email.com' })()"
             [formControl]="authForm.controls.emailAddress"
             icon="icon-email"
             type="email"

@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "آپ کی عمر کم از کم 18 سال ہونی چاہیے۔",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "آپ کو اکاؤنٹ نہیں ہے؟ {#linkref}لکھی ہوئی کتاب{/linkref}",
   "Voyage": "سفر",
+  "exemple@email.com": "مثال کے طور پر IPvemail.com",
+  "exemple{domain}": "مثال{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "متناسقات: (\" کم از کم 3 مفادات کا انتخاب کریں",
   "ton@email.com": "Tn IPvemail.com",
   "{displayName} a liké votre profil": "{displayName} پرو فا ئل کي طرح",

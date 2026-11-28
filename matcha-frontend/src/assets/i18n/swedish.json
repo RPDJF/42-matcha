@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "Du måste vara minst 18 år gammal.",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "Har du inte ett konto? {#linkref}Registrera{/linkref}",
   "Voyage": "Resor",
+  "exemple@email.com": "Exempel@email.com",
+  "exemple{domain}": "Exempelvis{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "textcenter\"> (\"Välj minst 3 intressen",
   "ton@email.com": "ton@email.com",
   "{displayName} a liké votre profil": "{displayName} Gillade din profil",

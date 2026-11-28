@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "En az 18 yaşında olmalısınız.",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "Bir hesabınız yok mu? {#linkref}Register{/linkref}",
   "Voyage": "Seyahat",
+  "exemple@email.com": "Örnek@email.com",
+  "exemple{domain}": "Örnek örnek örnek örnek örneği{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "metin merkezi\">{{ (\"En az 3 ilgi alanı seçin",
   "ton@email.com": "ton@email.com",
   "{displayName} a liké votre profil": "{displayName} liked your profile",

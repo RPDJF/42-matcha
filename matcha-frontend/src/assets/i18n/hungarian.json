@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "Legalább 18 éves lehetsz.",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "Nincs számlád? {#linkref}Nyilvántartás{/linkref}",
   "Voyage": "Utazás",
+  "exemple@email.com": "Példa @ email.com",
+  "exemple{domain}": "példa{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "szövegközpont \"> {{(\" Válassza ki legalább 3 érdeket",
   "ton@email.com": "ton @ email.com",
   "{displayName} a liké votre profil": "{displayName} Tetszett a profilod.",

@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "Sie müssen mindestens 18 Jahre alt sein.",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "Haben Sie kein Konto? {#linkref}Registrieren{/linkref}",
   "Voyage": "Reise",
+  "exemple@email.com": "example@email.com",
+  "exemple{domain}": "Beispiel{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "Textzentrum\"> (\"Select mindestens 3 Interessen",
   "ton@email.com": "Angemeldet bleiben",
   "{displayName} a liké votre profil": "{displayName} Gefällt Ihnen Ihr Profil",

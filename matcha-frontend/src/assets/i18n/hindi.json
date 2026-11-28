@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "आपको कम से कम 18 साल का होना चाहिए।",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "क्या आपके पास कोई खाता नहीं है? {#linkref}रजिस्टर{/linkref}",
   "Voyage": "यात्रा",
+  "exemple@email.com": "Email.com",
+  "exemple{domain}": "उदाहरण{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "पाठ केन्द्र कम से कम 3 हितों का चयन करें",
   "ton@email.com": "Email.com",
   "{displayName} a liké votre profil": "{displayName} अपनी प्रोफ़ाइल को पसंद करें",

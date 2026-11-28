@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "Almenys deus tenir 18 anys.",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "No tens cap compte? {#linkref}Registra{/linkref}",
   "Voyage": "Viatges",
+  "exemple@email.com": "exemple@ email. com",
+  "exemple{domain}": "exemple{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "centre de text \">{ (\"Seleccioneu com a mínim 3 interessos",
   "ton@email.com": "tona@ email. com",
   "{displayName} a liké votre profil": "{displayName} Com el teu perfil",

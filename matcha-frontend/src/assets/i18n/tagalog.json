@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "Tiyak na ikaw ay di - kukulangin sa 18 taóng gulang.",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "Wala kang account? {#linkref}Pag - aasawa{/linkref}",
   "Voyage": "Paglalakbay",
+  "exemple@email.com": "halimbawa si Januemail.com",
+  "exemple{domain}": "halimbawa{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "gitna ng teksto\">ić (\"Select ng hindi bababa sa 3 interes",
   "ton@email.com": "ton Januemail.com",
   "{displayName} a liké votre profil": "{displayName} Nagustuhan mo ang iyong profile",

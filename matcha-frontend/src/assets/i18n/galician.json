@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "Debes ter polo menos 18 anos.",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "Non tes unha conta? {#linkref}Registro{/linkref}",
   "Voyage": "viaxes",
+  "exemple@email.com": "exemplo@email.com",
+  "exemple{domain}": "exemplo{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "{{Cita conferencia}} Selecciona polo menos 3 intereses",
   "ton@email.com": "ton@email.com",
   "{displayName} a liké votre profil": "{displayName} Me gusta tu perfil",

@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "Vous devez avoir au moins 18 ans",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}",
   "Voyage": "Voyage",
+  "exemple@email.com": "exemple@email.com",
+  "exemple{domain}": "exemple{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts",
   "ton@email.com": "ton@email.com",
   "{displayName} a liké votre profil": "{displayName} a liké votre profil",

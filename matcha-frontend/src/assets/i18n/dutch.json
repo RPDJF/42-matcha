@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "Je moet minstens 18 jaar oud zijn.",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "Heb je geen rekening? {#linkref}Register{/linkref}",
   "Voyage": "Reis",
+  "exemple@email.com": "voorbeeld@email.com",
+  "exemple{domain}": "voorbeeld{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "tekstcentrum\">{{ (\"Selecteer ten minste 3 belangen",
   "ton@email.com": "ton@email.com",
   "{displayName} a liké votre profil": "{displayName} Leuk profiel.",

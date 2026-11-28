@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "Trebuie să ai cel puţin 18 ani.",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "Nu ai un cont? {#linkref}Registru{/linkref}",
   "Voyage": "Călătorii",
+  "exemple@email.com": "example@email.com",
+  "exemple{domain}": "exemplu{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "Centrul de text [62] {{ (\"Alege cel puțin 3 interese",
   "ton@email.com": "ton@email.com",
   "{displayName} a liké votre profil": "{displayName} Mi-a plăcut profilul tău.",

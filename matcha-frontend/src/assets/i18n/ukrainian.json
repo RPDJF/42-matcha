@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "Ви повинні бути принаймні 18 років.",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "Ви не маєте облікового запису? {#linkref}Реєстрація{/linkref}",
   "Voyage": "Подорожі",
+  "exemple@email.com": "Електронна пошта: info@mail.com",
+  "exemple{domain}": "Приклад{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "Веб-сайт «Виберіть щонайменше 3 інтереси",
   "ton@email.com": "Веб-сайт: http://www.facebook.com",
   "{displayName} a liké votre profil": "{displayName} Який профіль",

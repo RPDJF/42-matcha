@@ -127,6 +127,8 @@
   "Vous devez avoir au moins 18 ans": "Siz ən azı 18 yaşında olmalıdır.",
   "Vous n'avez pas de compte ? {#linkref}S'enregistrer{/linkref}": "Siz heç bir hesabınız yoxdur? {#linkref}Qeydiyyat{/linkref}",
   "Voyage": "Bakı",
+  "exemple@email.com": "example@email.com",
+  "exemple{domain}": "example{domain}",
   "text-center\">{{ (\"Sélectionnez au moins 3 centres d'intérêts": "text > Yadda saxla",
   "ton@email.com": "Axtarış",
   "{displayName} a liké votre profil": "{displayName} Sizin profil",
