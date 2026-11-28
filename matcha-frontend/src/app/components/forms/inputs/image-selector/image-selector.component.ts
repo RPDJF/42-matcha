@@ -32,7 +32,6 @@ export class ImageSelectorComponent {
     const input = document.createElement('input');
     input.files = null;
 
-    console.log('Clearing image, emitting clear event');
     this.imageClear.emit();
     if (!this.preventSelfControl()) {
       this.imageSrc.set(null);

@@ -68,12 +68,6 @@ export class OnboardingComponent {
         Validators.pattern(/^[a-zA-ZÀ-ÿœŒæÆ]+(?:[ '-][a-zA-ZÀ-ÿœŒæÆ]+)*$/),
         Validators.maxLength(50),
       ]),
-      age: new FormControl<number | null>(null, [
-        Validators.required,
-        Validators.min(this.researchFiltersLimits.MIN_AGE),
-        Validators.max(this.researchFiltersLimits.MAX_AGE),
-        Validators.pattern(/^\d+$/),
-      ]),
       gender: new FormControl<BaseUser['gender'] | undefined>(undefined, [Validators.required]),
       biography: new FormControl<string>('', [
         Validators.required,

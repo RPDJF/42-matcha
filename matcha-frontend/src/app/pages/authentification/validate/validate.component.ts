@@ -14,6 +14,8 @@ import { InputPrimaryDirective } from '../../../directives/inputs/input-primary.
 import { HttpErrorHandler } from '../../../helpers/httpErrorHandler.helper';
 import { handleBackendValidators } from '../../../helpers/validators/validators.helper';
 import { AUTHENTIFICATION_VALIDATORS } from '../authentification.const';
+import { UserSetUser } from '../../../core/stores/user/user.actions';
+import { FullUser } from '../../../core/stores/user/user.state.types';
 
 @Component({
   selector: 'app-validate',
@@ -54,7 +56,22 @@ export class ValidateComponent {
       .dispatch(new AuthValidate({ code: this.authForm.controls.otp.value ?? '' }))
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
-        complete: () => /** TODO: handle success */ alert('super'),
+        complete: () => {
+          // TODO: remove when jwt token returns user
+          this.#store
+            .dispatch(
+              new UserSetUser({
+                age: Math.random() * 50 + 18,
+                displayName: 'DisplayName',
+                emailAddress: 'gerard.menvusa@broller.com',
+                firstName: 'firstName',
+                lastName: 'lastName',
+              } as FullUser),
+            )
+            .subscribe(() => this.#router.navigate(['chats']));
+
+          this.#router.navigate(['onboarding']);
+        },
         error: (error) => {
           if (!(error instanceof HttpErrorResponse)) undefined; // TODO: handle unexpected error
           switch (HttpErrorHandler.retrieveErrorCode(error)) {
@@ -67,7 +84,6 @@ export class ValidateComponent {
                 ...this.authForm.controls.otp.errors,
                 backendErrors: [HttpErrorHandler.retrieveErrorDetails(error)],
               });
-              console.log(this.authForm.controls.otp.errors);
               break;
             default:
               handleBackendValidators(this.authForm, error);

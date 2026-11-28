@@ -39,17 +39,17 @@
             ) {
               <div>
                 @if (errors?.['required']) {
-                  <label class="text-muted-foreground text-frappe-red text-sm">
+                  <label class="-mt-1 text-xs text-red-400">
                     {{ ('Ce champ est requis' | i18n)() }}
                   </label>
                 }
                 @if (errors?.['pattern']) {
-                  <label class="text-muted-foreground text-frappe-red text-sm">
+                  <label class="-mt-1 text-xs text-red-400">
                     {{ ('Ne doit pas contenir de caractères spéciaux ou de chiffres' | i18n)() }}
                   </label>
                 }
                 @if (errors?.['maxlength']; as maxLengthError) {
-                  <label class="text-muted-foreground text-frappe-red text-sm">
+                  <label class="-mt-1 text-xs text-red-400">
                     {{
                       (
                         'Ne doit pas dépasser {count} caractères'
@@ -80,17 +80,17 @@
             ) {
               <div>
                 @if (errors?.['required']) {
-                  <label class="text-muted-foreground text-frappe-red text-sm">
+                  <label class="-mt-1 text-xs text-red-400">
                     {{ ('Ce champ est requis' | i18n)() }}
                   </label>
                 }
                 @if (errors?.['pattern']) {
-                  <label class="text-muted-foreground text-frappe-red text-sm">
+                  <label class="-mt-1 text-xs text-red-400">
                     {{ ('Ne doit pas contenir de chiffres ou de caractères spéciaux' | i18n)() }}
                   </label>
                 }
                 @if (errors?.['maxlength']; as maxLengthError) {
-                  <label class="text-muted-foreground text-frappe-red text-sm">
+                  <label class="-mt-1 text-xs text-red-400">
                     {{
                       (
                         'Ne doit pas dépasser {count} caractères'
@@ -103,45 +103,6 @@
             }
           </div>
         </div>
-      </div>
-      <label>{{ ('Âge' | i18n)() }}</label>
-      <div>
-        <input
-          appInputPrimary
-          class="w-full"
-          placeholder="{{ ('Ton âge' | i18n)() }}"
-          [formControl]="formGroup.controls.basicInformation.controls.age"
-        />
-        @if (
-          (formGroup.controls.basicInformation.controls.age.touched &&
-            formGroup.controls.basicInformation.controls.age.dirty &&
-            formGroup.controls.basicInformation.controls.age.errors) ||
-            {};
-          as errors
-        ) {
-          <div>
-            @if (errors?.['required']) {
-              <label class="text-muted-foreground text-frappe-red text-sm">
-                {{ ('Ce champ est requis' | i18n)() }}
-              </label>
-            }
-            @if (errors?.['min']; as minError) {
-              <label class="text-muted-foreground text-frappe-red text-sm">
-                {{ ("L'âge minimum est de {min} ans" | i18n: { min: minError.min })() }}
-              </label>
-            }
-            @if (errors?.['max']; as maxError) {
-              <label class="text-muted-foreground text-frappe-red text-sm">
-                {{ ("L'âge maximum est de {max} ans" | i18n: { max: maxError.max })() }}
-              </label>
-            }
-            @if (errors?.['pattern']) {
-              <label class="text-muted-foreground text-frappe-red text-sm">
-                {{ ("L'âge doit être un nombre entier" | i18n)() }}
-              </label>
-            }
-          </div>
-        }
       </div>
       <label>{{ ('Sexe' | i18n)() }}</label>
       <app-radio-button-group [formControl]="formGroup.controls.basicInformation.controls.gender">
@@ -166,12 +127,12 @@
         ) {
           <div>
             @if (errors?.['required']) {
-              <label class="text-muted-foreground text-frappe-red text-sm">
+              <label class="-mt-1 text-xs text-red-400">
                 {{ ('Ce champ est requis' | i18n)() }}
               </label>
             }
             @if (errors?.['maxlength']; as maxLengthError) {
-              <label class="text-muted-foreground text-frappe-red text-sm">
+              <label class="-mt-1 text-xs text-red-400">
                 {{
                   (
                     'Ne doit pas dépasser {count} caractères'
@@ -181,7 +142,7 @@
               </label>
             }
             @if (errors?.['minlength']; as minLengthError) {
-              <label class="text-muted-foreground text-frappe-red text-sm">
+              <label class="-mt-1 text-xs text-red-400">
                 {{
                   (
                     'Doit comporter au moins {count} caractères'

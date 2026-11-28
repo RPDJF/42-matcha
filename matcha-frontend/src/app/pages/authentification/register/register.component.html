@@ -27,7 +27,7 @@
           @if (authForm.controls.emailAddress; as emailAddressControl) {
             @if (emailAddressControl.touched && emailAddressControl.invalid) {
               @if (emailAddressControl.hasError('email')) {
-                <span class="-mt-1.5 text-xs text-red-400">{{
+                <span class="-mt-1 text-xs text-red-400">{{
                   ("L'email n'est pas valide." | i18n)()
                 }}</span>
               }
@@ -49,7 +49,7 @@
           @if (authForm.controls.password; as passwordControl) {
             @if (passwordControl.touched && passwordControl.invalid) {
               @if (passwordControl.hasError('minlength')) {
-                <span class="-mt-1.5 text-xs text-red-400">{{
+                <span class="-mt-1 text-xs text-red-400">{{
                   (
                     'Doit faire au moins {minLength} caractères'
                     | i18n: { minLength: authentificationValidators.MIN_PASSWORD_LENGTH }
@@ -57,7 +57,7 @@
                 }}</span>
               }
               @if (passwordControl.hasError('maxlength')) {
-                <span class="-mt-1.5 text-xs text-red-400">{{
+                <span class="-mt-1 text-xs text-red-400">{{
                   (
                     'Doit faire moins que {maxLength} caractères'
                     | i18n: { maxLength: authentificationValidators.MAX_PASSWORD_LENGTH }
@@ -65,28 +65,28 @@
                 }}</span>
               }
               @if (passwordControl.hasError('missingUppercase')) {
-                <span class="-mt-1.5 text-xs text-red-400">{{
+                <span class="-mt-1 text-xs text-red-400">{{
                   ('Doit contenir au moins une majuscule' | i18n)()
                 }}</span>
               }
               @if (passwordControl.hasError('missingLowercase')) {
-                <span class="-mt-1.5 text-xs text-red-400">{{
+                <span class="-mt-1 text-xs text-red-400">{{
                   ('Doit contenir au moins une minuscule' | i18n)()
                 }}</span>
               }
               @if (passwordControl.hasError('missingSymbol')) {
-                <span class="-mt-1.5 text-xs text-red-400">{{
+                <span class="-mt-1 text-xs text-red-400">{{
                   ('Doit contenir au moins un symbole.' | i18n)()
                 }}</span>
               }
               @if (passwordControl.hasError('missingDigit')) {
-                <span class="-mt-1.5 text-xs text-red-400">{{
+                <span class="-mt-1 text-xs text-red-400">{{
                   ('Doit contenir au moins un chiffre.' | i18n)()
                 }}</span>
               }
               @if (passwordControl.hasError('backendErrors')) {
                 @for (error of passwordControl.getError('backendErrors'); track error) {
-                  <span class="-mt-1.5 text-xs text-red-400">{{ (error | i18n)() }}</span>
+                  <span class="-mt-1 text-xs text-red-400">{{ (error | i18n)() }}</span>
                 }
               }
             }
@@ -107,7 +107,7 @@
           @if (authForm.controls.confirmPassword; as confirmPasswordControl) {
             @if (confirmPasswordControl.touched && confirmPasswordControl.invalid) {
               @if (confirmPasswordControl.hasError('notEqual')) {
-                <span class="-mt-1.5 text-xs text-red-400">{{
+                <span class="-mt-1 text-xs text-red-400">{{
                   ('Les mots de passe ne correspondent pas' | i18n)()
                 }}</span>
               }
@@ -129,15 +129,15 @@
           @if (authForm.controls.birthDate; as birthDateControl) {
             @if (birthDateControl.touched && birthDateControl.invalid) {
               @if (birthDateControl.hasError('tooYoung')) {
-                <span class="-mt-1.5 text-xs text-red-400">
+                <span class="-mt-1 text-xs text-red-400">
                   {{ ('Vous devez avoir au moins 18 ans' | i18n)() }}
                 </span>
               } @else if (birthDateControl.hasError('tooOld')) {
-                <span class="-mt-1.5 text-xs text-red-400">
+                <span class="-mt-1 text-xs text-red-400">
                   {{ ('Vous devez avoir 50 ans ou moins' | i18n)() }}
                 </span>
               } @else if (birthDateControl.hasError('invalidDate')) {
-                <span class="-mt-1.5 text-xs text-red-400">
+                <span class="-mt-1 text-xs text-red-400">
                   {{ ('Date de naissance invalide' | i18n)() }}
                 </span>
               }
@@ -163,7 +163,7 @@
         "
       >
         <ng-template appMarkupReplacerTemplate="linkref" let-content>
-          <a class="text-white underline" routerLink="register">{{ content }}</a>
+          <a class="text-white underline" routerLink="/login">{{ content }}</a>
         </ng-template>
       </p>
     </div>

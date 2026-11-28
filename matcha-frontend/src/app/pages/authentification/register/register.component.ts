@@ -3,6 +3,7 @@ import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngxs/store';
+import { finalize } from 'rxjs';
 import { IconComponent } from '../../../components/icon/icon.component';
 import { RESEARCH_FILTERS_LIMITS } from '../../../core/consts/researchFiltersLimits.consts';
 import { I18nPipe } from '../../../core/pipes/i18n/i18n.pipe';
@@ -88,14 +89,12 @@ export class RegisterComponent {
       this.isLoading.set(true);
       this.#store
         .dispatch(new AuthRegister(this.registerPayload as AuthServiceRegisterProp))
+        .pipe(finalize(() => this.isLoading.set(false)))
         .subscribe({
           next: () => {
-            console.log('next');
             this.#router.navigate(['validate']);
           },
-          complete: () => this.isLoading.set(false),
           error: (error) => {
-            this.isLoading.set(false); // TODO: error message handling
             if (!(error instanceof HttpErrorResponse)) {
               // TODO: implement notification service for unexpected errors
               return;
